@@ -1,5 +1,6 @@
 package hifian.hintahaukka;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,6 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    Intent intent = new Intent(this, Scanner.class);
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 }
