@@ -19,7 +19,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
-public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class BarcodeScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
@@ -32,7 +32,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                Toast.makeText(Scanner.this, "Permission is granted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(BarcodeScannerActivity.this, "Permission is granted!", Toast.LENGTH_LONG).show();
             } else {
                 requestPermission();
             }
@@ -40,7 +40,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
 
     private Boolean checkPermission() {
-        return (ContextCompat.checkSelfPermission(Scanner.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
+        return (ContextCompat.checkSelfPermission(BarcodeScannerActivity.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestPermission() {
@@ -53,9 +53,9 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 if (grantResults.length > 0) {
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (cameraAccepted) {
-                        Toast.makeText(Scanner.this, "Permission granted!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BarcodeScannerActivity.this, "Permission granted!", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(Scanner.this, "Permission denied!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BarcodeScannerActivity.this, "Permission denied!", Toast.LENGTH_LONG).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (shouldShowRequestPermissionRationale(CAMERA))
                                 displayAlertMessage("You need too allow access for both permissions", new DialogInterface.OnClickListener() {
@@ -98,7 +98,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     }
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
-        new AlertDialog.Builder(Scanner.this)
+        new AlertDialog.Builder(BarcodeScannerActivity.this)
                 .setMessage(message)
                 .setPositiveButton("OK", listener)
                 .setNegativeButton("Cancel", null)
@@ -113,7 +113,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                scannerView.resumeCameraPreview(Scanner.this);
+                scannerView.resumeCameraPreview(BarcodeScannerActivity.this);
             }
         });
 
