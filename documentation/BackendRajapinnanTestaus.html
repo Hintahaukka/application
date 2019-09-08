@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Palvelimen testaus lomake</title>
+</head>
+
+<body>
+
+<h2>Lomake localhost-palvelimen testaukseen</h2>
+
+<form action="http://localhost:4567/" method="post">
+  EAN:<br>
+  <input type="text" name="ean">
+  <br>
+  Cents:<br>
+  <input type="number" name="cents">
+  <br>
+  StoreId:<br>
+  <input type="text" name="storeId">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+<h2>Lomake Heroku-palvelimen testaukseen</h2>
+
+<form action="https://hintahaukka.herokuapp.com/" method="post">
+  EAN:<br>
+  <input type="text" name="ean">
+  <br>
+  Cents:<br>
+  <input type="number" name="cents">
+  <br>
+  StoreId:<br>
+  <input type="text" name="storeId">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+</body>
+</html>
