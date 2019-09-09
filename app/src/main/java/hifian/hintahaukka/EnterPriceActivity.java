@@ -26,9 +26,10 @@ public class EnterPriceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TextView priceField = (TextView) findViewById(R.id.priceField);
-                Intent intent = new Intent(getApplicationContext(), EnterPriceActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ListPricesActivity.class);
                 intent.putExtra("scanResult", ean);
                 intent.putExtra("price", priceField.getText());
+                startActivity(intent);
             }
         });
 
