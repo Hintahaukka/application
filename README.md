@@ -13,7 +13,7 @@ A user story can be seen as done when all of the following requirements are fulf
 
 * The acceptance criteria of the user story are fulfilled
 * All tests pass successfully
-* The line coverage of tests is decent
+* The line coverage of tests is decent / joku toinen katselmoinut
 * The code is documented at a general level (The usage cases for classes)
 * Travis CI build is successful
 * Heroku build is successful and runs
