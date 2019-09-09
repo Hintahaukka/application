@@ -18,7 +18,7 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 -->
 * Sovellus toimii laitteella
 * Koodi on dokumentoitu yleisellä tasolla
-* Travis CI testit menevät läpi
+* CI testit menevät läpi
 * Heroku buildaa ja toimii
 
 ## Asennusohjeet
