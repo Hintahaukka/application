@@ -9,7 +9,7 @@ kameralla.
 
 ## Definition of Done
 
-A user story can be seen as done when all of the following requirements are fulfilled:
+User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 * User storyn hyväksymiskriteerit täyttyvät
 <!--
