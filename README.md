@@ -11,12 +11,15 @@ kameralla.
 
 A user story can be seen as done when all of the following requirements are fulfilled:
 
-* The acceptance criteria of the user story are fulfilled
+* User storyn hyväksymiskriteerit täyttyvät
+<!--
 * All tests pass successfully
-* The line coverage of tests is decent / joku toinen katselmoinut
-* The code is documented at a general level (The usage cases for classes)
-* Travis CI build is successful
-* Heroku build is successful and runs
+* The line coverage of tests is decent  
+-->
+* Sovellus toimii laitteella
+* Koodi on dokumentoitu yleisellä tasolla
+* Travis CI testit menevät läpi
+* Heroku buildaa ja toimii
 
 ## Asennusohjeet
 
