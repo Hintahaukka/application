@@ -1,5 +1,3 @@
-t the Materialistic app:
-
 image: openjdk:8-jdk
 
 variables:
