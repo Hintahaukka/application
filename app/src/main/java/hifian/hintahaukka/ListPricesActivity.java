@@ -7,6 +7,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 ;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -20,9 +24,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ListPricesActivity extends AppCompatActivity {
 
-    Map<String, List<String>> prices = new HashMap<>();
     String ean;
-    String price;
+    String cents;
 
     private TextView pricesTextView;
 
@@ -31,12 +34,12 @@ public class ListPricesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_prices);
 
-        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("price")) {
+        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents")) {
             ean = getIntent().getExtras().getString("scanResult").toString();
-            price = getIntent().getExtras().getString("price").toString();
+            cents = getIntent().getExtras().getString("cents").toString();
             pricesTextView = (TextView) findViewById(R.id.pricesTextView);
-            pricesTextView.setText("Viivakoodi: " + ean);
-            new HerokuPostTask().execute(ean, price, "101");
+            pricesTextView.setText("Haetaan hintoja...");
+            new HerokuPostTask().execute(ean, cents, "101");
         }
     }
 
@@ -97,7 +100,18 @@ public class ListPricesActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            pricesTextView.setText(response);
+            pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
+            try {
+                JSONArray json = new JSONArray(response);
+
+                for (int i = 0; i < json.length(); i++) {
+                    JSONObject priceObject = json.getJSONObject(i);
+                    pricesTextView.append("\nKauppa: " + priceObject.getString("storeId"));
+                    pricesTextView.append("\nHinta: " + priceObject.getInt("cents") + "\n");
+                }
+            } catch (JSONException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
     }
