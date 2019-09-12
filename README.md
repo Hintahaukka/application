@@ -16,13 +16,13 @@ Uusia ominaisuuksia varten tehdään aina oma branch. Kun ominaisuus on valmis, 
 User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 * User storyn hyväksymiskriteerit täyttyvät
+* Jos on automaattisia testejä, ne menevät läpi
 <!--
-* All tests pass successfully
 * The line coverage of tests is decent  
 -->
 * Sovellus toimii laitteella
 * Koodi on dokumentoitu yleisellä tasolla
-* CI testit menevät läpi
+* Jos CI on pystyssä, se toimii
 * Heroku buildaa ja toimii
 
 ## Asennusohjeet
