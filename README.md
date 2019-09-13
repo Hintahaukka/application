@@ -1,5 +1,9 @@
 # Hintahaukka
 
+## CI
+
+[![CircleCI](https://circleci.com/gh/Hintahaukka/application.svg?style=svg)](https://circleci.com/gh/Hintahaukka/application)
+
 ## Tavoite
 
 Ohjelmistotuotantoprojektin tavoitteena on luoda pilvipalvelun kanssa kommunikoiva Android- ja iOS-laitteilla toimiva
