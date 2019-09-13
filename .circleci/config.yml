@@ -1,10 +1,11 @@
 version: 2
 jobs:
   build:
-    branches:
-      only;
-        - dev
-        - /feat*.*/
+    filters:
+      branches:
+        only:
+          - dev
+          - /feat*.*/
     working_directory: ~/code
     docker:
       - image: circleci/android:api-25-alpha
