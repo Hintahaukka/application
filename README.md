@@ -2,7 +2,7 @@
 
 ## CI
 
-[![CircleCI](https://circleci.com/gh/Hintahaukka/application.svg?style=svg)](https://circleci.com/gh/Hintahaukka/application)
+[![CircleCI](https://circleci.com/gh/Hintahaukka/application/tree/dev.svg?style=svg)](https://circleci.com/gh/Hintahaukka/application/tree/dev)
 
 ## Tavoite
 
