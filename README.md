@@ -7,6 +7,11 @@ mobiilisovellus liikkuvan ihmisen käyttöön. Sovelluksen tarkoitus on kertoa h
 tuotteen hinta muissa kaupoissa. Tuotteiden hinnan tarkastus tehdään helpoksi tunnistamalla viivakoodi mobiililaitteen
 kameralla.
 
+## Repositoriot
+
+* Android-sovellus (tämä repositorio)
+* [Backend](https://github.com/Hintahaukka/backend/tree/master)
+
 ## Dokumentit
 
 * [Product backlog](https://docs.google.com/spreadsheets/d/1Mazq4EFbfbMsLPeCpOckbu11LNR1Ki2RiNf460z-rpU/edit#gid=0)
