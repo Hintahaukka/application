@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat;
 
 import com.google.zxing.Result;
 
+import java.util.HashMap;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
@@ -23,6 +25,7 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
+    private HashMap<String, Integer> prices = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,25 +111,9 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
     @Override
     public void handleResult(Result result) {
         final String scanResult = result.getText();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan result:");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                scannerView.resumeCameraPreview(BarcodeScannerActivity.this);
-            }
-        });
-
-        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(scanResult));
+                Intent intent = new Intent(getApplicationContext(), EnterPriceActivity.class);
+                intent.putExtra("scanResult", scanResult);
                 startActivity(intent);
             }
-        });
-
-        builder.setMessage(scanResult);
-        AlertDialog alert = builder.create();
-        alert.show();
     }
-}
+
