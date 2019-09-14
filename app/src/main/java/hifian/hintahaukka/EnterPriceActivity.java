@@ -25,15 +25,25 @@ public class EnterPriceActivity extends AppCompatActivity {
         sendPriceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView priceField = (TextView) findViewById(R.id.priceField);
+                TextView enterEuros = (TextView) findViewById(R.id.enterEuros);
+                TextView enterCents = (TextView) findViewById(R.id.enterCents);
+                String cents = turnEnteredPriceToCents(enterEuros.getText().toString(),
+                        enterCents.getText().toString());
+
                 Intent intent = new Intent(getApplicationContext(), ListPricesActivity.class);
                 intent.putExtra("scanResult", ean);
-                intent.putExtra("cents", priceField.getText().toString());
+                intent.putExtra("cents", cents);
                 startActivity(intent);
             }
         });
 
+    }
 
+    private String turnEnteredPriceToCents(String euros, String cents) {
+        int eurosAsInt = Integer.parseInt(euros);
+        int centsasInt = Integer.parseInt(cents);
 
+        int result = eurosAsInt * 100 + centsasInt;
+        return String.valueOf(result);
     }
 }

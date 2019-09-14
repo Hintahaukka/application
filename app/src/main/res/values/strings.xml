@@ -4,5 +4,7 @@
     <string name="text_scan_barcode">Skannaa \n viivakoodi</string>
     <string name="text_finding_prices">Haetaan hintoja...</string>
     <string name="button_send">Lähetä</string>
-    <string name="text_enter_price">Syötä hinta</string>
+    <string name="text_enter_price">Syötä hinta:</string>
+    <string name="text_euro_sign">€</string>
+    <string name="text_cents">snt</string>
 </resources>
