@@ -26,7 +26,7 @@ public class ListPricesActivity extends AppCompatActivity {
 
     String ean;
     String cents;
-
+    String selectedStore;
     private TextView pricesTextView;
 
     @Override
@@ -34,12 +34,13 @@ public class ListPricesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_prices);
 
-        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents")) {
+        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents") && getIntent().hasExtra("selectedStore")) {
             ean = getIntent().getExtras().getString("scanResult").toString();
             cents = getIntent().getExtras().getString("cents").toString();
+            selectedStore = getIntent().getExtras().getString("selectedStore");
             pricesTextView = (TextView) findViewById(R.id.pricesTextView);
             pricesTextView.setText("Haetaan hintoja...");
-            new HerokuPostTask().execute(ean, cents, "101");
+            new HerokuPostTask().execute(ean, cents, selectedStore);
         }
     }
 
