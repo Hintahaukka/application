@@ -1,0 +1,39 @@
+CREATE TABLE Product (
+
+id SERIAL PRIMARY KEY,  
+
+ean TEXT,
+
+name TEXT
+
+);
+
+
+CREATE TABLE Store (
+
+id SERIAL PRIMARY KEY,
+
+googleStoreId TEXT,
+
+name TEXT
+
+);
+
+
+CREATE TABLE Price (
+
+id SERIAL PRIMARY KEY,
+
+product_id INTEGER NOT NULL,
+
+store_id INTEGER NOT NULL,
+
+cents INTEGER,
+
+created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+FOREIGN KEY(product_id) REFERENCES Product (id),
+
+FOREIGN KEY(store_id) REFERENCES Store (id)
+
+);
