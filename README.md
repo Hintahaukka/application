@@ -8,7 +8,7 @@ master: [![CircleCI](https://circleci.com/gh/Hintahaukka/application.svg?style=s
 
 ### Backend
 
-master: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=master)](https://travis-ci.org/Hintahaukka/backend)
+master: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=master)](https://travis-ci.org/Hintahaukka/backend)  
 dev: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=dev)](https://travis-ci.org/Hintahaukka/backend)
 
 ## Tavoite
