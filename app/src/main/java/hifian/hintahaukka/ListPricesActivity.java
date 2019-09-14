@@ -38,7 +38,6 @@ public class ListPricesActivity extends AppCompatActivity {
             ean = getIntent().getExtras().getString("scanResult").toString();
             cents = getIntent().getExtras().getString("cents").toString();
             pricesTextView = (TextView) findViewById(R.id.pricesTextView);
-            pricesTextView.setText("Haetaan hintoja...");
             new HerokuPostTask().execute(ean, cents, "101");
         }
     }
