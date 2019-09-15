@@ -3,6 +3,7 @@ package hifian.hintahaukka;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class ListPricesActivity extends AppCompatActivity {
             cents = getIntent().getExtras().getString("cents").toString();
             selectedStore = getIntent().getExtras().getString("selectedStore");
             pricesTextView = (TextView) findViewById(R.id.pricesTextView);
+            //pricesTextView.setText("Haetaan hintoja...");
             pricesTextView.setText("Haetaan hintoja...");
             new HerokuPostTask().execute(ean, cents, selectedStore);
         }
@@ -113,6 +115,7 @@ public class ListPricesActivity extends AppCompatActivity {
                     String formattedPrice = String.format("%.02f", cents);
                     pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
                 }
+                pricesTextView.setMovementMethod(new ScrollingMovementMethod());
             } catch (JSONException e) {
                 System.out.println(e.getMessage());
             }
