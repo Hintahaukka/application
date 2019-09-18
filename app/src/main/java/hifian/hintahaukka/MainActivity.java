@@ -9,13 +9,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -27,15 +28,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Spinner spinner = (Spinner) findViewById(R.id.storeSpinner);
-        String[] stores = new String[]{
-            String.format(getResources().getString(R.string.text_choose_store)),
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"
-        };
-        final List<String> storeList = new ArrayList<>(Arrays.asList(stores));
+
+        StoreManager storeManager = new StoreManager();
+        storeManager.setStores(this.handleStores());
+
+        // TODO: Dropdown menu should show store names, but send the store id as value
+        List<String> storeList = storeManager.listNearestStores(0, 0);
+
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this,android.R.layout.simple_spinner_dropdown_item,storeList){
 
@@ -94,6 +93,29 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Calls the StoreHandler to access the list of Store objects
+     * @return
+     */
+    private List<Store> handleStores() {
+
+        List<Store> stores = new ArrayList<>();
+        try {
+            InputStream istream = getAssets().open("stores.osm");
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+
+            StoreHandler storeHandler = new StoreHandler();
+            saxParser.parse(istream, storeHandler);
+
+            stores = storeHandler.getStores();
+
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return stores;
     }
 
 }
