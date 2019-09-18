@@ -10,14 +10,16 @@ import android.widget.TextView;
 
 public class EnterPriceActivity extends AppCompatActivity {
     String ean;
+    String selectedStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_price);
 
-        if (getIntent().hasExtra("scanResult")) {
+        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("selectedStore")) {
             TextView eanField = (TextView) findViewById(R.id.eanField);
             ean = getIntent().getExtras().getString("scanResult");
+            selectedStore = getIntent().getExtras().getString("selectedStore");
             eanField.setText("Viivakoodi: " + ean);
         }
 
@@ -25,15 +27,33 @@ public class EnterPriceActivity extends AppCompatActivity {
         sendPriceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView priceField = (TextView) findViewById(R.id.priceField);
+                TextView enterEuros = (TextView) findViewById(R.id.enterEuros);
+                TextView enterCents = (TextView) findViewById(R.id.enterCents);
+                String cents = turnEnteredPriceToCents(enterEuros.getText().toString(),
+                        enterCents.getText().toString());
+
                 Intent intent = new Intent(getApplicationContext(), ListPricesActivity.class);
                 intent.putExtra("scanResult", ean);
-                intent.putExtra("cents", priceField.getText().toString());
+                intent.putExtra("selectedStore", selectedStore);
+                intent.putExtra("cents", cents);
                 startActivity(intent);
             }
         });
 
+    }
 
+    private String turnEnteredPriceToCents(String euros, String cents) {
+        int eurosAsInt = 0;
+        if(!euros.isEmpty()) {
+            eurosAsInt = Integer.parseInt(euros);
+        }
 
+        int centsasInt = 0;
+        if(!cents.isEmpty()) {
+            centsasInt = Integer.parseInt(cents);
+        }
+
+        int result = eurosAsInt * 100 + centsasInt;
+        return String.valueOf(result);
     }
 }

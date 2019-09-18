@@ -3,6 +3,7 @@ package hifian.hintahaukka;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +27,7 @@ public class ListPricesActivity extends AppCompatActivity {
 
     String ean;
     String cents;
-
+    String selectedStore;
     private TextView pricesTextView;
 
     @Override
@@ -34,11 +35,14 @@ public class ListPricesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_prices);
 
-        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents")) {
+        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents") && getIntent().hasExtra("selectedStore")) {
             ean = getIntent().getExtras().getString("scanResult").toString();
             cents = getIntent().getExtras().getString("cents").toString();
+            selectedStore = getIntent().getExtras().getString("selectedStore");
             pricesTextView = (TextView) findViewById(R.id.pricesTextView);
-            new HerokuPostTask().execute(ean, cents, "101");
+            //pricesTextView.setText("Haetaan hintoja...");
+            pricesTextView.setText("Haetaan hintoja...");
+            new HerokuPostTask().execute(ean, cents, selectedStore);
         }
     }
 
@@ -106,8 +110,12 @@ public class ListPricesActivity extends AppCompatActivity {
                 for (int i = 0; i < json.length(); i++) {
                     JSONObject priceObject = json.getJSONObject(i);
                     pricesTextView.append("\nKauppa: " + priceObject.getString("storeId"));
-                    pricesTextView.append("\nHinta: " + priceObject.getInt("cents") + "\n");
+
+                    double cents = priceObject.getInt("cents") / 100.0;
+                    String formattedPrice = String.format("%.02f", cents);
+                    pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
                 }
+                pricesTextView.setMovementMethod(new ScrollingMovementMethod());
             } catch (JSONException e) {
                 System.out.println(e.getMessage());
             }

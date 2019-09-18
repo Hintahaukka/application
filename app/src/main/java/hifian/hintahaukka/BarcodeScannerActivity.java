@@ -25,14 +25,14 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
-    private HashMap<String, Integer> prices = new HashMap<>();
+    String selectedStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
-
+        selectedStore = getIntent().getExtras().getString("selectedStore");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
                 Toast.makeText(BarcodeScannerActivity.this, "Permission is granted!", Toast.LENGTH_LONG).show();
@@ -108,11 +108,14 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
                 .create()
                 .show();
     }
+
+
     @Override
     public void handleResult(Result result) {
         final String scanResult = result.getText();
                 Intent intent = new Intent(getApplicationContext(), EnterPriceActivity.class);
                 intent.putExtra("scanResult", scanResult);
+                intent.putExtra("selectedStore", selectedStore);
                 startActivity(intent);
             }
     }
