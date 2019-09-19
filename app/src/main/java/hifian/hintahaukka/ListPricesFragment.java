@@ -1,13 +1,20 @@
 package hifian.hintahaukka;
 
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,33 +24,45 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class ListPricesActivity extends AppCompatActivity {
 
-    String ean;
-    String cents;
-    String selectedStore;
+public class ListPricesFragment extends Fragment {
+
+    private String ean;
+    private String cents;
+    private String selectedStore;
     private TextView pricesTextView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_prices);
 
-        if (getIntent().hasExtra("scanResult") && getIntent().hasExtra("cents") && getIntent().hasExtra("selectedStore")) {
-            ean = getIntent().getExtras().getString("scanResult").toString();
-            cents = getIntent().getExtras().getString("cents").toString();
-            selectedStore = getIntent().getExtras().getString("selectedStore");
-            pricesTextView = (TextView) findViewById(R.id.pricesTextView);
-            //pricesTextView.setText("Haetaan hintoja...");
-            pricesTextView.setText("Haetaan hintoja...");
-            new HerokuPostTask().execute(ean, cents, selectedStore);
-        }
+    public ListPricesFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ListPricesFragmentArgs args = ListPricesFragmentArgs.fromBundle(getArguments());
+        ean = args.getScanResult();
+        selectedStore = args.getSelectedStore();
+        cents = args.getCents();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
+        new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
     public class HerokuPostTask extends AsyncTask<String, String, String> {
