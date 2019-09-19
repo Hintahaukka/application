@@ -19,9 +19,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 
 public class HomeFragment extends Fragment {
@@ -61,15 +65,13 @@ public class HomeFragment extends Fragment {
 
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
-        String[] stores = new String[]{
-                String.format(getResources().getString(R.string.text_choose_store)),
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-        };
-        final List<String> storeList = new ArrayList<>(Arrays.asList(stores));
+
+        StoreManager storeManager = new StoreManager();
+        storeManager.setStores(this.handleStores());
+
+        // TODO: Dropdown menu should show store names, but send the store id as value
+        List<String> storeList = storeManager.listNearestStores(0, 0);
+
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this.getContext(),android.R.layout.simple_spinner_dropdown_item,storeList){
 
@@ -117,6 +119,29 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Calls the StoreHandler to access the list of Store objects
+     * @return
+     */
+    private List<Store> handleStores() {
+
+        List<Store> stores = new ArrayList<>();
+        try {
+            InputStream istream = getAssets().open("stores.osm");
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+
+            StoreHandler storeHandler = new StoreHandler();
+            saxParser.parse(istream, storeHandler);
+
+            stores = storeHandler.getStores();
+
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return stores;
     }
 
 }
