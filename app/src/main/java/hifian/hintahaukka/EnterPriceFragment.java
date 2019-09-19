@@ -24,13 +24,6 @@ public class EnterPriceFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static EnterPriceFragment newInstance() {
-        EnterPriceFragment fragment = new EnterPriceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

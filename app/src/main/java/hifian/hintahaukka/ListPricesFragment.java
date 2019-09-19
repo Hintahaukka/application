@@ -28,9 +28,6 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ListPricesFragment extends Fragment {
 
     private String ean;
