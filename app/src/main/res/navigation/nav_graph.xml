@@ -11,8 +11,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_barcodeScannerFragment"
-            app:destination="@id/barcodeScannerFragment" >
-        </action>
+            app:destination="@id/barcodeScannerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"></action>
     </fragment>
     <fragment
         android:id="@+id/barcodeScannerFragment"
@@ -21,7 +24,11 @@
         tools:layout="@layout/fragment_barcode_scanner" >
         <action
             android:id="@+id/action_barcodeScannerFragment_to_enterPriceFragment"
-            app:destination="@id/enterPriceFragment" />
+            app:destination="@id/enterPriceFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -33,7 +40,11 @@
         tools:layout="@layout/fragment_enter_price" >
         <action
             android:id="@+id/action_enterPriceFragment_to_listPricesFragment"
-            app:destination="@id/listPricesFragment" />
+            app:destination="@id/listPricesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
