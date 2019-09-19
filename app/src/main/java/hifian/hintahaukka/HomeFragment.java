@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
 
         List<Store> stores = new ArrayList<>();
         try {
-            InputStream istream = getAssets().open("stores.osm");
+            InputStream istream = getContext().getAssets().open("stores.osm");
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
 
