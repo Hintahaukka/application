@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="hifian.hintahaukka.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_barcodeScannerFragment"
+            app:destination="@id/barcodeScannerFragment" >
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/barcodeScannerFragment"
+        android:name="hifian.hintahaukka.BarcodeScannerFragment"
+        android:label="fragment_barcode_scanner"
+        tools:layout="@layout/fragment_barcode_scanner" >
+        <action
+            android:id="@+id/action_barcodeScannerFragment_to_enterPriceFragment"
+            app:destination="@id/enterPriceFragment" />
+        <argument
+            android:name="selectedStore"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterPriceFragment"
+        android:name="hifian.hintahaukka.EnterPriceFragment"
+        android:label="fragment_enter_price"
+        tools:layout="@layout/fragment_enter_price" >
+        <action
+            android:id="@+id/action_enterPriceFragment_to_listPricesFragment"
+            app:destination="@id/listPricesFragment" />
+        <argument
+            android:name="selectedStore"
+            app:argType="string" />
+        <argument
+            android:name="scanResult"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPricesFragment"
+        android:name="hifian.hintahaukka.ListPricesFragment"
+        android:label="fragment_list_prices"
+        tools:layout="@layout/fragment_list_prices" >
+        <argument
+            android:name="selectedStore"
+            app:argType="string" />
+        <argument
+            android:name="scanResult"
+            app:argType="string" />
+        <argument
+            android:name="cents"
+            app:argType="string" />
+    </fragment>
+</navigation>
