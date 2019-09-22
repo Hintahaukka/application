@@ -8,6 +8,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,19 +51,46 @@ public class EnterPriceFragment extends Fragment {
         eanField.setText("Viivakoodi: " + scanResult);
 
         Button sendPriceButton = getView().findViewById(R.id.sendPriceBtn);
+        final TextView enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
+        final TextView enterCents = (TextView) getView().findViewById(R.id.enterCents);
+
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
-                TextView enterCents = (TextView) getView().findViewById(R.id.enterCents);
                 String cents = turnEnteredPriceToCents(enterEuros.getText().toString(),
                         enterCents.getText().toString());
-
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(selectedStore, scanResult, cents));
 
             }
         });
+
+        // Moves the focus from euros to cents if pressing '.' ',' or enter keys
+        enterEuros.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable e) {
+                String input = e.toString();
+                if(input.length() > 0) {
+                    char c = input.charAt(input.length() - 1);
+                    if (c == '.' || c == ',' || c == '\n') {
+                        String newInput = input.substring(0, input.indexOf(c));
+                        enterEuros.setText(newInput);
+                        enterCents.requestFocus();
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //nothing needed here...
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //nothing needed here...
+            }
+        });
+
     }
 
     private String turnEnteredPriceToCents(String euros, String cents) {
