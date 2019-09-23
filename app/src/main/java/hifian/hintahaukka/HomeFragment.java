@@ -31,6 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
 public class HomeFragment extends Fragment {
 
     private String selectedStore = "Unknown store";
+    private StoreManager storeManager;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -65,9 +66,13 @@ public class HomeFragment extends Fragment {
 
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
-
-        StoreManager storeManager = new StoreManager();
-        storeManager.setStores(this.handleStores());
+        this.storeManager = new StoreManager();
+        try {
+            InputStream istream = getContext().getAssets().open("stores.osm");
+            storeManager.fetchStores(istream);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         // TODO: Dropdown menu should show store names, but send the store id as value
         List<String> storeList = storeManager.listNearestStores(0, 0);
@@ -119,29 +124,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
-
-    /**
-     * Calls the StoreHandler to access the list of Store objects
-     * @return
-     */
-    private List<Store> handleStores() {
-
-        List<Store> stores = new ArrayList<>();
-        try {
-            InputStream istream = getContext().getAssets().open("stores.osm");
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-
-            StoreHandler storeHandler = new StoreHandler();
-            saxParser.parse(istream, storeHandler);
-
-            stores = storeHandler.getStores();
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-        return stores;
     }
 
 }
