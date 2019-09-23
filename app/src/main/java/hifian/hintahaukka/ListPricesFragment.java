@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -34,6 +35,7 @@ public class ListPricesFragment extends Fragment {
     private String cents;
     private String selectedStore;
     private TextView pricesTextView;
+    private StoreManager storeManager;
 
 
     public ListPricesFragment() {
@@ -56,6 +58,14 @@ public class ListPricesFragment extends Fragment {
 
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
         new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
+
+        this.storeManager = new StoreManager();
+        try {
+            InputStream istream = getContext().getAssets().open("stores.osm");
+            storeManager.fetchStores(istream);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -128,8 +138,12 @@ public class ListPricesFragment extends Fragment {
 
                 for (int i = 0; i < json.length(); i++) {
                     JSONObject priceObject = json.getJSONObject(i);
-                    pricesTextView.append("\nKauppa: " + priceObject.getString("storeId"));
-
+                    Store s = storeManager.getStore(priceObject.getString("storeId"));
+                    if (s!= null && s.getName() != null) {
+                        pricesTextView.append("\n" + s.getName());
+                    } else {
+                        pricesTextView.append("\nTuntematon kauppa");
+                    }
                     double cents = priceObject.getInt("cents") / 100.0;
                     String formattedPrice = String.format("%.02f", cents);
                     pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
