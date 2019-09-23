@@ -59,13 +59,7 @@ public class ListPricesFragment extends Fragment {
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
         new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
 
-        this.storeManager = new StoreManager();
-        try {
-            InputStream istream = getContext().getAssets().open("stores.osm");
-            storeManager.fetchStores(istream);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
     }
 
     @Override

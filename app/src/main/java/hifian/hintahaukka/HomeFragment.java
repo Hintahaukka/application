@@ -66,13 +66,7 @@ public class HomeFragment extends Fragment {
 
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
-        this.storeManager = new StoreManager();
-        try {
-            InputStream istream = getContext().getAssets().open("stores.osm");
-            storeManager.fetchStores(istream);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
         // TODO: Dropdown menu should show store names, but send the store id as value
         List<String> storeList = storeManager.listNearestStores(0, 0);
