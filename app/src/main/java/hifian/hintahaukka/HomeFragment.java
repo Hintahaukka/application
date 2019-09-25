@@ -1,12 +1,15 @@
 package hifian.hintahaukka;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -18,10 +21,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -31,6 +34,7 @@ import javax.xml.parsers.SAXParserFactory;
 public class HomeFragment extends Fragment {
 
     private String selectedStore = "Unknown store";
+    private GpsActivity gpsActivity;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -52,7 +56,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createSpinner();
-
+        getLocation();
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +65,18 @@ public class HomeFragment extends Fragment {
                         HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore));
             }
         });
+    }
+
+    private void getLocation() {
+        this.gpsActivity = ((MainActivity)getActivity()).getGpsActivity();
+        Location l = gpsActivity.getLocation();
+        if( l == null){
+            Toast.makeText(this.getContext(),"GPS unable to get Value",Toast.LENGTH_LONG).show();
+        }else {
+            double lat = l.getLatitude();
+            double lon = l.getLongitude();
+            Toast.makeText(this.getContext(),"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
+        }
     }
 
     private void createSpinner() {
