@@ -35,6 +35,8 @@ public class HomeFragment extends Fragment {
     private String selectedStore = "Unknown store";
     private StoreManager storeManager;
     private GpsActivity gpsActivity;
+    private double lat;
+    private double lon;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -55,8 +57,8 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        createSpinner();
         getLocation();
+        createSpinner();
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +75,8 @@ public class HomeFragment extends Fragment {
         if( l == null){
             Toast.makeText(this.getContext(),"GPS unable to get Value",Toast.LENGTH_LONG).show();
         }else {
-            double lat = l.getLatitude();
-            double lon = l.getLongitude();
+            this.lat = l.getLatitude();
+            this.lon = l.getLongitude();
             Toast.makeText(this.getContext(),"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         }
     }
@@ -84,7 +86,7 @@ public class HomeFragment extends Fragment {
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
         // TODO: Dropdown menu should show store names, but send the store id as value
-        List<String> storeList = storeManager.listNearestStores(0, 0);
+        List<String> storeList = storeManager.listNearestStores(this.lat, this.lon);
 
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this.getContext(),android.R.layout.simple_spinner_dropdown_item,storeList){
