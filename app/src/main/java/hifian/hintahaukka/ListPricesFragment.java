@@ -138,6 +138,8 @@ public class ListPricesFragment extends Fragment {
                     } else {
                         pricesTextView.append("\nTuntematon kauppa");
                     }
+                    String date = priceObject.getString("timestamp");
+                    pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
                     double cents = priceObject.getInt("cents") / 100.0;
                     String formattedPrice = String.format("%.02f", cents);
                     pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
