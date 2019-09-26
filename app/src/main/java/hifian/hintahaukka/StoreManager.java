@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Collections;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -34,27 +36,52 @@ public class StoreManager {
 
 
     /**
+     * Sorts stores into ascending order according to their distances to the given reference location.
+     */
+    class StoreDistanceComparator implements Comparator<Store> {
+        private double lat;
+        private double lon;
+        /**
+         * @param lat The latitude of the reference location.
+         * @param lon The longitude of the reference location.
+         */
+        public StoreDistanceComparator(double lat, double lon) {
+            this.lat = lat;
+            this.lon = lon;
+        }
+        public int compare(Store s1, Store s2) {
+            //Store s1 distance to reference location.
+            double distanceS1 = Math.hypot(s1.getLat() - lat, s1.getLon() - lon);
+            //Store s2 distance to reference location.
+            double distanceS2 = Math.hypot(s2.getLat() - lat, s2.getLon() - lon);
+
+            if(distanceS1 < distanceS2) {
+                return -1;
+            } else if(distanceS1 > distanceS2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    /**
      * Finds the nearest stores and converts them into Strings
      * @param lat The current latitude
      * @param lon The current longitude
      * @return A list of stores nearest to the coordinates
      */
     public List<String> listNearestStores(double lat, double lon) {
-        List<Store> nearestStores = findNearestStores(lat, lon);
+        Collections.sort(this.stores, new StoreDistanceComparator(lat, lon));
+
+        int numberOfStoresToReturn = 10;
+        if(numberOfStoresToReturn > stores.size()) numberOfStoresToReturn = stores.size();
+
         List<String> storesToStringList = new ArrayList<>();
-        for (int i = 0; i < nearestStores.size(); i ++) {
+        for (int i = 0; i < numberOfStoresToReturn; i++) {
             storesToStringList.add(stores.get(i).getStoreId());
         }
         return storesToStringList;
-    }
-
-    //TODO: Return nearest 10 stores instead of theses examples
-    protected List<Store> findNearestStores(double lat, double lon) {
-        List<Store> exampleList = new ArrayList<>();
-        for (int i = 0; i < 10; i ++) {
-            exampleList.add(stores.get(i));
-        }
-        return exampleList;
     }
 
     /**
