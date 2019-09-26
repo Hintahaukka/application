@@ -56,10 +56,14 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cents = turnEnteredPriceToCents(enterEuros.getText().toString(),
+
+                String cents = EnterPriceUtils.turnEnteredPriceToCents(
+                        enterEuros.getText().toString(),
                         enterCents.getText().toString());
+
                 Navigation.findNavController(getView()).navigate(
-                        EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(selectedStore, scanResult, cents));
+                        EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
+                                selectedStore, scanResult, cents));
 
             }
         });
@@ -92,18 +96,4 @@ public class EnterPriceFragment extends Fragment {
 
     }
 
-    private String turnEnteredPriceToCents(String euros, String cents) {
-        int eurosAsInt = 0;
-        if(!euros.isEmpty()) {
-            eurosAsInt = Integer.parseInt(euros);
-        }
-
-        int centsasInt = 0;
-        if(!cents.isEmpty()) {
-            centsasInt = Integer.parseInt(cents);
-        }
-
-        int result = eurosAsInt * 100 + centsasInt;
-        return String.valueOf(result);
-    }
 }
