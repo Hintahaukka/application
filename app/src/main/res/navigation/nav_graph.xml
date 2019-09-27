@@ -7,8 +7,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="hifian.hintahaukka.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_barcodeScannerFragment"
             app:destination="@id/barcodeScannerFragment"
@@ -20,8 +19,7 @@
     <fragment
         android:id="@+id/barcodeScannerFragment"
         android:name="hifian.hintahaukka.BarcodeScannerFragment"
-        android:label="fragment_barcode_scanner"
-        tools:layout="@layout/fragment_barcode_scanner" >
+        tools:layout="@layout/fragment_barcode_scanner">
         <action
             android:id="@+id/action_barcodeScannerFragment_to_enterPriceFragment"
             app:destination="@id/enterPriceFragment"
@@ -36,8 +34,7 @@
     <fragment
         android:id="@+id/enterPriceFragment"
         android:name="hifian.hintahaukka.EnterPriceFragment"
-        android:label="fragment_enter_price"
-        tools:layout="@layout/fragment_enter_price" >
+        tools:layout="@layout/fragment_enter_price">
         <action
             android:id="@+id/action_enterPriceFragment_to_listPricesFragment"
             app:destination="@id/listPricesFragment"
@@ -55,8 +52,7 @@
     <fragment
         android:id="@+id/listPricesFragment"
         android:name="hifian.hintahaukka.ListPricesFragment"
-        android:label="fragment_list_prices"
-        tools:layout="@layout/fragment_list_prices" >
+        tools:layout="@layout/fragment_list_prices">
         <argument
             android:name="selectedStore"
             app:argType="string" />
