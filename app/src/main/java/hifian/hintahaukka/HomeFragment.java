@@ -76,29 +76,40 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the dropdown menu.
+     */
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
-        // TODO: Dropdown menu should show store names, but send the store id as value
-       // List<String> storeList = storeManager.listNearestStores(this.lat, this.lon);
-        final List<Store> storeList2 = storeManager.listNearestStores2(this.lat, this.lon);
+        final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
         List<String> storeNames = new ArrayList<>();
-        for (Store s : storeList2) {
+        for (Store s : storeList) {
             storeNames.add(s.getName());
         }
 
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this.getContext(),android.R.layout.simple_spinner_dropdown_item,storeNames){
 
+            /**
+             * Defines which items in the dropdown menu are selectable.
+             * If first item is used as hint, make this method return false for position 0.
+             * @param position The position of the item (Starting from 0).
+             * @return True if the item is enabled, false otherwise.
+             */
             public boolean isEnabled(int position){
                 return true;
             }
+
             @Override
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
+
+                // Defines the color of the item in this position.
+                // If first item is used as hint, set color gray for position 0.
                 tv.setTextColor(Color.BLACK);
 
                 return view;
@@ -107,11 +118,11 @@ public class HomeFragment extends Fragment {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
 
+        // What to do when an item in dropdown is selected
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                Store selected = storeList2.get(position);
+                Store selected = storeList.get(position);
                 selectedStore = selected.getStoreId();
             }
 
