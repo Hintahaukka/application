@@ -15,16 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Comparator;
+import com.google.gson.Gson;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -37,6 +36,7 @@ public class ListPricesFragment extends Fragment {
     private TextView pricesTextView;
     private StoreManager storeManager;
     private String herokuResponse;
+    private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
 
 
     public ListPricesFragment() {
@@ -138,29 +138,70 @@ public class ListPricesFragment extends Fragment {
 
     }
 
-    //TODO: JSON-vastauksen käsittely ja kauppojen järjestys tässä!
     public void handleResponse(String response) {
         pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
-        try {
-            JSONArray json = new JSONArray(response);
 
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject priceObject = json.getJSONObject(i);
-                Store s = storeManager.getStore(priceObject.getString("storeId"));
-                if (s!= null && s.getName() != null) {
-                    pricesTextView.append("\n" + s.getName());
-                } else {
-                    pricesTextView.append("\nTuntematon kauppa");
-                }
-                String date = priceObject.getString("timestamp");
-                pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
-                double cents = priceObject.getInt("cents") / 100.0;
-                String formattedPrice = String.format("%.02f", cents);
-                pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+        Store selected = storeManager.getStore(selectedStore);
+
+        PriceListItem[] priceList = new Gson().fromJson(response, PriceListItem[].class);
+        Arrays.sort(priceList, new PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
+        if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
+
+        for (PriceListItem item : priceList) {
+            Store s = storeManager.getStore(item.getStoreId());
+            if (s!= null && s.getName() != null) {
+                pricesTextView.append("\n" + s.getName());
+            } else {
+                pricesTextView.append("\nTuntematon kauppa");
             }
-            pricesTextView.setMovementMethod(new ScrollingMovementMethod());
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
+            String date = item.getTimestamp();
+            pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
+            double cents = item.getCents() / 100.0;
+            String formattedPrice = String.format("%.02f", cents);
+            pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+        }
+        pricesTextView.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    /**
+     * Sorts PriceListItems into ascending order according to their distances to the given reference location.
+     */
+    class PriceListItemDistanceComparator implements Comparator<PriceListItem> {
+        private double lat;
+        private double lon;
+        /**
+         * @param lat The latitude of the reference location.
+         * @param lon The longitude of the reference location.
+         */
+        public PriceListItemDistanceComparator(double lat, double lon) {
+            this.lat = lat;
+            this.lon = lon;
+        }
+        public int compare(PriceListItem p1, PriceListItem p2) {
+            // Extract stores from PriceListItems.
+            Store s1 = storeManager.getStore(p1.getStoreId());
+            Store s2 = storeManager.getStore(p2.getStoreId());
+
+            if(s1 != null && s2 == null) {
+                return -1;
+            } else if(s1 == null && s2 != null) {
+                return 1;
+            } else if(s1 == null && s2 == null) {
+                return 0;
+            }
+
+            //Store s1 distance to reference location.
+            double distanceS1 = Math.hypot(s1.getLat() - lat, s1.getLon() - lon);
+            //Store s2 distance to reference location.
+            double distanceS2 = Math.hypot(s2.getLat() - lat, s2.getLon() - lon);
+
+            if(distanceS1 < distanceS2) {
+                return -1;
+            } else if(distanceS1 > distanceS2) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
 
