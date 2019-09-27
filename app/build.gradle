@@ -21,8 +21,8 @@ android {
     targetSdkVersion 29
     versionCode 1
     versionName "1.0"  //tämäkin voitaisiin määritellä juuren build.gradlessa
-    // option for next : testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    // testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
   }
  
   buildTypes {
