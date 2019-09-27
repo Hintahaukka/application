@@ -36,6 +36,7 @@ public class ListPricesFragment extends Fragment {
     private String selectedStore;
     private TextView pricesTextView;
     private StoreManager storeManager;
+    private String herokuResponse;
 
 
     public ListPricesFragment() {
@@ -55,11 +56,16 @@ public class ListPricesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
         new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
 
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        while( herokuResponse == null) {
+
+        }
+        this.handleResponse(herokuResponse);
+
     }
 
     @Override
@@ -117,39 +123,45 @@ public class ListPricesFragment extends Fragment {
                     }
                 }
                 urlConnection.disconnect();
+                herokuResponse = response;
                 return response;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                herokuResponse = "";
                 return "";
             }
         }
 
         @Override
         protected void onPostExecute(String response) {
-            pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
-            try {
-                JSONArray json = new JSONArray(response);
-
-                for (int i = 0; i < json.length(); i++) {
-                    JSONObject priceObject = json.getJSONObject(i);
-                    Store s = storeManager.getStore(priceObject.getString("storeId"));
-                    if (s!= null && s.getName() != null) {
-                        pricesTextView.append("\n" + s.getName());
-                    } else {
-                        pricesTextView.append("\nTuntematon kauppa");
-                    }
-                    String date = priceObject.getString("timestamp");
-                    pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
-                    double cents = priceObject.getInt("cents") / 100.0;
-                    String formattedPrice = String.format("%.02f", cents);
-                    pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
-                }
-                pricesTextView.setMovementMethod(new ScrollingMovementMethod());
-            } catch (JSONException e) {
-                System.out.println(e.getMessage());
-            }
         }
 
+    }
+
+    //TODO: JSON-vastauksen käsittely ja kauppojen järjestys tässä!
+    public void handleResponse(String response) {
+        pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
+        try {
+            JSONArray json = new JSONArray(response);
+
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject priceObject = json.getJSONObject(i);
+                Store s = storeManager.getStore(priceObject.getString("storeId"));
+                if (s!= null && s.getName() != null) {
+                    pricesTextView.append("\n" + s.getName());
+                } else {
+                    pricesTextView.append("\nTuntematon kauppa");
+                }
+                String date = priceObject.getString("timestamp");
+                pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
+                double cents = priceObject.getInt("cents") / 100.0;
+                String formattedPrice = String.format("%.02f", cents);
+                pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+            }
+            pricesTextView.setMovementMethod(new ScrollingMovementMethod());
+        } catch (JSONException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
