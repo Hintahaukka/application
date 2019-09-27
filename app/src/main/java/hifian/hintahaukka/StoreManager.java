@@ -85,6 +85,25 @@ public class StoreManager {
     }
 
     /**
+     * Finds the nearest stores
+     * @param lat The current latitude
+     * @param lon The current longitude
+     * @return A list of stores nearest to the coordinates
+     */
+    public List<Store> listNearestStores2(double lat, double lon) {
+        Collections.sort(this.stores, new StoreDistanceComparator(lat, lon));
+
+        int numberOfStoresToReturn = 10;
+        if(numberOfStoresToReturn > stores.size()) numberOfStoresToReturn = stores.size();
+
+        List<Store> storesToList = new ArrayList<>();
+        for (int i = 0; i < numberOfStoresToReturn; i++) {
+            storesToList.add(stores.get(i));
+        }
+        return storesToList;
+    }
+
+    /**
      * Find the Store with the given id
      * @param id Store id
      * @return Store matching the id
