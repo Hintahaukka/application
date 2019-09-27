@@ -23,6 +23,10 @@ public class StoreManager {
         this.storeMap = new HashMap<>();
     }
 
+    /**
+     * Initializes the StoreManager with data from the InputStream
+     * @param istream InputStream containing Store osm-data.
+     */
     public void fetchStores(InputStream istream) {
         this.stores = this.handleStores(istream);
         for (Store s: stores) {
@@ -66,31 +70,12 @@ public class StoreManager {
     }
 
     /**
-     * Finds the nearest stores and converts them into Strings
-     * @param lat The current latitude
-     * @param lon The current longitude
-     * @return A list of stores nearest to the coordinates
-     */
-    public List<String> listNearestStores(double lat, double lon) {
-        Collections.sort(this.stores, new StoreDistanceComparator(lat, lon));
-
-        int numberOfStoresToReturn = 10;
-        if(numberOfStoresToReturn > stores.size()) numberOfStoresToReturn = stores.size();
-
-        List<String> storesToStringList = new ArrayList<>();
-        for (int i = 0; i < numberOfStoresToReturn; i++) {
-            storesToStringList.add(stores.get(i).getStoreId());
-        }
-        return storesToStringList;
-    }
-
-    /**
      * Finds the nearest stores
      * @param lat The current latitude
      * @param lon The current longitude
      * @return A list of stores nearest to the coordinates
      */
-    public List<Store> listNearestStores2(double lat, double lon) {
+    public List<Store> listNearestStores(double lat, double lon) {
         Collections.sort(this.stores, new StoreDistanceComparator(lat, lon));
 
         int numberOfStoresToReturn = 10;
