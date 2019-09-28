@@ -4,11 +4,9 @@ package hifian.hintahaukka;
 import android.graphics.Color;
 
 import android.location.Location;
-<<<<<<< HEAD
-=======
+
 import android.media.Image;
 import android.net.Uri;
->>>>>>> logonLisays
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
