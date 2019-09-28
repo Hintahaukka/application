@@ -12,15 +12,16 @@ Master: [![codecov](https://codecov.io/gh/Hintahaukka/application/branch/master/
 
 Dev: [![codecov](https://codecov.io/gh/Hintahaukka/application/branch/dev/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/application)
 
-#### Test codecoverage:
-Master: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/master/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
-
-Dev: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/dev/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
-
 ### Backend
 
 master: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=master)](https://travis-ci.org/Hintahaukka/backend)  
 dev: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=dev)](https://travis-ci.org/Hintahaukka/backend)
+
+
+#### Test codecoverage:
+Master: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/master/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
+
+Dev: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/dev/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
 
 ## Tavoite
 
