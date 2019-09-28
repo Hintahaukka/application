@@ -1,6 +1,7 @@
 package hifian.hintahaukka;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -18,18 +19,19 @@ public class MainActivity extends AppCompatActivity {
 
     private StoreManager storeManager;
     private GpsActivity gpsActivity;
-
+    Double lat;
+    Double lon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.gpsActivity = new GpsActivity(getApplicationContext());
-        try {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
+        Intent i = getIntent();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+             lat = extras.getDouble("lat");
+             lon = extras.getDouble("lon");
+        }
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
 

@@ -4,6 +4,11 @@ package hifian.hintahaukka;
 import android.graphics.Color;
 
 import android.location.Location;
+<<<<<<< HEAD
+=======
+import android.media.Image;
+import android.net.Uri;
+>>>>>>> logonLisays
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +32,6 @@ import java.util.List;
 
 
 public class HomeFragment extends Fragment {
-
     private String selectedStore = "Unknown store";
     private StoreManager storeManager;
     private GpsActivity gpsActivity;
@@ -52,7 +57,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        getLocation();
         createSpinner();
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +68,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getLocation() {
+    /*private void getLocation() {
         this.gpsActivity = ((MainActivity)getActivity()).getGpsActivity();
         Location l = gpsActivity.getLocation();
         if( l == null){
@@ -74,7 +78,7 @@ public class HomeFragment extends Fragment {
             this.lon = l.getLongitude();
             Toast.makeText(this.getContext(),"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     /**
      * Creates the dropdown menu.
