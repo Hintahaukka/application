@@ -86,7 +86,12 @@ public class HomeFragment extends Fragment {
         final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
         List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
-            storeNames.add(s.getName());
+            if (s.getName() != null) {
+                storeNames.add(s.getName());
+            } else {
+                storeNames.add("Tuntematon kauppa");
+            }
+
         }
 
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
