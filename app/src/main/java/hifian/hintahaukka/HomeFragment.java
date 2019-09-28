@@ -6,6 +6,7 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ import java.util.List;
 
 
 public class HomeFragment extends Fragment {
-
+/home/mmohamud/AndroidStudioProjects/application/app/src/main/java/hifian/hintahaukka/BarcodeScannerFragment.java
     private String selectedStore = "Unknown store";
     private StoreManager storeManager;
     private GpsActivity gpsActivity;
@@ -56,7 +58,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createSpinner();
-        getLocation();
+        //getLocation();
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +69,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getLocation() {
+    /*private void getLocation() {
         this.gpsActivity = ((MainActivity)getActivity()).getGpsActivity();
         Location l = gpsActivity.getLocation();
         if( l == null){
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment {
             double lon = l.getLongitude();
             Toast.makeText(this.getContext(),"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
