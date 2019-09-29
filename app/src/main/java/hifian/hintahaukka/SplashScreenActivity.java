@@ -20,16 +20,16 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        this.gpsActivity = new GpsActivity(getApplicationContext());
+        this.gpsActivity = new GpsActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        requestPermission();
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(i);
-                requestPermission();
                 getLocation();
                 sendLocation();
                 // close this activity
@@ -39,12 +39,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     }
-
-
+    
         public void requestPermission() {
             if (this.gpsActivity != null) {
                 try {
-                    //ActivityCompat.requestPermissions(SplashScreenActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
                 } catch (Exception ex) {
                     ex.printStackTrace();

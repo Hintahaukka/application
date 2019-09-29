@@ -19,21 +19,29 @@ public class MainActivity extends AppCompatActivity {
 
     private StoreManager storeManager;
     private GpsActivity gpsActivity;
-    Double lat;
-    Double lon;
+    double lat;
+    double lon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = getIntent();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-             lat = extras.getDouble("lat");
-             lon = extras.getDouble("lon");
+             this.lat = extras.getDouble("lat");
+             this.lon = extras.getDouble("lon");
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lon", lon);
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(bundle);
+
+        Toast.makeText(this,"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
+
 
         this.storeManager = new StoreManager();
         try {
@@ -53,8 +61,20 @@ public class MainActivity extends AppCompatActivity {
         return this.storeManager;
     }
 
-    public GpsActivity getGpsActivity() {
-        return this.gpsActivity;
+    public void sendLocationDataToHomefragment() {
+        Bundle bundle = new Bundle();
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lon", lon);
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(bundle);
+    }
+
+    public double getLat() {
+        return this.lat;
+    }
+
+    public double getLon() {
+        return this.lon;
     }
 
 }
