@@ -69,8 +69,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         public void sendLocation() {
             Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-            i.putExtra("lat", l.getLatitude());
-            i.putExtra("lon", l.getLongitude());
+            if (l != null) {
+                i.putExtra("lat", l.getLatitude());
+                i.putExtra("lon", l.getLongitude());
+            } else {
+                Double def= 0.0;
+                i.putExtra("lat", def);
+                i.putExtra("lon", def);
+            }
             startActivity(i);
             finish();
         }
