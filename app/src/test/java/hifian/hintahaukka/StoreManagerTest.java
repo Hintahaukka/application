@@ -46,21 +46,21 @@ public class StoreManagerTest {
     public void listNearestStoresMethodWorks() {
         this.useAllData();
 
-        List<String> storeIdList = storeManager.listNearestStores(60.317435, 24.849496);
-        assertEquals(10, storeIdList.size());
-        assertEquals("K-Market Kivistö", storeManager.getStore(storeIdList.get(0)).getName());
+        List<Store> storeList = storeManager.listNearestStores(60.317435, 24.849496);
+        assertEquals(10, storeList.size());
+        assertEquals("K-Market Kivistö", storeList.get(0).getName());
 
-        storeIdList = storeManager.listNearestStores(61.491727, 23.790583);
-        assertEquals(10, storeIdList.size());
-        assertEquals("Sale Järvensivu", storeManager.getStore(storeIdList.get(0)).getName());
+        storeList = storeManager.listNearestStores(61.491727, 23.790583);
+        assertEquals(10, storeList.size());
+        assertEquals("Sale Järvensivu", storeList.get(0).getName());
 
-        storeIdList = storeManager.listNearestStores(61.496632, 23.802789);
-        assertEquals(10, storeIdList.size());
-        assertEquals("K-Market Domus", storeManager.getStore(storeIdList.get(0)).getName());
+        storeList = storeManager.listNearestStores(61.496632, 23.802789);
+        assertEquals(10, storeList.size());
+        assertEquals("K-Market Domus", storeList.get(0).getName());
 
-        storeIdList = storeManager.listNearestStores(61.508963, 23.778021);
-        assertEquals(10, storeIdList.size());
-        assertEquals("K-Market Lapinniemi", storeManager.getStore(storeIdList.get(0)).getName());
+        storeList = storeManager.listNearestStores(61.508963, 23.778021);
+        assertEquals(10, storeList.size());
+        assertEquals("K-Market Lapinniemi", storeList.get(0).getName());
     }
 
 
