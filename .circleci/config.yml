@@ -1,12 +1,8 @@
-version: 2
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.5
 jobs:
-  build:
-    filters:
-      branches:
-        only:
-          - dev
-          - /feat*.*/
-    working_directory: ~/code
+  build-android:
     docker:
       - image: circleci/android:api-25-alpha
     environment:
@@ -31,10 +27,25 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Run Tests
-          command: ./gradlew lint test
+          command: ./gradlew build jacocoTestReport assembleAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: app/build/reports
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: app/build/test-results
+#      - run:
+#          name: connectedCheck
+#          command: ./gradlew connectedCheck
+      - run:
+          name: Upload Coverage Results
+          command: |
+            curl -s https://codecov.io/bash | bash -s --\
+              -t $CODECOV_TOKEN \
+              -n $CIRCLE_BUILD_NUM \
+              -Z || echo 'Codecov upload failed'
 # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - build-android
