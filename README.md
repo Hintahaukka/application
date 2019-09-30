@@ -53,6 +53,7 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 * Keskeisimpiä ominaisuuksia varten on tehty automaattiset testit
 * Sovellus toimii laitteella
 * Koodi on dokumentoitu yleisellä tasolla
+* Uudet ominaisuudet ja merkittävät muutokset on katselmoitu
 * CI on pystyssä ja testit menevät läpi
 * Heroku buildaa ja toimii
 
