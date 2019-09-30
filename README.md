@@ -50,7 +50,7 @@ Uusia ominaisuuksia varten tehdään aina oma branch. Kun ominaisuus on valmis, 
 User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 * User storyn hyväksymiskriteerit täyttyvät
-* Automaattisia testejä on riittävästi
+* Keskeisimpiä ominaisuuksia varten on tehty automaattiset testit
 * Sovellus toimii laitteella
 * Koodi on dokumentoitu yleisellä tasolla
 * CI on pystyssä ja testit menevät läpi
