@@ -8,6 +8,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.core.content.ContextCompat;
+
+import java.util.List;
+
 import static android.content.Context.LOCATION_SERVICE;
 
 public class GpsActivity implements LocationListener {
@@ -28,8 +31,19 @@ public class GpsActivity implements LocationListener {
             boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (isGPSEnabled){
                 lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000,10,this);
-                Location loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                return loc;
+                List<String> providers = lm.getProviders(true);
+                Location bestLocation = null;
+                for (String provider : providers) {
+                    Location l = lm.getLastKnownLocation(provider);
+                    if (l == null) {
+                        continue;
+                    }
+                    if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                        // Found best last known location: %s", l);
+                        bestLocation = l;
+                    }
+                }
+                return bestLocation;
             }else{
                 Log.e("sec","error");
             }
