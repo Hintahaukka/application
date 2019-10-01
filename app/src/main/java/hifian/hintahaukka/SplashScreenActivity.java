@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.os.AsyncTask;
-
 
 public class SplashScreenActivity extends AppCompatActivity {
     public Location l;
@@ -28,10 +26,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(i);
                 getLocation();
-                sendLocation();
+                Intent intent = getIntentWithLocationArguments();
+                startActivity(intent);
                 // close this activity
                 finish();
             }
@@ -65,7 +62,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             return null;
         }
 
-        public void sendLocation() {
+        public Intent getIntentWithLocationArguments() {
             Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
             if (l != null) {
                 i.putExtra("lat", l.getLatitude());
@@ -75,7 +72,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 i.putExtra("lat", def);
                 i.putExtra("lon", def);
             }
-            startActivity(i);
-            finish();
+            return i;
         }
 }

@@ -32,16 +32,8 @@ public class MainActivity extends AppCompatActivity {
              this.lon = extras.getDouble("lon");
         }
 
-        Bundle bundle = new Bundle();
-        bundle.putDouble("lat", lat);
-        bundle.putDouble("lon", lon);
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-
-        Toast.makeText(this,"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
-
 
         this.storeManager = new StoreManager();
         try {
