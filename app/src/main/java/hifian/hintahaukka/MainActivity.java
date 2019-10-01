@@ -1,13 +1,7 @@
 package hifian.hintahaukka;
 
-import android.Manifest;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.widget.Toast;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -18,9 +12,9 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity {
 
     private StoreManager storeManager;
-    private GpsActivity gpsActivity;
     double lat;
     double lon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,14 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     public StoreManager getStoreManager() {
         return this.storeManager;
-    }
-
-    public void sendLocationDataToHomefragment() {
-        Bundle bundle = new Bundle();
-        bundle.putDouble("lat", lat);
-        bundle.putDouble("lon", lon);
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
     }
 
     public double getLat() {
