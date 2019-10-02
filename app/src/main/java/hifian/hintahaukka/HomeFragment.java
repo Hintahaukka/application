@@ -66,17 +66,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    /*private void getLocation() {
-        this.gpsActivity = ((MainActivity)getActivity()).getGpsActivity();
-        Location l = gpsActivity.getLocation();
-        if( l == null){
-            Toast.makeText(this.getContext(),"GPS unable to get Value",Toast.LENGTH_LONG).show();
-        }else {
-            this.lat = l.getLatitude();
-            this.lon = l.getLongitude();
-            Toast.makeText(this.getContext(),"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
-        }
-    }*/
 
     /**
      * Creates the dropdown menu.
@@ -84,8 +73,10 @@ public class HomeFragment extends Fragment {
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-
-        final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
+        this.lat = ((MainActivity)getActivity()).getLat();
+        this.lon = ((MainActivity)getActivity()).getLon();
+        //final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
+        final List<Store> storeList = storeManager.listNearestStores(lat, lon);
         List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
             if (s.getName() != null) {
