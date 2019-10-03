@@ -1,8 +1,6 @@
 package hifian.hintahaukka;
 
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,17 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 import com.google.gson.Gson;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class ListPricesFragment extends Fragment {
@@ -35,7 +25,6 @@ public class ListPricesFragment extends Fragment {
     private String selectedStore;
     private TextView pricesTextView;
     private StoreManager storeManager;
-    private String herokuResponse;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
 
 
@@ -59,13 +48,17 @@ public class ListPricesFragment extends Fragment {
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
-        new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
 
-        while( herokuResponse == null) {
-
+        HttpService httpService = new HttpService("https://hintahaukka.herokuapp.com/");
+        String[] parameterNames = {"ean", "cents", "storeId"};
+        String[] parameters = {ean, cents, selectedStore};
+        httpService.sendPostRequest(parameterNames, parameters);
+        String herokuResponse = null;
+        while (herokuResponse == null) {
+            // TODO: Do something while the post task is running. While-loop probably not the best way to wait.
+            herokuResponse = httpService.getPostResponse();
         }
         this.handleResponse(herokuResponse);
-
     }
 
     @Override
@@ -73,69 +66,6 @@ public class ListPricesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
-    }
-
-    public class HerokuPostTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String urlString = "https://hintahaukka.herokuapp.com/";
-            String response = "";
-
-            try {
-                URL url = new URL(urlString);
-                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
-
-                urlConnection.setReadTimeout(10000);
-                urlConnection.setConnectTimeout(15000);
-
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("ean", params[0])
-                        .appendQueryParameter("cents", params[1])
-                        .appendQueryParameter("storeId", params[2]);
-                String query = builder.build().getEncodedQuery();
-
-                urlConnection.connect();
-
-                DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-
-                out.writeBytes(query);
-                out.flush();
-                out.close();
-
-
-                int responseCode=urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    String line;
-                    BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
-                }
-                urlConnection.disconnect();
-                herokuResponse = response;
-                return response;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                herokuResponse = "";
-                return "";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-        }
-
     }
 
     public void handleResponse(String response) {
