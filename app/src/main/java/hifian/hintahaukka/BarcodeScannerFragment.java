@@ -133,9 +133,9 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
 
     @Override
     public void handleResult(Result result) {
+        onDestroy();
         final String scanResult = result.getText();
         Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult));
     }
-
 }
