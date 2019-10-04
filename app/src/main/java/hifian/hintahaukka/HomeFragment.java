@@ -3,10 +3,6 @@ package hifian.hintahaukka;
 
 import android.graphics.Color;
 
-import android.location.Location;
-
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,11 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,20 +52,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createSpinner();
-/*
-        CheckBox databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
-        CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isChecked()) {
-                    test = true;
-                } else {
-                    test = false;
-                }
-            }
-        };
-        databaseCheckBox.setOnCheckedChangeListener(listener);
-*/
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +77,6 @@ public class HomeFragment extends Fragment {
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
         this.lat = ((MainActivity)getActivity()).getLat();
         this.lon = ((MainActivity)getActivity()).getLon();
-        //final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
         final List<Store> storeList = storeManager.listNearestStores(lat, lon);
         List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
