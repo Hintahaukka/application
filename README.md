@@ -59,11 +59,25 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 ## Asennusohjeet
 
-TODO
+1. Mene osoitteeseen https://github.com/Hintahaukka/application/releases
+2. Paina sivulla näkyvää "Assets" nimistä valikkoa
+3. Paina "app-dubug.apk" nimistä tiedostoa.
+
+Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se android puhelimeesi. Vaihtoehtoisesti voit ladata tiedoston suoraan puhelimeesi menemällä puhelimen selaimella kohdassa 1) olevaan osoitteeseen. 
+
+4. Seuraavaksi mene puhelimesi asetuksiin ja salli asennus tuntemattomista lähteistä. Android puhelimissa valinnan sijainti asetuksissa vaihtelee mutta esimerkiksi Huawei puhelimissa tämä tapahtuu siten että menee asetuksiin, valitsee suojaus ja sitten valitsee "Tuntematomat lähteet". 
+5. Kun sovellus on asennettu voit käynnistää sen valitsemalla sen sovellusvalikosta. 
+
 
 ## Käyttöohjeet
-
-TODO
+1. Laita puhelimen GPS päälle
+2. Avaa sovellus
+3. Anna sovellukselle lupa käyttää sijaintitietoja
+4. Valitse valikosta kauppa
+5. Paina "SKANNAA VIIVAKOODI" nappia
+6. Skannaa tuotteen viivakoodi puhelimen kameralla
+7. Syötä tuotteen hinta ja paina "Lähetä"
+8. Tuotteen hinta muissa kaupoissa tulee näkyville.
 
 ## Credits
 
