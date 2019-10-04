@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class HomeFragment extends Fragment {
     private GpsActivity gpsActivity;
     private double lat;
     private double lon;
+    private boolean test;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -56,12 +59,32 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createSpinner();
+/*
+        CheckBox databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
+        CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()) {
+                    test = true;
+                } else {
+                    test = false;
+                }
+            }
+        };
+        databaseCheckBox.setOnCheckedChangeListener(listener);
+*/
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CheckBox databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
+                if (databaseCheckBox.isChecked()) {
+                    test = true;
+                } else {
+                    test = false;
+                }
                 Navigation.findNavController(getView()).navigate(
-                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore));
+                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore, test));
             }
         });
     }
