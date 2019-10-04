@@ -26,6 +26,7 @@ public class ListPricesFragment extends Fragment {
     private TextView pricesTextView;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
+    private boolean test;
 
 
     public ListPricesFragment() {
@@ -40,6 +41,7 @@ public class ListPricesFragment extends Fragment {
         ean = args.getScanResult();
         selectedStore = args.getSelectedStore();
         cents = args.getCents();
+        test = args.getTest();
     }
 
     @Override
@@ -49,7 +51,11 @@ public class ListPricesFragment extends Fragment {
 
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
 
-        HttpService httpService = new HttpService("https://hintahaukka.herokuapp.com/");
+        String urlString = "https://hintahaukka.herokuapp.com/";
+        if (test) {
+            urlString = "https://hintahaukka.herokuapp.com/test";
+        }
+        HttpService httpService = new HttpService(urlString);
         String[] parameterNames = {"ean", "cents", "storeId"};
         String[] parameters = {ean, cents, selectedStore};
         httpService.sendPostRequest(parameterNames, parameters);
