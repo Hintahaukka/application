@@ -33,6 +33,7 @@ public class EnterPriceFragmentTest {
         Bundle bundle = new Bundle();
         bundle.putString(selectedStore, selectedStore);
         bundle.putString(scanResult, scanResult);
+        bundle.putBoolean("test", false);
         FragmentScenario<EnterPriceFragment> scenario =
                 FragmentScenario.launchInContainer(EnterPriceFragment.class, bundle);
 
@@ -61,7 +62,7 @@ public class EnterPriceFragmentTest {
         // THEN - Application navigates to list prices with correct price as argument
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "250"));
+                        selectedStore, scanResult, "250", false));
     }
 
     @Test
@@ -76,7 +77,7 @@ public class EnterPriceFragmentTest {
         // THEN - Application navigates to list prices with 0,00€ as price
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "0"));
+                        selectedStore, scanResult, "0", false));
     }
 
     @Test
