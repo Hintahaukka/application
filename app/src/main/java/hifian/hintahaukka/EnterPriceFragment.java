@@ -23,8 +23,11 @@ public class EnterPriceFragment extends Fragment {
 
     private String selectedStore;
     private String scanResult;
+    private boolean test;
+
     private String storeName;
     private StoreManager storeManager;
+
 
     public EnterPriceFragment() {
         // Required empty public constructor
@@ -37,6 +40,7 @@ public class EnterPriceFragment extends Fragment {
 
         selectedStore = args.getSelectedStore();
         scanResult = args.getScanResult();
+        test = args.getTest();
     }
 
     @Override
@@ -74,7 +78,7 @@ public class EnterPriceFragment extends Fragment {
 
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents));
+                                selectedStore, scanResult, cents, test));
 
             }
         });
