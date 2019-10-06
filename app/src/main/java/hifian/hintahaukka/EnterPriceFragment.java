@@ -16,12 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 
 public class EnterPriceFragment extends Fragment {
 
     private String selectedStore;
     private String scanResult;
     private boolean test;
+
+    private String storeName;
+    private StoreManager storeManager;
+
 
     public EnterPriceFragment() {
         // Required empty public constructor
@@ -47,7 +53,14 @@ public class EnterPriceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
+        Store store = storeManager.getStore(selectedStore);
+        if (store != null && store.getName() != null) {
+            storeField.setText("Kauppa: " + store.getName());
+        } else {
+            storeField.setText("Tuntematon kauppa");
+        }
         TextView eanField = (TextView) getView().findViewById(R.id.eanField);
         eanField.setText("Viivakoodi: " + scanResult);
 
