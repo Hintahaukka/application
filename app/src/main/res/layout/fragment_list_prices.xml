@@ -6,22 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ListPricesFragment">
 
-    <!--TextView
-        android:id="@+id/myPriceTextView"
-        android:layout_width="120dp"
-        android:layout_height="64dp"
-        android:text="Lisätty hinta"
-        app:layout_constraintBottom_toTopOf="@+id/pricesTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.078" /-->
-
     <TextView
         android:id="@+id/myPriceField"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="56dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +17,8 @@
 
     <TextView
         android:id="@+id/productField"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="56dp"
         app:layout_constraintLeft_toRightOf="@+id/myPriceField"
@@ -40,22 +28,19 @@
     <TextView
         android:id="@+id/otherPricesText"
         android:text="@string/text_finding_prices"
-        android:layout_width="150dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/myPriceField"
-        app:layout_constraintBottom_toTopOf="@+id/pricesTextView"
         app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
 
     <TextView
         android:id="@+id/pricesTextView"
-        android:layout_width="323dp"
-        android:layout_height="416dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="150dp"
+        android:paddingLeft="30dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/otherPricesText"
