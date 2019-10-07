@@ -23,7 +23,10 @@ public class ListPricesFragment extends Fragment {
     private String ean;
     private String cents;
     private String selectedStore;
+    private TextView myPriceField;
+    private TextView productField;
     private TextView pricesTextView;
+    private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
@@ -49,6 +52,24 @@ public class ListPricesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
+        //Showing the store and price added by user
+        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
+        Store s = storeManager.getStore(selectedStore);
+        if (s!= null && s.getName() != null) {
+            myPriceField.append(s.getName());
+        } else {
+            myPriceField.append("Tuntematon kauppa");
+        }
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        String formattedPrice = String.format("%.02f", myPrice);
+        myPriceField.append("\nHinta: " + formattedPrice + "€\n");
+
+        //Showing the product info
+        productField = (TextView) getView().findViewById(R.id.productField);
+        productField.setText("Viivakoodi: " + ean);
+
+        //Showing other prices
+        otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
 
         String urlString = "https://hintahaukka.herokuapp.com/";
@@ -74,8 +95,13 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
+    /**
+     * Creates a scrollable list of prices based on the JSON response.
+     * @param response The JSON containing the price info.
+     */
     public void handleResponse(String response) {
-        pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
+
+        otherPricesText.setText("Muut hinnat:\n");
 
         Store selected = storeManager.getStore(selectedStore);
 
@@ -84,6 +110,9 @@ public class ListPricesFragment extends Fragment {
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
         for (PriceListItem item : priceList) {
+            if (item.getStoreId().equals(selectedStore)) {
+                continue;
+            }
             Store s = storeManager.getStore(item.getStoreId());
             if (s!= null && s.getName() != null) {
                 pricesTextView.append("\n" + s.getName());
