@@ -88,10 +88,14 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
+                parameterNames = {"ean", "cents", "storeId"};
+                String[] parameters = {scanResult, cents, selectedStore};
+                httpService.sendPostRequest(parameterNames, parameters);
+
+                // does backend respond??
 
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
