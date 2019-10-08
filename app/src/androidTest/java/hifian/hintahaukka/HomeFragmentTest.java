@@ -1,7 +1,5 @@
 package hifian.hintahaukka;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.testing.FragmentScenario;
@@ -13,13 +11,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
@@ -55,7 +49,7 @@ public class HomeFragmentTest {
         // THEN - Application navigates to barcode scanner with the id of selected store and the test parameter set false
         verify(mockNavController).navigate(
                 HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(
-                        "418006009", false));
+                        defaultStoreId, false));
     }
 
     @Test
@@ -71,7 +65,7 @@ public class HomeFragmentTest {
         // THEN - Application navigates to barcode scanner with parameter test set true
         verify(mockNavController).navigate(
                 HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(
-                        "418006009", true));
+                        defaultStoreId, true));
     }
 
 }
