@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +75,8 @@ public class HomeFragment extends Fragment {
      */
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        this.lat = ((MainActivity)getActivity()).getLat();
-        this.lon = ((MainActivity)getActivity()).getLon();
+        this.createStoreManager();
+        this.getCoordinates();
         final List<Store> storeList = storeManager.listNearestStores(lat, lon);
         List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
@@ -130,6 +130,38 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Fragment calls MainActivity to get the StoreManager.
+     * In tests this causes a ClassCastException, so the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        try {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        } catch (ClassCastException e) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Fragment calls MainActivity to get the coordinates.
+     * In tests this causes a ClassCastException, so default coordinates (0, 0) are used.
+     */
+    private void getCoordinates() {
+        try {
+            this.lat = ((MainActivity)getActivity()).getLat();
+            this.lon = ((MainActivity)getActivity()).getLon();
+        } catch (ClassCastException e) {
+            this.lat = 0.0;
+            this.lon = 0.0;
+        }
     }
 
 }
