@@ -134,6 +134,10 @@ public class HttpService {
         URL url = new URL (urlString);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
 
+        if (request.getResponseCode() == 404) {
+            return null;
+        }
+        
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(request.getInputStream()));
 
