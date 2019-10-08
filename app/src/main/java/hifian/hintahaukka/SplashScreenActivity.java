@@ -97,16 +97,16 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     public Location getLocation() {
         location = gpsActivity.getLocation();
-        if(location == null) {
-            Toast.makeText(this,"GPS unable to get Value",Toast.LENGTH_LONG).show();
+        if (location == null) {
+            Log.e("SplashScreenActivity", "GPS unable to get value");
+            return null;
         } else {
             double lat = location.getLatitude();
             double lon = location.getLongitude();
-            Toast.makeText(this,"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
+            Log.i("SplashScreenActivity", "GPS lat = " + lat + " lon = " + lon);
 
             return location;
         }
-        return null;
     }
 
     public Intent getIntentWithLocationArguments() {
