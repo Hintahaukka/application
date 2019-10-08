@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
+
 
 public class EnterPriceFragment extends Fragment {
 
@@ -53,7 +55,7 @@ public class EnterPriceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        this.createStoreManager();
         TextView storeField = (TextView) getView().findViewById(R.id.storeField);
         Store store = storeManager.getStore(selectedStore);
         if (store != null && store.getName() != null) {
@@ -109,6 +111,24 @@ public class EnterPriceFragment extends Fragment {
             }
         });
 
+    }
+
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests this causes a ClassCastException, so the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        try {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        } catch (ClassCastException e) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }
