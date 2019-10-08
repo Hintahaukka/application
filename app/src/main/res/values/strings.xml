@@ -9,4 +9,6 @@
     <string name="text_euro_sign">€</string>
     <string name="text_cents">snt</string>
     <string name="text_use_test_data">Käytä testitietokantaa</string>
+    <string name="snackbar_request_permission_rationale">Sinun on annettava lupa sijainnin käyttöön voidaksemme löytää lähimmät kauppasi.</string>
+    <string name="snackbar_require_permission">Anna lupa sijainnin käyttöön puhelimesi asetuksista.</string>
 </resources>
