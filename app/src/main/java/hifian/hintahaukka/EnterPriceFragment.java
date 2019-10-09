@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
@@ -31,8 +34,12 @@ public class EnterPriceFragment extends Fragment {
     private String storeName;
     private String productName;
     private TextView nameTextView;
-    private PriceListItem[] priceList;
+    private PriceListItem priceListItem;
+    private PriceListItem[] prices;
     private StoreManager storeManager;
+    private HttpService httpService;
+    private String[] parameterNames;
+    private String[] parameters;
 
     public EnterPriceFragment() {
         // Required empty public constructor
@@ -58,13 +65,12 @@ public class EnterPriceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
 
-        HttpService httpService = new HttpService("https://hintahaukka.herokuapp.com/");
-        // removed cents from parameters as we haven't got it yet
-        String[] parameterNames = {"ean",  "storeId"};
-        String[] parameters = {scanResult,  selectedStore};
+        // find productName from backend to nameTextView
+        httpService = new HttpService("https://hintahaukka.herokuapp.com/getInfoAndPrices");
+        // removed cents from parameters as we haven't got it yet, no need to send storeId neither
+        parameterNames = new String[]{"ean"};
+        parameters = new String[]{scanResult};
         httpService.sendPostRequest(parameterNames, parameters);
         String herokuResponse = null;
         while (herokuResponse == null) {
@@ -72,6 +78,10 @@ public class EnterPriceFragment extends Fragment {
             herokuResponse = httpService.getPostResponse();
         }
         this.handleResponse(herokuResponse);
+
+
+        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
         Store store = storeManager.getStore(selectedStore);
         if (store != null && store.getName() != null) {
             storeField.setText("Kauppa: " + store.getName());
@@ -91,15 +101,29 @@ public class EnterPriceFragment extends Fragment {
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
-                parameterNames = {"ean", "cents", "storeId"};
-                String[] parameters = {scanResult, cents, selectedStore};
+                parameterNames = new String[]{"ean", "cents", "storeId"};
+                parameters = new String[]{scanResult, cents, selectedStore};
+                httpService = new HttpService("https://hintahaukka.herokuapp.com/addPrice");
+
                 httpService.sendPostRequest(parameterNames, parameters);
+                String response = null;
+                while (response == null) {
+                    // TODO: Do something while the post task is running. While-loop probably not the best way to wait.
+                    response = httpService.getPostResponse();
+                    if (response != null ) {
+                        if (response.equals("success")) {
+                            break;
+                        } else {
+                            // Todo: backend returned error
+                        }
+                    }
+                }
 
                 // does backend respond??
 
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, priceList ));
+                                selectedStore, scanResult, cents, productName, prices ));
 
             }
         });
@@ -134,14 +158,25 @@ public class EnterPriceFragment extends Fragment {
 
     public void handleResponse(String response) {
         nameTextView.setText("Haetaan tuotenimi...\n");
-
-        Store selected = storeManager.getStore(selectedStore);
-
-        priceList = new Gson().fromJson(response, PriceListItem[].class);
-
-        // we are now have productname, lets show it
-        productName = priceList[0].getProductName();
+        try {
+        JSONObject jsonObject = new JSONObject(response);
+        productName = jsonObject.getString("name");
         nameTextView.setText(productName);
+        JSONArray jsonArray = jsonObject.getJSONArray("prices");
+        int l = jsonArray.length();
+        prices = priceListItem.CREATOR.newArray(l);
+
+            for (int i = 0; i < l; i++) {
+                JSONObject j = jsonArray.getJSONObject(l);
+                prices[l] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
+                        j.getString("timestamp"));
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+
+        }
+        // we are now have productname, lets show it
+
 
 
 
