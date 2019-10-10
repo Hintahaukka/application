@@ -7,6 +7,16 @@
     tools:context=".EnterPriceFragment">
 
     <TextView
+        android:id="@+id/storeField"
+        android:layout_width="147dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Kauppa: Punkten" />
+
+    <TextView
         android:id="@+id/eanField"
         android:layout_width="147dp"
         android:layout_height="38dp"
@@ -107,15 +117,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/label_cents"
         app:layout_constraintTop_toTopOf="@+id/label_cents" />
-
-    <TextView
-        android:id="@+id/storeField"
-        android:layout_width="147dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="56dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
