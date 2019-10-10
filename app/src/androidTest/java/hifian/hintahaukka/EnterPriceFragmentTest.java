@@ -27,12 +27,14 @@ public class EnterPriceFragmentTest {
 
     String selectedStore = "selectedStore";
     String scanResult = "scanResult";
+    String productName = "Omena";
     NavController mockNavController;
 
     private void launchEnterPriceFragment() {
         Bundle bundle = new Bundle();
         bundle.putString(selectedStore, selectedStore);
         bundle.putString(scanResult, scanResult);
+        bundle.putString(productName, productName);
         FragmentScenario<EnterPriceFragment> scenario =
                 FragmentScenario.launchInContainer(EnterPriceFragment.class, bundle);
 
@@ -54,6 +56,8 @@ public class EnterPriceFragmentTest {
         // WHEN - User types price 2,50€ and clicks send
         onView(withId(R.id.enterEuros)).perform(typeText("2"));
         onView(withId(R.id.enterCents)).perform(typeText("50"));
+        onView(withId(R.id.nameField)).perform(typeText("Omena"));
+        PriceListItem[] prices = new PriceListItem[]{new PriceListItem(250,"23","2019-10-01 19:48:57.356073")};
         closeSoftKeyboard();
 
         onView(withId(R.id.sendPriceBtn)).perform(click());
@@ -61,7 +65,7 @@ public class EnterPriceFragmentTest {
         // THEN - Application navigates to list prices with correct price as argument
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "250"));
+                        selectedStore, scanResult, "250", productName, prices));
     }
 
     @Test
@@ -76,7 +80,7 @@ public class EnterPriceFragmentTest {
         // THEN - Application navigates to list prices with 0,00€ as price
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "0"));
+                        selectedStore, scanResult, "0", productName, new PriceListItem[]{}));
     }
 
     @Test
