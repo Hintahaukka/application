@@ -29,6 +29,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // Wake Heroku
+        String urlString = "https://hintahaukka.herokuapp.com/wake";
+        HttpService httpService = new HttpService(urlString);
+        httpService.sendGetRequest();
+
         requirePermissionToUseLocation(true);
     }
 
