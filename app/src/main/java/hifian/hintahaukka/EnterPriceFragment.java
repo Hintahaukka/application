@@ -70,6 +70,7 @@ public class EnterPriceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
+        nameTextView.setText("Haetaan tuotenimi...\n");
 
         // find productName from backend to nameTextView
         httpService = new HttpService("https://hintahaukka.herokuapp.com/getInfoAndPrices");
@@ -162,18 +163,20 @@ public class EnterPriceFragment extends Fragment {
 
 
     public void handleResponse(String response) {
-        nameTextView.setText("Haetaan tuotenimi...\n");
+        if (response == null) {
+            nameTextView.setText("Tuotenimen hakeminen epäonnistui\n");
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             productName = jsonObject.getString("name");
-            nameTextView.setText(productName);
+
             JSONArray jsonArray = jsonObject.getJSONArray("prices");
             int l = jsonArray.length();
-            prices = priceListItem.CREATOR.newArray(l);
+            prices = new PriceListItem[l];
 
             for (int i = 0; i < l; i++) {
-                JSONObject j = jsonArray.getJSONObject(l);
-                prices[l] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
+                JSONObject j = jsonArray.getJSONObject(i);
+                prices[i] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
                         j.getString("timestamp"));
             }
         } catch (JSONException e1) {
@@ -181,7 +184,14 @@ public class EnterPriceFragment extends Fragment {
 
         }
         // we are now have productname, lets show it
-
+        if (productName == null) {
+            productName = "Tuntematon tuote";
+        }
+        if (prices == null) {
+            prices = new PriceListItem[1];
+            prices[0] = new PriceListItem(0, selectedStore, "timestamp");
+        }
+        nameTextView.setText(productName);
     }
 
 

@@ -76,7 +76,7 @@
             app:argType="string" />
         <argument
             android:name="priceList"
-            app:argType="PriceListItem[]" />
+            app:argType="hifian.hintahaukka.PriceListItem[]" />
         <argument
             android:name="test"
             app:argType="boolean" />
