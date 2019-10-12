@@ -83,10 +83,6 @@ public class EnterPriceFragment extends Fragment {
             herokuResponse = httpService.getPostResponse();
         }
         this.handleResponse(herokuResponse);
-
-
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-
         this.createStoreManager();
 
         TextView storeField = (TextView) getView().findViewById(R.id.storeField);
@@ -168,12 +164,12 @@ public class EnterPriceFragment extends Fragment {
     public void handleResponse(String response) {
         nameTextView.setText("Haetaan tuotenimi...\n");
         try {
-        JSONObject jsonObject = new JSONObject(response);
-        productName = jsonObject.getString("name");
-        nameTextView.setText(productName);
-        JSONArray jsonArray = jsonObject.getJSONArray("prices");
-        int l = jsonArray.length();
-        prices = priceListItem.CREATOR.newArray(l);
+            JSONObject jsonObject = new JSONObject(response);
+            productName = jsonObject.getString("name");
+            nameTextView.setText(productName);
+            JSONArray jsonArray = jsonObject.getJSONArray("prices");
+            int l = jsonArray.length();
+            prices = priceListItem.CREATOR.newArray(l);
 
             for (int i = 0; i < l; i++) {
                 JSONObject j = jsonArray.getJSONObject(l);
@@ -186,7 +182,7 @@ public class EnterPriceFragment extends Fragment {
         }
         // we are now have productname, lets show it
 
-
+    }
 
 
 
