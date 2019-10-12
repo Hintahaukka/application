@@ -106,6 +106,7 @@ public class ListPricesFragment extends Fragment {
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
         // current Store and price there
+        /**
         Store s = storeManager.getStore(selectedStore);
         if (s!= null && s.getName() != null) {
             pricesTextView.append("\n" + s.getName());
@@ -115,11 +116,12 @@ public class ListPricesFragment extends Fragment {
         double price = Integer.parseInt(cents) / 100.0;
         String formattedPrice = String.format("%.02f", price);
         pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+        **/
 
         // strores and prices from array
         for (PriceListItem item : priceList) {
 
-            s = storeManager.getStore(item.getStoreId());
+            Store s = storeManager.getStore(item.getStoreId());
 
             if (item.getStoreId().equals(selectedStore)) {
                 continue;
@@ -133,7 +135,7 @@ public class ListPricesFragment extends Fragment {
             String date = item.getTimestamp();
             pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
             double cents = item.getCents() / 100.0;
-            formattedPrice = String.format("%.02f", cents);
+            String formattedPrice = String.format("%.02f", cents);
             pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
         }
         // can first one be locked ??

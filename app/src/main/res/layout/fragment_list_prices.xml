@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ListPricesFragment">
 
-    <TextView
+    <!--TextView
         android:id="@+id/productField"
         android:layout_width="147dp"
         android:layout_height="38dp"
@@ -15,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.811"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Viivakoodi: 1234567" />
+        tools:text="Viivakoodi: 1234567" /-->
 
     <TextView
         android:id="@+id/myPriceField"
