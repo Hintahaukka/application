@@ -73,15 +73,12 @@ public class ListPricesFragment extends Fragment {
 
         //Showing the product info
         productField = (TextView) getView().findViewById(R.id.productField);
-        productField.setText("Viivakoodi: " + ean);
+        productField.setText(productName);
 
         //Showing other prices
         otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
-<<<<<<< HEAD
         // added productName
-        productTextView = (TextView) getView().findViewById(R.id.productField);
-        productTextView.setText(productName);
         this.handlePricelist();
 
 
@@ -127,7 +124,6 @@ public class ListPricesFragment extends Fragment {
             if (item.getStoreId().equals(selectedStore)) {
                 continue;
             }
-            Store s = storeManager.getStore(item.getStoreId());
 
             if (s!= null && s.getName() != null) {
                 pricesTextView.append("\n" + s.getName());
