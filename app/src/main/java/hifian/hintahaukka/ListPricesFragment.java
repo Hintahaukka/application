@@ -24,10 +24,13 @@ public class ListPricesFragment extends Fragment {
     private String cents;
     private String selectedStore;
     private PriceListItem[] priceList;
+    private TextView myPriceField;
+    private TextView productField;
     private TextView pricesTextView;
-    private TextView productTextView;
+    private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
+    private boolean test;
 
 
 
@@ -47,6 +50,8 @@ public class ListPricesFragment extends Fragment {
         cents = args.getCents();
         // array of PriceListItems from database via enterPriceFragment
         priceList = args.getPriceList();
+        test = args.getTest();
+
     }
 
     @Override
@@ -54,11 +59,32 @@ public class ListPricesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
 
+        //Showing the store and price added by user
+        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
+        Store s = storeManager.getStore(selectedStore);
+        if (s!= null && s.getName() != null) {
+            myPriceField.append(s.getName());
+        } else {
+            myPriceField.append("Tuntematon kauppa");
+        }
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        String formattedPrice = String.format("%.02f", myPrice);
+        myPriceField.append("\nHinta: " + formattedPrice + "€\n");
+
+        //Showing the product info
+        productField = (TextView) getView().findViewById(R.id.productField);
+        productField.setText("Viivakoodi: " + ean);
+
+        //Showing other prices
+        otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
+<<<<<<< HEAD
         // added productName
         productTextView = (TextView) getView().findViewById(R.id.productField);
         productTextView.setText(productName);
         this.handlePricelist();
+
+
     }
 
     @Override
@@ -68,9 +94,14 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
+
     public void handlePricelist() {
         // changed to handle array from enterPriceFragment
         pricesTextView.setText(productName + " " + ean + " hinnat:\n");
+
+
+
+        otherPricesText.setText("Muut hinnat:\n");
 
         Store selected = storeManager.getStore(selectedStore);
 
@@ -90,7 +121,14 @@ public class ListPricesFragment extends Fragment {
 
         // strores and prices from array
         for (PriceListItem item : priceList) {
+
             s = storeManager.getStore(item.getStoreId());
+
+            if (item.getStoreId().equals(selectedStore)) {
+                continue;
+            }
+            Store s = storeManager.getStore(item.getStoreId());
+
             if (s!= null && s.getName() != null) {
                 pricesTextView.append("\n" + s.getName());
             } else {

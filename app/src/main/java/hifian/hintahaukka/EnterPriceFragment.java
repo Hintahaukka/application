@@ -25,12 +25,15 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
+import java.io.InputStream;
 
 
 public class EnterPriceFragment extends Fragment {
 
     private String selectedStore;
     private String scanResult;
+    private boolean test;
+
     private String storeName;
     private String productName;
     private TextView nameTextView;
@@ -40,6 +43,7 @@ public class EnterPriceFragment extends Fragment {
     private HttpService httpService;
     private String[] parameterNames;
     private String[] parameters;
+
 
     public EnterPriceFragment() {
         // Required empty public constructor
@@ -52,6 +56,7 @@ public class EnterPriceFragment extends Fragment {
 
         selectedStore = args.getSelectedStore();
         scanResult = args.getScanResult();
+        test = args.getTest();
     }
 
     @Override
@@ -81,6 +86,9 @@ public class EnterPriceFragment extends Fragment {
 
 
         this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+
+        this.createStoreManager();
+
         TextView storeField = (TextView) getView().findViewById(R.id.storeField);
         Store store = storeManager.getStore(selectedStore);
         if (store != null && store.getName() != null) {
@@ -123,7 +131,7 @@ public class EnterPriceFragment extends Fragment {
 
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, prices ));
+                                selectedStore, scanResult, cents, productName, prices, false ));
 
             }
         });
@@ -156,6 +164,7 @@ public class EnterPriceFragment extends Fragment {
 
     }
 
+
     public void handleResponse(String response) {
         nameTextView.setText("Haetaan tuotenimi...\n");
         try {
@@ -179,6 +188,24 @@ public class EnterPriceFragment extends Fragment {
 
 
 
+
+
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests this causes a ClassCastException, so the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        try {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        } catch (ClassCastException e) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
     }
 

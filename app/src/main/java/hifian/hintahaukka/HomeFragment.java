@@ -3,10 +3,6 @@ package hifian.hintahaukka;
 
 import android.graphics.Color;
 
-import android.location.Location;
-
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +16,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +31,7 @@ public class HomeFragment extends Fragment {
     private GpsActivity gpsActivity;
     private double lat;
     private double lon;
+    private boolean test;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,8 +57,14 @@ public class HomeFragment extends Fragment {
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CheckBox databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
+                if (databaseCheckBox.isChecked()) {
+                    test = true;
+                } else {
+                    test = false;
+                }
                 Navigation.findNavController(getView()).navigate(
-                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore));
+                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore, test));
             }
         });
     }
@@ -72,10 +75,8 @@ public class HomeFragment extends Fragment {
      */
     private void createSpinner() {
         final Spinner spinner = (Spinner) getView().findViewById(R.id.storeSpinner);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        this.lat = ((MainActivity)getActivity()).getLat();
-        this.lon = ((MainActivity)getActivity()).getLon();
-        //final List<Store> storeList = storeManager.listNearestStores(this.lat, this.lon);
+        this.createStoreManager();
+        this.getCoordinates();
         final List<Store> storeList = storeManager.listNearestStores(lat, lon);
         List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
@@ -129,6 +130,38 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Fragment calls MainActivity to get the StoreManager.
+     * In tests this causes a ClassCastException, so the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        try {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        } catch (ClassCastException e) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Fragment calls MainActivity to get the coordinates.
+     * In tests this causes a ClassCastException, so default coordinates (0, 0) are used.
+     */
+    private void getCoordinates() {
+        try {
+            this.lat = ((MainActivity)getActivity()).getLat();
+            this.lon = ((MainActivity)getActivity()).getLon();
+        } catch (ClassCastException e) {
+            this.lat = 0.0;
+            this.lon = 0.0;
+        }
     }
 
 }

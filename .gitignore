@@ -1,5 +1,10 @@
 .idea/
 .gradle/
 local.properties
+<<<<<<< HEAD
 build/
 app/*.iml
+=======
+*.iml
+build/
+>>>>>>> dev
