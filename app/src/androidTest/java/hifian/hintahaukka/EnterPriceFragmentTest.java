@@ -60,7 +60,6 @@ public class EnterPriceFragmentTest {
         // WHEN - User types price 2,50€ and clicks send
         onView(withId(R.id.enterEuros)).perform(typeText("2"));
         onView(withId(R.id.enterCents)).perform(typeText("50"));
-        onView(withId(R.id.nameField)).perform(replaceText("Omena"));
         PriceListItem[] prices = new PriceListItem[]{new PriceListItem(250,"23","2019-10-01 19:48:57.356073")};
         closeSoftKeyboard();
 
