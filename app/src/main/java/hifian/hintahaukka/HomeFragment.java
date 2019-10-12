@@ -63,8 +63,8 @@ public class HomeFragment extends Fragment {
                 } else {
                     test = false;
                 }
-                Navigation.findNavController(getView()).navigate(
-                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore, test));
+                /*Navigation.findNavController(getView()).navigate(
+                        HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(selectedStore, test));*/
             }
         });
     }
