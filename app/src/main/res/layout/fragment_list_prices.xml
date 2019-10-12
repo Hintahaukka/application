@@ -18,16 +18,44 @@
         tools:text="Viivakoodi: 1234567" />
 
     <TextView
-        android:id="@+id/pricesTextView"
+        android:id="@+id/myPriceField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:text="@string/text_finding_prices"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
-        app:layout_constraintStart_toStartOf="@+id/productField"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/productField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="56dp"
+        app:layout_constraintLeft_toRightOf="@+id/myPriceField"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.078" />
+        tools:text="Viivakoodi: 1234567" />
+
+    <TextView
+        android:id="@+id/otherPricesText"
+        android:text="@string/text_finding_prices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/myPriceField"
+        app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
+
+    <TextView
+        android:id="@+id/pricesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="150dp"
+        android:paddingLeft="30dp"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/otherPricesText"
+        app:layout_constraintTop_toBottomOf="@+id/otherPricesText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
