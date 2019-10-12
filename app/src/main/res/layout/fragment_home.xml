@@ -25,10 +25,21 @@
         android:id="@+id/storeSpinner"
         android:layout_width="221dp"
         android:layout_height="30dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="132dp"
         android:scrollHorizontally="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkbox_test_database"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/text_use_test_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
