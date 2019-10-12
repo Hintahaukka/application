@@ -78,7 +78,6 @@ public class ListPricesFragment extends Fragment {
         //Showing other prices
         otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
-        // added productName
         this.handlePricelist();
 
 
@@ -94,29 +93,13 @@ public class ListPricesFragment extends Fragment {
 
     public void handlePricelist() {
         // changed to handle array from enterPriceFragment
-        pricesTextView.setText(productName + " " + ean + " hinnat:\n");
-
-
-
         otherPricesText.setText("Muut hinnat:\n");
+        pricesTextView.setText("");
 
         Store selected = storeManager.getStore(selectedStore);
 
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
-
-        // current Store and price there
-        /**
-        Store s = storeManager.getStore(selectedStore);
-        if (s!= null && s.getName() != null) {
-            pricesTextView.append("\n" + s.getName());
-        } else {
-            pricesTextView.append("\nTuntematon kauppa");
-        }
-        double price = Integer.parseInt(cents) / 100.0;
-        String formattedPrice = String.format("%.02f", price);
-        pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
-        **/
 
         // strores and prices from array
         for (PriceListItem item : priceList) {
@@ -137,6 +120,9 @@ public class ListPricesFragment extends Fragment {
             double cents = item.getCents() / 100.0;
             String formattedPrice = String.format("%.02f", cents);
             pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+        }
+        if (pricesTextView.getText()=="") {
+            pricesTextView.setText("Ei muita hintoja");
         }
         // can first one be locked ??
         pricesTextView.setMovementMethod(new ScrollingMovementMethod());

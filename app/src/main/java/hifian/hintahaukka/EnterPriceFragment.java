@@ -10,21 +10,16 @@ import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
-import org.w3c.dom.Text;
 
-import java.util.Arrays;
 import java.io.InputStream;
 
 
@@ -73,8 +68,11 @@ public class EnterPriceFragment extends Fragment {
         nameTextView.setText("Haetaan tuotenimi...\n");
 
         // find productName from backend to nameTextView
-        httpService = new HttpService("https://hintahaukka.herokuapp.com/getInfoAndPrices");
-        // removed cents from parameters as we haven't got it yet, no need to send storeId neither
+        String productNameUrlString = "https://hintahaukka.herokuapp.com/getInfoAndPrices";
+        if (test) {
+            productNameUrlString = "https://hintahaukka.herokuapp.com/test/getInfoAndPrices";
+        }
+        httpService = new HttpService(productNameUrlString);
         parameterNames = new String[]{"ean"};
         parameters = new String[]{scanResult};
         httpService.sendPostRequest(parameterNames, parameters);
@@ -84,8 +82,9 @@ public class EnterPriceFragment extends Fragment {
             herokuResponse = httpService.getPostResponse();
         }
         this.handleResponse(herokuResponse);
-        this.createStoreManager();
 
+        // Show store and ean
+        this.createStoreManager();
         TextView storeField = (TextView) getView().findViewById(R.id.storeField);
         Store store = storeManager.getStore(selectedStore);
         if (store != null && store.getName() != null) {
@@ -108,23 +107,13 @@ public class EnterPriceFragment extends Fragment {
                         enterCents.getText().toString());
                 parameterNames = new String[]{"ean", "cents", "storeId"};
                 parameters = new String[]{scanResult, cents, selectedStore};
-                httpService = new HttpService("https://hintahaukka.herokuapp.com/addPrice");
+                String addPriceUrlString = "https://hintahaukka.herokuapp.com/addPrice";
+                if (test) {
+                    addPriceUrlString = "https://hintahaukka.herokuapp.com/test/addPrice";
+                }
+                httpService = new HttpService(addPriceUrlString);
 
                 httpService.sendPostRequest(parameterNames, parameters);
-                String response = null;
-                while (response == null) {
-                    // TODO: Do something while the post task is running. While-loop probably not the best way to wait.
-                    response = httpService.getPostResponse();
-                    if (response != null ) {
-                        if (response.equals("success")) {
-                            break;
-                        } else {
-                            // Todo: backend returned error
-                        }
-                    }
-                }
-
-                // does backend respond??
 
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
@@ -161,7 +150,10 @@ public class EnterPriceFragment extends Fragment {
 
     }
 
-
+    /**
+     * Parses the product name and an array of prices based on the JSON response.
+     * @param response The JSON containing the product and price info
+     */
     public void handleResponse(String response) {
         if (response == null) {
             nameTextView.setText("Tuotenimen hakeminen epäonnistui\n");
@@ -183,14 +175,17 @@ public class EnterPriceFragment extends Fragment {
             e1.printStackTrace();
 
         }
-        // we are now have productname, lets show it
+        // If the response contains no product name, put Unknown so that argument won't be null
         if (productName == null) {
             productName = "Tuntematon tuote";
         }
+        // If the responce contains no price list, create a fake, so that argument won't be null
+        // Id must be that of selectedStore, so that it won't be listed in the next fragment
         if (prices == null) {
             prices = new PriceListItem[1];
             prices[0] = new PriceListItem(0, selectedStore, "timestamp");
         }
+        // we are now have productname, lets show it
         nameTextView.setText(productName);
     }
 
