@@ -31,6 +31,9 @@
         <argument
             android:name="selectedStore"
             app:argType="string" />
+        <argument
+            android:name="test"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/enterPriceFragment"
@@ -50,6 +53,9 @@
         <argument
             android:name="scanResult"
             app:argType="string" />
+        <argument
+            android:name="test"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/listPricesFragment"
@@ -64,5 +70,8 @@
         <argument
             android:name="cents"
             app:argType="string" />
+        <argument
+            android:name="test"
+            app:argType="boolean" />
     </fragment>
 </navigation>

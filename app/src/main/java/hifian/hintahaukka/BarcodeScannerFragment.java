@@ -36,6 +36,7 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private String selectedStore;
+    private boolean test;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
 
         BarcodeScannerFragmentArgs args = BarcodeScannerFragmentArgs.fromBundle(getArguments());
         selectedStore = args.getSelectedStore();
+        test = args.getTest();
 
         //selectedStore = getIntent().getExtras().getString("selectedStore");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -136,6 +138,6 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         onDestroy();
         final String scanResult = result.getText();
         Navigation.findNavController(getView()).navigate(
-                BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult));
+                BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
     }
 }
