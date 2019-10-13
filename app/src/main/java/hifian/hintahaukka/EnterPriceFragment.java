@@ -176,8 +176,8 @@ public class EnterPriceFragment extends Fragment {
 
         }
         // If the response contains no product name, put Unknown so that argument won't be null
-        if (productName == null) {
-            productName = "Tuntematon tuote";
+        if (productName == null || productName.equals("")) {
+            productName = "Tuotenimeä ei saatavilla";
         }
         // If the responce contains no price list, create a fake, so that argument won't be null
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
