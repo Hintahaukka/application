@@ -33,12 +33,11 @@
 
     <TextView
         android:id="@+id/showStore"
-        android:layout_width="147dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="32dp"
+        android:layout_width="198dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toTopOf="@+id/button_scan_barcode"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Punkten" />
 

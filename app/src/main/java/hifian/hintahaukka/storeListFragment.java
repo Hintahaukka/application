@@ -19,13 +19,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class newHomeFragment extends Fragment {
+public class storeListFragment extends Fragment {
     private String selectedStore = "Unknown store";
     private StoreManager storeManager;
     private double lat;
     private double lon;
 
-    public newHomeFragment() {
+    public storeListFragment() {
 
     }
 
@@ -66,9 +66,11 @@ public class newHomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedStore = storeNames.get(i);
+                //selectedStore = storeList.get(i).getName();
+                Store selected = storeList.get(i);
+                selectedStore = selected.getStoreId();
                 Navigation.findNavController(getView()).navigate(
-                        newHomeFragmentDirections.actionNewHomeFragmentToNewScanFragment(selectedStore)
+                        storeListFragmentDirections.actionNewHomeFragmentToNewScanFragment(selectedStore)
                 );
             }
         });

@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/newHomeFragment"
-        android:name="hifian.hintahaukka.newHomeFragment"
+        android:name="hifian.hintahaukka.storeListFragment"
         android:label="Valitse kauppa"
         tools:layout="@layout/new_fragment_home">
         <action
@@ -73,7 +73,7 @@
     </fragment>
     <fragment
         android:id="@+id/newScanFragment"
-        android:name="hifian.hintahaukka.newScanFragment"
+        android:name="hifian.hintahaukka.scanButtonFragment"
         android:label="Skannaa tuote">
         <action
             android:id="@+id/action_newScanFragment_to_barcodeScannerFragment"
