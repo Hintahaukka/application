@@ -15,14 +15,15 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import com.google.gson.Gson;
 
 
 public class ListPricesFragment extends Fragment {
 
     private String ean;
+    private String productName;
     private String cents;
     private String selectedStore;
+    private PriceListItem[] priceList;
     private TextView myPriceField;
     private TextView productField;
     private TextView pricesTextView;
@@ -30,6 +31,8 @@ public class ListPricesFragment extends Fragment {
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
+
+
 
 
     public ListPricesFragment() {
@@ -42,9 +45,13 @@ public class ListPricesFragment extends Fragment {
 
         ListPricesFragmentArgs args = ListPricesFragmentArgs.fromBundle(getArguments());
         ean = args.getScanResult();
+        productName = args.getProductName();
         selectedStore = args.getSelectedStore();
         cents = args.getCents();
+        // array of PriceListItems from database via enterPriceFragment
+        priceList = args.getPriceList();
         test = args.getTest();
+
     }
 
     @Override
@@ -66,26 +73,14 @@ public class ListPricesFragment extends Fragment {
 
         //Showing the product info
         productField = (TextView) getView().findViewById(R.id.productField);
-        productField.setText("Viivakoodi: " + ean);
+        productField.setText(productName);
 
         //Showing other prices
         otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
+        this.handlePricelist();
 
-        String urlString = "https://hintahaukka.herokuapp.com/";
-        if (test) {
-            urlString = "https://hintahaukka.herokuapp.com/test";
-        }
-        HttpService httpService = new HttpService(urlString);
-        String[] parameterNames = {"ean", "cents", "storeId"};
-        String[] parameters = {ean, cents, selectedStore};
-        httpService.sendPostRequest(parameterNames, parameters);
-        String herokuResponse = null;
-        while (herokuResponse == null) {
-            // TODO: Do something while the post task is running. While-loop probably not the best way to wait.
-            herokuResponse = httpService.getPostResponse();
-        }
-        this.handleResponse(herokuResponse);
+
     }
 
     @Override
@@ -95,25 +90,26 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
-    /**
-     * Creates a scrollable list of prices based on the JSON response.
-     * @param response The JSON containing the price info.
-     */
-    public void handleResponse(String response) {
 
+    public void handlePricelist() {
+        // changed to handle array from enterPriceFragment
         otherPricesText.setText("Muut hinnat:\n");
+        pricesTextView.setText("");
 
         Store selected = storeManager.getStore(selectedStore);
 
-        PriceListItem[] priceList = new Gson().fromJson(response, PriceListItem[].class);
-        Arrays.sort(priceList, new PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
+        Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
+        // strores and prices from array
         for (PriceListItem item : priceList) {
+
+            Store s = storeManager.getStore(item.getStoreId());
+
             if (item.getStoreId().equals(selectedStore)) {
                 continue;
             }
-            Store s = storeManager.getStore(item.getStoreId());
+
             if (s!= null && s.getName() != null) {
                 pricesTextView.append("\n" + s.getName());
             } else {
@@ -125,6 +121,10 @@ public class ListPricesFragment extends Fragment {
             String formattedPrice = String.format("%.02f", cents);
             pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
         }
+        if (pricesTextView.getText()=="") {
+            pricesTextView.setText("Ei muita hintoja");
+        }
+        // can first one be locked ??
         pricesTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
