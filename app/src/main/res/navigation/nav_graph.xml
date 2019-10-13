@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_barcode_scanner">
         <action
             android:id="@+id/action_barcodeScannerFragment_to_enterPriceFragment"
-            app:destination="@id/enterPriceFragment"
+            app:destination="@+id/enterPriceFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -46,7 +46,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/homeFragment" />
+            app:popUpTo="@id/homeFragment" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -70,6 +70,13 @@
         <argument
             android:name="cents"
             app:argType="string" />
+        <argument
+
+            android:name="productName"
+            app:argType="string" />
+        <argument
+            android:name="priceList"
+            app:argType="hifian.hintahaukka.PriceListItem[]" />
         <argument
             android:name="test"
             app:argType="boolean" />
