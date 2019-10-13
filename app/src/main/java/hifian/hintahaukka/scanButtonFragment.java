@@ -17,10 +17,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-public class newScanFragment extends Fragment {
+import java.io.InputStream;
+
+public class scanButtonFragment extends Fragment {
     private boolean test;
     private String selectedStore;
-    public newScanFragment() {
+    private StoreManager storeManager;
+    public scanButtonFragment() {
         // Required empty public constructor
     }
 
@@ -28,7 +31,7 @@ public class newScanFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        newScanFragmentArgs args = newScanFragmentArgs.fromBundle(getArguments());
+        scanButtonFragmentArgs args = scanButtonFragmentArgs.fromBundle(getArguments());
         selectedStore = args.getSelectedStore();
     }
 
@@ -36,7 +39,6 @@ public class newScanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_scan_fragment, container, false);
-        getActivity().setTitle(selectedStore);
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.new_scan_fragment, container, false);
         return view;
@@ -45,8 +47,11 @@ public class newScanFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.createStoreManager();
         TextView showStore = getView().findViewById(R.id.showStore);
-        showStore.setText("Valittu kauppa: " + selectedStore);
+        Store store = storeManager.getStore(selectedStore);
+        showStore.setText("Valittu kauppa: " + store.getName());
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,11 +64,23 @@ public class newScanFragment extends Fragment {
                 }
 
                 Navigation.findNavController(getView()).navigate(
-                        newScanFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(selectedStore, test));
-
-
+                        scanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(selectedStore, test));
                 }
         });
+    }
+
+    private void createStoreManager() {
+        try {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        } catch (ClassCastException e) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }
