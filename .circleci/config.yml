@@ -20,7 +20,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Run UnitTests
-          command: ./gradlew build jacocoTestReport testDemoDebugUnitTest
+          command: ./gradlew build jacocoTestReport assembleAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: app/build/reports
           destination: reports
