@@ -4,20 +4,13 @@ orbs:
 jobs:
   build-android:
     docker:
-      - image: circleci/android:api-25-alpha
+      - image: circleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-#     - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
-      - run:
-          yes | sdkmanager --licenses || exit 0
-      - run: 
-          yes | sdkmanager --update || exit 0
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -26,16 +19,36 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Run Tests
-          command: ./gradlew build jacocoTestReport assembleAndroidTest
+          name: Run UnitTests
+          command: ./gradlew build jacocoTestReport testDemoDebugUnitTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: app/build/reports
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: app/build/test-results  
+      - run:
+          name: Setup emulator
+          command: sdkmanager "system-images:android-16;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-16;default;armeabi-v7a"
+      - run:
+          name: Launch emulator
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel auto -verbose
+          background: true
+      - run:
+          name: Wait emulator
+          command: |
+            # wait for it to have booted
+            circle-android wait-for-boot
+            # unlock the emulator screen
+            sleep 30
+            adb shell input keyevent 82
+      - run:
+          name: Run EspressoTests
+          command: ./gradlew connectedDemoDebugAndroidTest
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
           path: app/build/test-results
-#      - run:
-#          name: connectedCheck
-#          command: ./gradlew connectedCheck
       - run:
           name: Upload Coverage Results
           command: |
