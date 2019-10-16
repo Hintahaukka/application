@@ -49,7 +49,6 @@ public class EnterPriceFragmentTest {
         });
     }
 
-
 /**
     @Test
     public void testSendingPrice() {
