@@ -70,7 +70,7 @@ public class StoreListFragment extends Fragment {
                 Store selected = storeList.get(i);
                 selectedStore = selected.getStoreId();
                 Navigation.findNavController(getView()).navigate(
-                        StoreListFragmentDirections.actionNewHomeFragmentToNewScanFragment(selectedStore)
+                        StoreListFragmentDirections.actionStoreListFragmentToScanButtonFragment(selectedStore)
                 );
             }
         });
