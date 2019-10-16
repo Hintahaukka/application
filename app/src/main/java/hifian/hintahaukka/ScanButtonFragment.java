@@ -64,7 +64,7 @@ public class ScanButtonFragment extends Fragment {
                 }
 
                 Navigation.findNavController(getView()).navigate(
-                        ScanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(selectedStore, test));
+                        ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(selectedStore, test));
                 }
         });
     }

@@ -27,8 +27,11 @@ public class ScanButtonFragmentTest {
     String defaultStoreId  = "418006009";
 
     private void launchScanButtonFragment() {
-        FragmentScenario<StoreListFragment> scenario =
-                FragmentScenario.launchInContainer(StoreListFragment.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("selectedStore", defaultStoreId);
+
+        FragmentScenario<ScanButtonFragment> scenario =
+                FragmentScenario.launchInContainer(ScanButtonFragment.class, bundle);
 
         mockNavController = Mockito.mock(NavController.class);
         scenario.onFragment(new FragmentScenario.FragmentAction() {
@@ -40,7 +43,7 @@ public class ScanButtonFragmentTest {
     }
 
 
-    /*@Test
+    @Test
     public void ifUserClicksScanBarcodeButtonThenFragmentNavigatesToTheNextFragmentWithCorrectStoreIdAndTestArguments() {
 
         // GIVEN - On the scan button fragment screen
@@ -51,9 +54,10 @@ public class ScanButtonFragmentTest {
 
         // THEN - Application navigates to barcode scanner with the id of selected store and the test parameter set false
         verify(mockNavController).navigate(
-                ScanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(
+                ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(
                         defaultStoreId, false));
     }
+
 
     @Test
     public void ifUserClicksCheckboxOnceThenParameterTestIsTrueWhenFragmentNavigatesToTheNextFragment() {
@@ -67,7 +71,7 @@ public class ScanButtonFragmentTest {
 
         // THEN - Application navigates to barcode scanner with parameter test set true
         verify(mockNavController).navigate(
-                ScanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(
+                ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(
                         defaultStoreId, true));
-    }*/
+    }
 }
