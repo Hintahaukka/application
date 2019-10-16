@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/newHomeFragment">
+    app:startDestination="@id/storeListFragment">
     <fragment
         android:id="@+id/barcodeScannerFragment"
         android:name="hifian.hintahaukka.BarcodeScannerFragment"
@@ -15,7 +15,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/newScanFragment" />
+            app:popUpTo="@+id/scanButtonFragment" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -35,7 +35,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
 
-            app:popUpTo="@+id/newScanFragment" />
+            app:popUpTo="@+id/scanButtonFragment" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -71,20 +71,20 @@
             app:argType="boolean" />
     </fragment>
     <fragment
-        android:id="@+id/newHomeFragment"
+        android:id="@+id/storeListFragment"
         android:name="hifian.hintahaukka.StoreListFragment"
         android:label="Valitse kauppa"
         tools:layout="@layout/new_fragment_home">
         <action
-            android:id="@+id/action_newHomeFragment_to_newScanFragment"
-            app:destination="@id/newScanFragment" />
+            android:id="@+id/action_storeListFragment_to_scanButtonFragment"
+            app:destination="@id/scanButtonFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newScanFragment"
+        android:id="@+id/scanButtonFragment"
         android:name="hifian.hintahaukka.ScanButtonFragment"
         android:label="Skannaa tuote">
         <action
-            android:id="@+id/action_newScanFragment_to_barcodeScannerFragment"
+            android:id="@+id/action_scanButtonFragment_to_barcodeScannerFragment"
             app:destination="@id/barcodeScannerFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_right"
