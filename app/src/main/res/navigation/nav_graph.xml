@@ -3,19 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="hifian.hintahaukka.HomeFragment"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_barcodeScannerFragment"
-            app:destination="@id/barcodeScannerFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"></action>
-    </fragment>
+    app:startDestination="@id/newHomeFragment">
     <fragment
         android:id="@+id/barcodeScannerFragment"
         android:name="hifian.hintahaukka.BarcodeScannerFragment"
@@ -27,7 +15,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/homeFragment" />
+            app:popUpTo="@+id/newScanFragment" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -46,7 +34,8 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/homeFragment" />
+
+            app:popUpTo="@+id/newScanFragment" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
@@ -80,5 +69,29 @@
         <argument
             android:name="test"
             app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/newHomeFragment"
+        android:name="hifian.hintahaukka.StoreListFragment"
+        android:label="Valitse kauppa"
+        tools:layout="@layout/new_fragment_home">
+        <action
+            android:id="@+id/action_newHomeFragment_to_newScanFragment"
+            app:destination="@id/newScanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newScanFragment"
+        android:name="hifian.hintahaukka.ScanButtonFragment"
+        android:label="Skannaa tuote">
+        <action
+            android:id="@+id/action_newScanFragment_to_barcodeScannerFragment"
+            app:destination="@id/barcodeScannerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+        <argument
+            android:name="selectedStore"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -1,5 +1,7 @@
 package hifian.hintahaukka;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.testing.FragmentScenario;
@@ -17,16 +19,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
-public class HomeFragmentTest {
+public class ScanButtonFragmentTest {
 
     NavController mockNavController;
 
     // The id of the closest store when coordinates are 0, 0
     String defaultStoreId  = "418006009";
 
-    private void launchHomeFragment() {
-        FragmentScenario<HomeFragment> scenario =
-                FragmentScenario.launchInContainer(HomeFragment.class);
+    private void launchScanButtonFragment() {
+        FragmentScenario<StoreListFragment> scenario =
+                FragmentScenario.launchInContainer(StoreListFragment.class);
 
         mockNavController = Mockito.mock(NavController.class);
         scenario.onFragment(new FragmentScenario.FragmentAction() {
@@ -37,26 +39,27 @@ public class HomeFragmentTest {
         });
     }
 
-    @Test
+
+    /*@Test
     public void ifUserClicksScanBarcodeButtonThenFragmentNavigatesToTheNextFragmentWithCorrectStoreIdAndTestArguments() {
 
-        // GIVEN - On the home fragment screen
-        launchHomeFragment();
+        // GIVEN - On the scan button fragment screen
+        launchScanButtonFragment();
 
         // WHEN - User clicks scan barcode button
         onView(withId(R.id.button_scan_barcode)).perform(click());
 
         // THEN - Application navigates to barcode scanner with the id of selected store and the test parameter set false
         verify(mockNavController).navigate(
-                HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(
+                ScanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(
                         defaultStoreId, false));
     }
 
     @Test
     public void ifUserClicksCheckboxOnceThenParameterTestIsTrueWhenFragmentNavigatesToTheNextFragment() {
 
-        // GIVEN - On the home fragment screen
-        launchHomeFragment();
+        // GIVEN - On the scan button fragment screen
+        launchScanButtonFragment();
 
         // WHEN - User selects the checkbox and clicks scan barcode button
         onView(withId(R.id.checkbox_test_database)).perform(click());
@@ -64,8 +67,7 @@ public class HomeFragmentTest {
 
         // THEN - Application navigates to barcode scanner with parameter test set true
         verify(mockNavController).navigate(
-                HomeFragmentDirections.actionHomeFragmentToBarcodeScannerFragment(
+                ScanButtonFragmentDirections.actionNewScanFragmentToBarcodeScannerFragment(
                         defaultStoreId, true));
-    }
-
+    }*/
 }
