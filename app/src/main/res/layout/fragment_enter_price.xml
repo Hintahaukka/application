@@ -6,57 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".EnterPriceFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_enter_price_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_enter_price_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_enter_price_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/spacing_top_and_bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_enter_price_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
+
     <TextView
         android:id="@+id/storeField"
-        android:layout_width="147dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_enter_price_top"
         tools:text="Kauppa: Punkten" />
 
     <TextView
         android:id="@+id/eanField"
-        android:layout_width="147dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.811"
-        app:layout_constraintStart_toEndOf="@+id/storeField"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
+        app:layout_constraintTop_toBottomOf="@+id/storeField"
         tools:text="Viivakoodi: 1234567" />
 
     <TextView
         android:id="@+id/nameField"
-        android:layout_width="147dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="84dp"
-        app:layout_constraintBottom_toTopOf="@+id/sendPriceBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.811"
-        app:layout_constraintStart_toEndOf="@+id/storeField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
         app:layout_constraintTop_toBottomOf="@+id/eanField"
-        app:layout_constraintVertical_bias="0.047"
         tools:text="Haetaan tuotenimeä..." />
 
     <TextView
         android:id="@+id/enterPriceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
         android:text="@string/text_enter_price"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/enterEuros"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storeField" />
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left" />
 
     <EditText
         android:id="@+id/enterEuros"
         android:layout_width="81dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginEnd="4dp"
         android:digits="0123456789\n.,"
         android:ems="10"
@@ -64,11 +79,10 @@
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_enter_price_bottom"
         app:layout_constraintEnd_toStartOf="@+id/label_euros"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_enter_price_top" />
 
     <TextView
         android:id="@+id/label_euros"
@@ -121,14 +135,11 @@
         android:id="@+id/sendPriceBtn"
         android:layout_width="81dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@android:color/holo_green_light"
+        android:layout_marginStart="16dp"
         android:text="@string/button_send"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/label_cents"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_enter_price_right"
         app:layout_constraintStart_toEndOf="@+id/label_cents"
         app:layout_constraintTop_toTopOf="@+id/label_cents" />
 
