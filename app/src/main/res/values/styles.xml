@@ -10,19 +10,16 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
+    <!-- Style for an activity without the action bar (basically the splash screen)-->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Style for buttons -->
     <style name="CustomButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/rounded_button</item>
         <item name="android:textColor">@color/white</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 
 </resources>
