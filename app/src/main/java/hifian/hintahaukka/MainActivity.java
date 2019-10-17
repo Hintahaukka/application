@@ -55,4 +55,12 @@ public class MainActivity extends AppCompatActivity {
         return this.lon;
     }
 
+    /**
+     * This is a dumb method that is called by fragments for testing purposes.
+     * @return
+     */
+    public boolean isDisabled() {
+        return false;
+    }
+
 }
