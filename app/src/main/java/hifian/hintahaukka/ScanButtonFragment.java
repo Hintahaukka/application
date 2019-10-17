@@ -23,6 +23,8 @@ public class ScanButtonFragment extends Fragment {
     private boolean test;
     private String selectedStore;
     private StoreManager storeManager;
+    private boolean isRunningInTestEnvironment;
+
     public ScanButtonFragment() {
         // Required empty public constructor
     }
@@ -48,6 +50,8 @@ public class ScanButtonFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        this.checkIfIsRunningInTestEnvironment();
         this.createStoreManager();
         TextView showStore = getView().findViewById(R.id.showStore);
         Store store = storeManager.getStore(selectedStore);
@@ -69,10 +73,12 @@ public class ScanButtonFragment extends Fragment {
         });
     }
 
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests the fragment creates its own StoreManager.
+     */
     private void createStoreManager() {
-        try {
-            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        } catch (ClassCastException e) {
+        if (isRunningInTestEnvironment) {
             this.storeManager = new StoreManager();
             try {
                 InputStream istream = this.getActivity().getAssets().open("stores.osm");
@@ -80,6 +86,20 @@ public class ScanButtonFragment extends Fragment {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        } else {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
         }
     }
 

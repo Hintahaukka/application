@@ -17,7 +17,6 @@ import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -28,15 +27,26 @@ public class EnterPriceFragmentTest {
 
     String selectedStore = "selectedStore";
     String scanResult = "scanResult";
+    boolean test = false;
+
+    //default productName returned by HttpServiceMock
     String productName = "Omena";
+
+    PriceListItem[] prices;
+
+    // mock NavController
     NavController mockNavController;
+
+    // this running Fragment
+    EnterPriceFragment thisFragment;
 
     private void launchEnterPriceFragment() {
         Bundle bundle = new Bundle();
-        bundle.putString(selectedStore, selectedStore);
-        bundle.putString(scanResult, scanResult);
-        bundle.putString(productName, productName);
-        bundle.putBoolean("test", false);
+        bundle.putString("selectedStore", selectedStore);
+        bundle.putString("scanResult", scanResult);
+        bundle.putString("productName", productName);
+        bundle.putBoolean("test", test);
+
         FragmentScenario<EnterPriceFragment> scenario =
                 FragmentScenario.launchInContainer(EnterPriceFragment.class, bundle);
 
@@ -45,13 +55,13 @@ public class EnterPriceFragmentTest {
             @Override
             public void perform(@NonNull Fragment fragment) {
                 Navigation.setViewNavController(fragment.requireView(), mockNavController);
+                thisFragment = (EnterPriceFragment) fragment;
             }
         });
     }
 
-/**
     @Test
-    public void testSendingPrice() {
+    public void typedPriceIsPassedToTheNextFragment() {
 
         // GIVEN - On the enter price screen
         launchEnterPriceFragment();
@@ -59,19 +69,21 @@ public class EnterPriceFragmentTest {
         // WHEN - User types price 2,50€ and clicks send
         onView(withId(R.id.enterEuros)).perform(typeText("2"));
         onView(withId(R.id.enterCents)).perform(typeText("50"));
-        PriceListItem[] prices = new PriceListItem[]{new PriceListItem(250,"23","2019-10-01 19:48:57.356073")};
         closeSoftKeyboard();
 
         onView(withId(R.id.sendPriceBtn)).perform(click());
 
         // THEN - Application navigates to list prices with correct price as argument
+        prices = thisFragment.getPrices();
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "250", productName, prices, false));
+                        selectedStore, scanResult, "250", productName, prices, test));
+
+
     }
 
     @Test
-    public void testSendingEmptyPrice() {
+    public void ifPriceFieldsAreEmptyThePricePassedToTheNextFragmentIsZero() {
 
         // GIVEN - On the enter price screen
         launchEnterPriceFragment();
@@ -80,11 +92,12 @@ public class EnterPriceFragmentTest {
         onView(withId(R.id.sendPriceBtn)).perform(click());
 
         // THEN - Application navigates to list prices with 0,00€ as price
+        prices = thisFragment.getPrices();
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "0", productName, new PriceListItem[]{}, false));
+                        selectedStore, scanResult, "0", productName, prices, test));
     }
-**/
+
     @Test
     public void typingCommaMovesFocusToEnterCents() {
 

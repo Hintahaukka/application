@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.io.InputStream;
-
+import java.util.Arrays;
 
 public class EnterPriceFragment extends Fragment {
 
@@ -39,6 +39,7 @@ public class EnterPriceFragment extends Fragment {
     private String[] parameterNames;
     private String[] parameters;
 
+    private boolean isRunningInTestEnvironment;
 
     public EnterPriceFragment() {
         // Required empty public constructor
@@ -64,6 +65,9 @@ public class EnterPriceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        this.checkIfIsRunningInTestEnvironment();
+
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
         nameTextView.setText("Haetaan tuotenimi...\n");
 
@@ -72,7 +76,7 @@ public class EnterPriceFragment extends Fragment {
         if (test) {
             productNameUrlString = "https://hintahaukka.herokuapp.com/test/getInfoAndPrices";
         }
-        httpService = new HttpService(productNameUrlString);
+        httpService = this.createHttpService(productNameUrlString);
         parameterNames = new String[]{"ean"};
         parameters = new String[]{scanResult};
         httpService.sendPostRequest(parameterNames, parameters);
@@ -111,13 +115,12 @@ public class EnterPriceFragment extends Fragment {
                 if (test) {
                     addPriceUrlString = "https://hintahaukka.herokuapp.com/test/addPrice";
                 }
-                httpService = new HttpService(addPriceUrlString);
+                httpService = createHttpService(addPriceUrlString);
 
                 httpService.sendPostRequest(parameterNames, parameters);
-
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, prices, false ));
+                                selectedStore, scanResult, cents, productName, prices, test ));
 
             }
         });
@@ -193,12 +196,10 @@ public class EnterPriceFragment extends Fragment {
 
     /**
      * Fragment uses the StoreManager of the Activity.
-     * In tests this causes a ClassCastException, so the fragment creates its own StoreManager.
+     * In tests the fragment creates its own StoreManager.
      */
     private void createStoreManager() {
-        try {
-            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        } catch (ClassCastException e) {
+        if (isRunningInTestEnvironment) {
             this.storeManager = new StoreManager();
             try {
                 InputStream istream = this.getActivity().getAssets().open("stores.osm");
@@ -206,8 +207,33 @@ public class EnterPriceFragment extends Fragment {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        } else {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
         }
+    }
 
+    private HttpService createHttpService(String url) {
+        if (isRunningInTestEnvironment) {
+            return new HttpServiceMock(url);
+        } else {
+            return new HttpService(url);
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
+        }
+    }
+
+    public PriceListItem[] getPrices() {
+        return this.prices;
     }
 
 }
