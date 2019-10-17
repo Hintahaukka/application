@@ -7,6 +7,7 @@
     <fragment
         android:id="@+id/barcodeScannerFragment"
         android:name="hifian.hintahaukka.BarcodeScannerFragment"
+        android:label="Skannaa viivakoodi"
         tools:layout="@layout/fragment_barcode_scanner">
         <action
             android:id="@+id/action_barcodeScannerFragment_to_enterPriceFragment"
@@ -26,6 +27,7 @@
     <fragment
         android:id="@+id/enterPriceFragment"
         android:name="hifian.hintahaukka.EnterPriceFragment"
+        android:label="Syötä tuotteen hinta"
         tools:layout="@layout/fragment_enter_price">
         <action
             android:id="@+id/action_enterPriceFragment_to_listPricesFragment"
@@ -49,6 +51,7 @@
     <fragment
         android:id="@+id/listPricesFragment"
         android:name="hifian.hintahaukka.ListPricesFragment"
+        android:label="Hinnat muissa kaupoissa"
         tools:layout="@layout/fragment_list_prices">
         <argument
             android:name="selectedStore"
@@ -74,22 +77,26 @@
         android:id="@+id/storeListFragment"
         android:name="hifian.hintahaukka.StoreListFragment"
         android:label="Valitse kauppa"
-        tools:layout="@layout/new_fragment_home">
+        tools:layout="@layout/fragment_store_list">
         <action
             android:id="@+id/action_storeListFragment_to_scanButtonFragment"
-            app:destination="@id/scanButtonFragment" />
+            app:destination="@id/scanButtonFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/scanButtonFragment"
         android:name="hifian.hintahaukka.ScanButtonFragment"
-        android:label="Skannaa tuote">
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_scanButtonFragment_to_barcodeScannerFragment"
             app:destination="@id/barcodeScannerFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="selectedStore"
             app:argType="string" />
