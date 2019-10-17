@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+  implementation "com.google.firebase:firebase-analytics:17.2.0"
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation "com.android.support:appcompat-v7:$android_appcompat_v7_version"
   implementation "androidx.constraintlayout:constraintlayout:$androidx_constraitlayout_version"
@@ -74,3 +75,4 @@ jacocoAndroidUnitTestReport {
   html.enabled true
   xml.enabled true
 }
+apply plugin: 'com.google.gms.google-services'
