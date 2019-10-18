@@ -2,26 +2,13 @@
 
 ## CI
 
-### Application
-
 master: [![CircleCI](https://circleci.com/gh/Hintahaukka/application.svg?style=svg)](https://circleci.com/gh/Hintahaukka/application)
 
-#### Tests codecoverage:
+## Tests code coverage:
 
 Master: [![codecov](https://codecov.io/gh/Hintahaukka/application/branch/master/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/application)
 
 Dev: [![codecov](https://codecov.io/gh/Hintahaukka/application/branch/dev/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/application)
-
-### Backend
-
-master: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=master)](https://travis-ci.org/Hintahaukka/backend)  
-dev: [![Build Status](https://travis-ci.org/Hintahaukka/backend.svg?branch=dev)](https://travis-ci.org/Hintahaukka/backend)
-
-
-#### Test codecoverage:
-Master: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/master/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
-
-Dev: [![codecov](https://codecov.io/gh/Hintahaukka/backend/branch/dev/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/backend)
 
 ## Tavoite
 
@@ -32,7 +19,7 @@ kameralla.
 
 ## Repositoriot
 
-* Android-sovellus (tämä repositorio)
+* Android-sovellus (tämä repositorio, päärepositorio)
 * [Backend](https://github.com/Hintahaukka/backend/tree/master)
 
 ## Dokumentit
@@ -63,10 +50,10 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 2. Paina sivulla näkyvää "Assets" nimistä valikkoa
 3. Paina "app-dubug.apk" nimistä tiedostoa.
 
-Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se android puhelimeesi. Vaihtoehtoisesti voit ladata tiedoston suoraan puhelimeesi menemällä puhelimen selaimella kohdassa 1) olevaan osoitteeseen. 
+Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se android puhelimeesi. Vaihtoehtoisesti voit ladata tiedoston suoraan puhelimeesi menemällä puhelimen selaimella kohdassa 1) olevaan osoitteeseen.
 
-4. Seuraavaksi mene puhelimesi asetuksiin ja salli asennus tuntemattomista lähteistä. Android puhelimissa valinnan sijainti asetuksissa vaihtelee mutta esimerkiksi Huawei puhelimissa tämä tapahtuu siten että menee asetuksiin, valitsee suojaus ja sitten valitsee "Tuntematomat lähteet". 
-5. Kun sovellus on asennettu voit käynnistää sen valitsemalla sen sovellusvalikosta. 
+4. Seuraavaksi mene puhelimesi asetuksiin ja salli asennus tuntemattomista lähteistä. Android puhelimissa valinnan sijainti asetuksissa vaihtelee mutta esimerkiksi Huawei puhelimissa tämä tapahtuu siten että menee asetuksiin, valitsee suojaus ja sitten valitsee "Tuntematomat lähteet".
+5. Kun sovellus on asennettu voit käynnistää sen valitsemalla sen sovellusvalikosta.
 
 
 ## Käyttöohjeet
