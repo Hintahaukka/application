@@ -49,7 +49,7 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         //selectedStore = getIntent().getExtras().getString("selectedStore");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                Toast.makeText(getContext(), "Permission is granted!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(), "Permission is granted!", Toast.LENGTH_LONG).show();
             } else {
                 requestPermission();
             }
