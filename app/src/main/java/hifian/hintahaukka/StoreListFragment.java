@@ -23,6 +23,8 @@ public class StoreListFragment extends Fragment {
     private double lat;
     private double lon;
 
+    private boolean isRunningInTestEnvironment;
+
     public StoreListFragment() {
 
     }
@@ -41,6 +43,7 @@ public class StoreListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        this.checkIfIsRunningInTestEnvironment();
         createList();
     }
 
@@ -74,10 +77,12 @@ public class StoreListFragment extends Fragment {
         });
     }
 
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests the fragment creates its own StoreManager.
+     */
     private void createStoreManager() {
-        try {
-            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
-        } catch (ClassCastException e) {
+        if (isRunningInTestEnvironment) {
             this.storeManager = new StoreManager();
             try {
                 InputStream istream = this.getActivity().getAssets().open("stores.osm");
@@ -85,16 +90,34 @@ public class StoreListFragment extends Fragment {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        } else {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
         }
     }
 
+    /**
+     * Fragment gets the coordinates from the MainActivity.
+     * In tests zero coordinates are used instead.
+     */
     private void getCoordinates() {
-        try {
-            this.lat = ((MainActivity)getActivity()).getLat();
-            this.lon = ((MainActivity)getActivity()).getLon();
-        } catch (ClassCastException e) {
+        if (isRunningInTestEnvironment) {
             this.lat = 0.0;
             this.lon = 0.0;
+        } else {
+            this.lat = ((MainActivity)getActivity()).getLat();
+            this.lon = ((MainActivity)getActivity()).getLon();
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
         }
     }
 }
