@@ -48,7 +48,7 @@ public class StoreListFragmentTest {
     @Test
     public void correctStoreIdIsPassedToTheNextFragment() {
 
-        // GIVEN - On the enter price screen
+        // GIVEN - On the store list screen
         launchStoreListFragment();
 
         // WHEN - User chooses the first store when coordinates are 0, 0
@@ -63,7 +63,7 @@ public class StoreListFragmentTest {
     @Test
     public void thereAreTenStoresListed() {
 
-        // GIVEN - On the enter price screen
+        // GIVEN - On the store list screen
         launchStoreListFragment();
 
         // WHEN - The stores are listed
