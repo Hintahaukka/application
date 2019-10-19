@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -32,7 +33,7 @@ public class ListPricesFragment extends Fragment {
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
 
-
+    private boolean isRunningInTestEnvironment;
 
 
     public ListPricesFragment() {
@@ -57,7 +58,8 @@ public class ListPricesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        this.checkIfIsRunningInTestEnvironment();
+        createStoreManager();
 
         //Showing the store and price added by user
         myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
@@ -167,6 +169,36 @@ public class ListPricesFragment extends Fragment {
             } else {
                 return 0;
             }
+        }
+    }
+
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        if (isRunningInTestEnvironment) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
         }
     }
 
