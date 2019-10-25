@@ -12,4 +12,6 @@
     <string name="text_use_test_data">Käytä testitietokantaa</string>
     <string name="snackbar_request_permission_rationale">Sinun on annettava lupa sijainnin käyttöön voidaksemme löytää lähimmät kauppasi.</string>
     <string name="snackbar_require_permission">Anna lupa sijainnin käyttöön puhelimesi asetuksista.</string>
+    <string name="button_update_location">Päivitä sijainti</string>
+    <string name="text_ask_to_turn_location_on">Sijaintia ei löydy. Onko sijaintisi poissa käytöstä?</string>
 </resources>
