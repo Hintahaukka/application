@@ -18,12 +18,6 @@ jobs:
           yes | sdkmanager --licenses || exit 0
       - run: 
           yes | sdkmanager --update || exit 0
-      - run:
-          name: check Tasks
-          command: ./gradlew tasks
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
