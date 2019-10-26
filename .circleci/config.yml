@@ -4,7 +4,7 @@ orbs:
 jobs:
 build:
     docker:
-      - image: circleci/android:api-25-alpha
+      - image: google/cloud-sdk
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -42,7 +42,7 @@ build:
               -Z || echo 'Codecov upload failed'
 test:
   docker:
-    - image: circleci/android:api-28-alpha  # gcloud is baked into this image
+    - image: google/cloud-sdk
   steps:
     - run:
         name: Build debug APK and release APK
