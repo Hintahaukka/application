@@ -4,24 +4,25 @@ orbs:
 jobs:
   build:
     docker:
-      - image: google/cloud-sdk
-    working_directory: /tmp
+      - image: circleci/android:api-28-alpha
+    working_directory: ~/code
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
+      - checkout
       - run:
           name: Creating Dummy Artifacts
           command: |
             echo "my artifact file" > /tmp/artifact-1;
-            mkdir /tmp/artifacts;
+            mkdir ~/tmp/artifacts;
             echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
 
       - store_artifacts:
-          path: /tmp/artifact-1
+          path: ~/tmp/artifact-1
           destination: artifact-file
 
       - store_artifacts:
-          path: /tmp/artifacts
+          path: ~/tmp/artifacts
    
       
       - restore_cache:
@@ -54,8 +55,8 @@ jobs:
               -Z || echo 'Codecov upload failed'
   test:
     docker:
-      - image: google/cloud-sdk
-    working_directory: /tmp
+      - image: circleci/android:api-28-alpha
+    working_directory: ~/code
     environment:
      JVM_OPTS: -Xmx3200m
     steps:
