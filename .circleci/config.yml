@@ -42,7 +42,7 @@ jobs:
     docker:
       - image: google/cloud-sdk
     working_directory: /tmp
-    enviroment:
+    environment:
      JVM_OPTS: -Xmx3200m
     steps:
       - checkout
