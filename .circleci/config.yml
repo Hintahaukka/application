@@ -5,6 +5,7 @@ jobs:
   build:
     docker:
       - image: google/cloud-sdk
+    working_directory: /tmp
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -26,10 +27,10 @@ jobs:
           name: Run Tests
           command: ./gradlew build jacocoTestReport assembleAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: app/build/reports
+          path: /tmp/app/build/reports
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: app/build/test-results
+          path: /tmp/app/build/test-results
       - run:
           name: Upload Coverage Results
           command: |
@@ -40,6 +41,13 @@ jobs:
   test:
     docker:
       - image: google/cloud-sdk
+    working_directory: /tmp
+    enviroment:
+     JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     steps:
       - run:
           name: Build debug APK and release APK
