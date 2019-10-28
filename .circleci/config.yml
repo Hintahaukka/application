@@ -40,10 +40,7 @@ jobs:
               -Z || echo 'Codecov upload failed'
   test:
     docker:
-      - image: circleci/android:api-28-alpha
-        auth:
-          username: _json_key  # default username when using a JSON key file to authenticate
-          password: $GCLOUD_SERVICE_KEY  # JSON service account you created, do not encode to base6      
+      - image: circleci/android:api-28-alpha    
     working_directory: ~/code
     environment:
      JVM_OPTS: -Xmx3200m
