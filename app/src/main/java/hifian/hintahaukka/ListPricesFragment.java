@@ -1,8 +1,6 @@
 package hifian.hintahaukka;
 
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,28 +13,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
-import com.google.gson.Gson;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class ListPricesFragment extends Fragment {
 
     private String ean;
+    private String productName;
     private String cents;
     private String selectedStore;
+    private PriceListItem[] priceList;
+    private TextView myPriceField;
+    private TextView productField;
     private TextView pricesTextView;
+    private TextView otherPricesText;
     private StoreManager storeManager;
-    private String herokuResponse;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
+    private boolean test;
+
+    private boolean isRunningInTestEnvironment;
 
 
     public ListPricesFragment() {
@@ -49,22 +46,42 @@ public class ListPricesFragment extends Fragment {
 
         ListPricesFragmentArgs args = ListPricesFragmentArgs.fromBundle(getArguments());
         ean = args.getScanResult();
+        productName = args.getProductName();
         selectedStore = args.getSelectedStore();
         cents = args.getCents();
+        // array of PriceListItems from database via enterPriceFragment
+        priceList = args.getPriceList();
+        test = args.getTest();
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        this.checkIfIsRunningInTestEnvironment();
+        createStoreManager();
 
-        pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
-        new ListPricesFragment.HerokuPostTask().execute(ean, cents, selectedStore);
-
-        while( herokuResponse == null) {
-
+        //Showing the store and price added by user
+        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
+        Store s = storeManager.getStore(selectedStore);
+        if (s!= null && s.getName() != null) {
+            myPriceField.append(s.getName());
+        } else {
+            myPriceField.append("Tuntematon kauppa");
         }
-        this.handleResponse(herokuResponse);
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        String formattedPrice = String.format("%.02f", myPrice);
+        myPriceField.append("\nHinta: " + formattedPrice + "€\n");
+
+        //Showing the product info
+        productField = (TextView) getView().findViewById(R.id.productField);
+        productField.setText(productName);
+
+        //Showing other prices
+        otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
+        pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
+        this.handlePricelist();
+
 
     }
 
@@ -75,80 +92,26 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
-    public class HerokuPostTask extends AsyncTask<String, String, String> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String urlString = "https://hintahaukka.herokuapp.com/";
-            String response = "";
-
-            try {
-                URL url = new URL(urlString);
-                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
-
-                urlConnection.setReadTimeout(10000);
-                urlConnection.setConnectTimeout(15000);
-
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("ean", params[0])
-                        .appendQueryParameter("cents", params[1])
-                        .appendQueryParameter("storeId", params[2]);
-                String query = builder.build().getEncodedQuery();
-
-                urlConnection.connect();
-
-                DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-
-                out.writeBytes(query);
-                out.flush();
-                out.close();
-
-
-                int responseCode=urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    String line;
-                    BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
-                }
-                urlConnection.disconnect();
-                herokuResponse = response;
-                return response;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                herokuResponse = "";
-                return "";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-        }
-
-    }
-
-    public void handleResponse(String response) {
-        pricesTextView.setText("Tuotteen "+ ean + " hinnat:\n");
+    public void handlePricelist() {
+        // changed to handle array from enterPriceFragment
+        otherPricesText.setText("Muut hinnat:\n");
+        pricesTextView.setText("");
 
         Store selected = storeManager.getStore(selectedStore);
 
-        PriceListItem[] priceList = new Gson().fromJson(response, PriceListItem[].class);
-        Arrays.sort(priceList, new PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
+        Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
+        // strores and prices from array
         for (PriceListItem item : priceList) {
+
             Store s = storeManager.getStore(item.getStoreId());
+
+            if (item.getStoreId().equals(selectedStore)) {
+                continue;
+            }
+
             if (s!= null && s.getName() != null) {
                 pricesTextView.append("\n" + s.getName());
             } else {
@@ -160,6 +123,10 @@ public class ListPricesFragment extends Fragment {
             String formattedPrice = String.format("%.02f", cents);
             pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
         }
+        if (pricesTextView.getText()=="") {
+            pricesTextView.setText("Ei muita hintoja");
+        }
+        // can first one be locked ??
         pricesTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
@@ -202,6 +169,36 @@ public class ListPricesFragment extends Fragment {
             } else {
                 return 0;
             }
+        }
+    }
+
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests the fragment creates its own StoreManager.
+     */
+    private void createStoreManager() {
+        if (isRunningInTestEnvironment) {
+            this.storeManager = new StoreManager();
+            try {
+                InputStream istream = this.getActivity().getAssets().open("stores.osm");
+                storeManager.fetchStores(istream);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
         }
     }
 

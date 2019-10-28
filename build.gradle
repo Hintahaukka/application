@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
   ext {
-     gradle_version = "3.5.0"
+     gradle_version = '3.5.1'
      android_material_version = "1.0.0"
      jacoco_android_version = "0.1.4"
      jacoco_tools_version = "0.8.3"
@@ -33,7 +33,7 @@ buildscript {
     maven { url 'https://maven.google.com' }
   }        
   dependencies {
-    classpath "com.android.tools.build:gradle:$gradle_version"
+    classpath "com.android.tools.build:gradle:${gradle_version}"
     classpath "com.dicedmelon.gradle:jacoco-android:$jacoco_android_version" 
     classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$navigation_gradleplugin_version"
         

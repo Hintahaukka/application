@@ -1,13 +1,7 @@
 package hifian.hintahaukka;
 
-import android.Manifest;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.widget.Toast;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -18,9 +12,9 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity {
 
     private StoreManager storeManager;
-    private GpsActivity gpsActivity;
     double lat;
     double lon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,16 +26,8 @@ public class MainActivity extends AppCompatActivity {
              this.lon = extras.getDouble("lon");
         }
 
-        Bundle bundle = new Bundle();
-        bundle.putDouble("lat", lat);
-        bundle.putDouble("lon", lon);
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-
-        Toast.makeText(this,"GPS Lat = "+lat+"\n lon = "+lon,Toast.LENGTH_LONG).show();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
-
 
         this.storeManager = new StoreManager();
         try {
@@ -61,20 +47,20 @@ public class MainActivity extends AppCompatActivity {
         return this.storeManager;
     }
 
-    public void sendLocationDataToHomefragment() {
-        Bundle bundle = new Bundle();
-        bundle.putDouble("lat", lat);
-        bundle.putDouble("lon", lon);
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-    }
-
     public double getLat() {
         return this.lat;
     }
 
     public double getLon() {
         return this.lon;
+    }
+
+    /**
+     * This is a dumb method that is called by fragments for testing purposes.
+     * @return
+     */
+    public boolean isDisabled() {
+        return false;
     }
 
 }

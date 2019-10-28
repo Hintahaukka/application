@@ -6,18 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".ListPricesFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/spacing_top_and_bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_sides" />
+
+
+    <TextView
+        android:id="@+id/productField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
+        tools:text="Viivakoodi: 1234567" />
+
+    <TextView
+        android:id="@+id/myPriceField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/productField"
+        tools:text="Kauppa: Punkten\nHinta: 3,50€" />
+
+    <TextView
+        android:id="@+id/otherPricesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_finding_prices"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
 
     <TextView
         android:id="@+id/pricesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:scrollbars="vertical"
-        android:text="@string/text_finding_prices"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.078" />
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
+        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
