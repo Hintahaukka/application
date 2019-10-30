@@ -2,9 +2,10 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.5
 jobs:
-  build-android:
+  build:
     docker:
-      - image: circleci/android:api-25-alpha
+      - image: circleci/android:api-28-alpha
+    working_directory: ~/code
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -18,9 +19,6 @@ jobs:
           yes | sdkmanager --licenses || exit 0
       - run: 
           yes | sdkmanager --update || exit 0
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
@@ -29,13 +27,10 @@ jobs:
           name: Run Tests
           command: ./gradlew build jacocoTestReport assembleAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: app/build/reports
+          path: /app/build/reports
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: app/build/test-results
-#      - run:
-#          name: connectedCheck
-#          command: ./gradlew connectedCheck
+          path: /app/build/test-results
       - run:
           name: Upload Coverage Results
           command: |
@@ -43,9 +38,55 @@ jobs:
               -t $CODECOV_TOKEN \
               -n $CIRCLE_BUILD_NUM \
               -Z || echo 'Codecov upload failed'
-# See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+  test:
+    docker:
+      - image: circleci/android:api-28-alpha    
+    working_directory: ~/code
+    environment:
+     JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          yes | sdkmanager --licenses || exit 0
+      - run: 
+          yes | sdkmanager --update || exit 0
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Build debug APK and release APK
+          command: |
+            ./gradlew :app:assembleDebug
+            ./gradlew :app:assembleDebugAndroidTest
+      - run:
+          name: Store Google Service Account
+          command: |
+            echo $GOOGLE_SERVICES_KEY > app/google-services.json
+            echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
+          
+      - run:
+          name: Authorize gcloud and set config defaults
+          command: |
+            sudo gcloud auth activate-service-account --key-file=app/gcloud-service-key.json
+            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+      - run:
+          name: Test with Firebase Test Lab
+          command: >
+            sudo gcloud firebase test android run \ 
+              --app <local_server_path>/<app_apk>.apk \ 
+              --test <local_server_path>/<app_test_apk>.apk \ 
+              --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
+      - run:
+          name: Install gsutil dependency and copy test results data
+          command: |
+            sudo pip install -U crcmod
+            sudo gsutil -m cp -r -U `sudo gsutil ls gs://[BUCKET_NAME]/[OBJECT_NAME] | tail -1` ${CIRCLE_ARTIFACTS}/ | true
 workflows:
   version: 2
-  workflow:
+  build_and_test:
     jobs:
-      - build-android
+      - build
+      - test

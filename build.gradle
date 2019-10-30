@@ -36,6 +36,7 @@ buildscript {
     classpath "com.android.tools.build:gradle:${gradle_version}"
     classpath "com.dicedmelon.gradle:jacoco-android:$jacoco_android_version" 
     classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$navigation_gradleplugin_version"
+    classpath "com.google.gms:google-services:4.3.2"
         
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
