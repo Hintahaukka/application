@@ -25,6 +25,7 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
+import static java.lang.Boolean.FALSE;
 
 
 public class BarcodeScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {
@@ -137,7 +138,32 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
     public void handleResult(Result result) {
         onDestroy();
         final String scanResult = result.getText();
-        Navigation.findNavController(getView()).navigate(
+        if (checkEan13(scanResult)) {
+             Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
+
+        } else {
+            // Barcode was not correct EAN13
+            Toast.makeText(getContext(), "Viivakoodi ei ole oikein! ", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean checkEan13(String scanResult) {
+        if (scanResult.length()!=13) return FALSE;
+        int odd=0;
+        int even=0;
+        int num;
+        for (int i=0;i<12;i++) {
+            num = Integer.parseInt(scanResult.substring(i, i+1));
+            if (i%2==0) {
+                odd += num;
+            } else {
+                even += num;
+            }
+        }
+        int sum = even*3 + odd;
+        int nextTen = (sum/10 + 1)*10;
+        return  (nextTen-sum)==Integer.parseInt(scanResult.substring(12,13));
+
     }
 }
