@@ -24,6 +24,17 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
+          name: Store Google Service Account
+          command: |
+            echo $GOOGLE_SERVICES_KEY > app/google-services.json
+            echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
+          
+      - run:
+          name: Authorize gcloud and set config defaults
+          command: |
+            sudo gcloud auth activate-service-account --key-file=app/gcloud-service-key.json
+            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}      
+      - run:
           name: Run Tests
           command: ./gradlew build jacocoTestReport assembleAndroidTest
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
