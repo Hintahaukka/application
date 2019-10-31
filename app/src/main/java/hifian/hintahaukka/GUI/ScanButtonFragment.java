@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.io.InputStream;
+
+import hifian.hintahaukka.GUI.MainActivity;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.GUI.ScanButtonFragmentArgs;
+import hifian.hintahaukka.GUI.ScanButtonFragmentDirections;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 public class ScanButtonFragment extends Fragment {
     private boolean test;

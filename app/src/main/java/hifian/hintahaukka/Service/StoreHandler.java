@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import hifian.hintahaukka.Domain.Store;
 
 /**
  * Reads the inputstream XML data and converts it into Store objects

@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.Collections;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import hifian.hintahaukka.Domain.Store;
 
 /**
  * Class contains methods to manage Store objects

@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Domain;
 
 public class Store {
     private String storeId;
