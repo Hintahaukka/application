@@ -3,6 +3,7 @@ package hifian.hintahaukka;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -47,19 +48,19 @@ public class StoreManagerTest {
         this.useAllData();
 
         List<Store> storeList = storeManager.listNearestStores(60.317435, 24.849496);
-        assertEquals(10, storeList.size());
+        assertTrue(storeList.size() <= 10);
         assertEquals("K-Market Kivistö", storeList.get(0).getName());
 
         storeList = storeManager.listNearestStores(61.491727, 23.790583);
-        assertEquals(10, storeList.size());
+        assertTrue(storeList.size() <= 10);
         assertEquals("Sale Järvensivu", storeList.get(0).getName());
 
         storeList = storeManager.listNearestStores(61.496632, 23.802789);
-        assertEquals(10, storeList.size());
+        assertTrue(storeList.size() <= 10);
         assertEquals("K-Market Domus", storeList.get(0).getName());
 
         storeList = storeManager.listNearestStores(61.508963, 23.778021);
-        assertEquals(10, storeList.size());
+        assertTrue(storeList.size() <= 10);
         assertEquals("K-Market Lapinniemi", storeList.get(0).getName());
     }
 
