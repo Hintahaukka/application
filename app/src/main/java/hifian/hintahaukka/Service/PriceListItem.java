@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Service;
 
 import android.os.Parcelable;
 import android.os.Parcel;

@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Service;
 
 public class EnterPriceUtils {
 
