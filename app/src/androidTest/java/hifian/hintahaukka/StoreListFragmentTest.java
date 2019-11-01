@@ -34,7 +34,7 @@ public class StoreListFragmentTest {
     // mock NavController
     NavController mockNavController;
 
-    /*private void launchStoreListFragment() {
+    private void launchStoreListFragment() {
 
         FragmentScenario<StoreListFragment> scenario =
                 FragmentScenario.launchInContainer(StoreListFragment.class);
@@ -62,18 +62,7 @@ public class StoreListFragmentTest {
                StoreListFragmentDirections.actionStoreListFragmentToScanButtonFragment(
                         "418006009"));
     }
-
-    @Test
-    public void thereAreTenStoresListed() {
-
-        // GIVEN - On the store list screen
-        launchStoreListFragment();
-
-        // WHEN - The stores are listed
-        // THEN - There are ten stores in the list
-
-        onView(withId(R.id.listView)).check(ViewAssertions.matches(Matchers.withListSize(10)));
-    }*/
+    
 }
 
 class Matchers {
