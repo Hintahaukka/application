@@ -112,7 +112,16 @@ public class StoreListFragment extends Fragment {
     private void createList() {
         this.createStoreManager();
         final List<Store> storeList = storeManager.listNearestStores(lat, lon);
-        final ListView listView = (ListView) getView().findViewById(R.id.listView);
+
+        // Prevent a bug that chrases the program: if user has asked to update the location
+        // but navigates to next screen before finding location is finished, don't update the list
+        final ListView listView;
+        try {
+            listView = (ListView) getView().findViewById(R.id.listView);
+        } catch (NullPointerException e) {
+            return;
+        }
+
         final List<String> storeNames = new ArrayList<>();
         for (Store s : storeList) {
             if (s.getName() != null) {
