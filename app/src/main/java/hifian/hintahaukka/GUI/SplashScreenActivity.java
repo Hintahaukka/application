@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.Service.HttpService;
 import hifian.hintahaukka.Service.HttpGetTask;
 
 
