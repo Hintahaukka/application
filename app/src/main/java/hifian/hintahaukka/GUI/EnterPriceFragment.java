@@ -105,7 +105,6 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
@@ -116,7 +115,6 @@ public class EnterPriceFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
                                 selectedStore, scanResult, cents, productName, prices, test ));
-
             }
         });
 
@@ -171,7 +169,6 @@ public class EnterPriceFragment extends Fragment {
                 }
             } catch (JSONException e1) {
                 e1.printStackTrace();
-
             }
         }
 

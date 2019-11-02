@@ -21,6 +21,10 @@ public abstract class HttpGetTask extends AsyncTask<String, String, String> {
         this.urlString = urlString;
     }
 
+    /**
+     * Setting the HttpGetTask mocked, if the task is needed in tests.
+     * In that case no request is sent to the server and the task returns only mock response.
+     */
     public void setMocked() {
         this.isMocked = true;
     }

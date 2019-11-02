@@ -39,6 +39,10 @@ public abstract class HttpPostTask extends AsyncTask<String, String, String> {
         this.paramNames = paramNames;
     }
 
+    /**
+     * Setting the HttpPostTask mocked, if the task is needed in tests.
+     * In that case no data is sent to the server and the task returns only mock response.
+     */
     public void setMocked() {
         this.isMocked = true;
     }
