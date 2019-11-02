@@ -1,13 +1,16 @@
 package hifian.hintahaukka;
 
 import org.junit.Test;
-import org.junit.BeforeClass;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 public class StoreManagerTest {
 

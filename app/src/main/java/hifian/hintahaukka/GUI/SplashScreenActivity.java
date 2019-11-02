@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,6 +15,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.GpsActivity;
+import hifian.hintahaukka.Service.HttpService;
 
 
 public class SplashScreenActivity extends AppCompatActivity {

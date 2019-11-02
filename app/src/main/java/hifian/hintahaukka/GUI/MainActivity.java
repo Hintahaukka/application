@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import java.io.InputStream;
+
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.StoreManager;
 
 
 public class MainActivity extends AppCompatActivity {
