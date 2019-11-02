@@ -33,7 +33,7 @@ public class EnterPriceFragmentTest {
     String scanResult = "scanResult";
     boolean test = false;
 
-    //default productName returned by HttpServiceMock
+    //default productName returned by mocked HttpPostTask
     String productName = "Omena";
 
     PriceListItem[] prices;
