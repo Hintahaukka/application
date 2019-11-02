@@ -177,12 +177,13 @@ public class StoreListFragment extends Fragment {
 
     /**
      * Finds the location of the user and updates the store list with the information.
-     * In tests location is set to 0,0.
+     * In tests location is set to a particular shop in Åland islands, beloved by the
+     * developing team.
      */
     private void updateLocationAndStoreList() {
         if(isRunningInTestEnvironment) {
-            lat = 0;
-            lon = 0;
+            lat = 60.083087;
+            lon = 19.942171;
             createList();
             return;
         }
