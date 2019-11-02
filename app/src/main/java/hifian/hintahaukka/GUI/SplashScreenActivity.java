@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpService;
+import hifian.hintahaukka.Service.HttpGetTask;
+
 
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -30,9 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         // Wake Heroku
-        String urlString = "https://hintahaukka.herokuapp.com/wake";
-        HttpService httpService = new HttpService(urlString);
-        httpService.sendGetRequest();
+        new WakeHerokuTask().execute("");
 
         requirePermissionToUseLocation(true);
     }
@@ -97,6 +97,26 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    /**
+     * Sends a wake request to the server.
+     */
+    private class WakeHerokuTask extends HttpGetTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/wake");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+        }
     }
 
 }
