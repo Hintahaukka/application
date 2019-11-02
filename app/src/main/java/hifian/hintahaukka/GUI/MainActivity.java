@@ -15,19 +15,11 @@ import hifian.hintahaukka.Service.StoreManager;
 public class MainActivity extends AppCompatActivity {
 
     private StoreManager storeManager;
-    double lat;
-    double lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-             this.lat = extras.getDouble("lat");
-             this.lon = extras.getDouble("lon");
-        }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);
@@ -48,14 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     public StoreManager getStoreManager() {
         return this.storeManager;
-    }
-
-    public double getLat() {
-        return this.lat;
-    }
-
-    public double getLon() {
-        return this.lon;
     }
 
     /**
