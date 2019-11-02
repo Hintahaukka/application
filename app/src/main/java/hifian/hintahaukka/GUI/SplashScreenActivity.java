@@ -34,7 +34,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         // Wake Heroku
-        System.out.println("käynnistetään herokun herätys");
         new WakeHerokuTask().execute("");
 
         requirePermissionToUseLocation(true);
@@ -132,6 +131,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         return intent;
     }
 
+    /**
+     * Sends a wake request to the server.
+     */
     private class WakeHerokuTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {
