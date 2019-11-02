@@ -34,7 +34,11 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
- // remove dataBinding because use of androidx
+  compileOptions {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+  }
+  // remove dataBinding because use of androidx
  // dataBinding {
  //   enabled = true
  // }
