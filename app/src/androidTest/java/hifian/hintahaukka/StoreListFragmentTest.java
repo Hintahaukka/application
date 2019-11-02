@@ -18,6 +18,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import hifian.hintahaukka.GUI.StoreListFragment;
+import hifian.hintahaukka.GUI.StoreListFragmentDirections;
+
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -59,18 +62,7 @@ public class StoreListFragmentTest {
                StoreListFragmentDirections.actionStoreListFragmentToScanButtonFragment(
                         "418006009"));
     }
-
-    @Test
-    public void thereAreTenStoresListed() {
-
-        // GIVEN - On the store list screen
-        launchStoreListFragment();
-
-        // WHEN - The stores are listed
-        // THEN - There are ten stores in the list
-
-        onView(withId(R.id.listView)).check(ViewAssertions.matches(Matchers.withListSize(10)));
-    }
+    
 }
 
 class Matchers {

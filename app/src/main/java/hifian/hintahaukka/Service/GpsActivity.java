@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.Service;
 
 import android.location.LocationListener;
 import android.content.Context;

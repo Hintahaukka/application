@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,12 @@ import androidx.navigation.Navigation;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import hifian.hintahaukka.GUI.MainActivity;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
+import hifian.hintahaukka.GUI.StoreListFragmentDirections;
 
 public class StoreListFragment extends Fragment {
     private String selectedStore = "Unknown store";

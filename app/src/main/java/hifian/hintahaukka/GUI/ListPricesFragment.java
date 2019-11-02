@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 
 import android.os.Bundle;
@@ -16,6 +16,12 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
+
+import hifian.hintahaukka.GUI.ListPricesFragmentArgs;
+import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 
 public class ListPricesFragment extends Fragment {

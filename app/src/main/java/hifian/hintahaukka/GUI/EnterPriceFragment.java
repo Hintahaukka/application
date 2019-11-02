@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 
 import android.os.Bundle;
@@ -22,7 +22,16 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.io.InputStream;
-import java.util.Arrays;
+
+import hifian.hintahaukka.GUI.EnterPriceFragmentArgs;
+import hifian.hintahaukka.GUI.EnterPriceFragmentDirections;
+import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.EnterPriceUtils;
+import hifian.hintahaukka.Service.HttpService;
+import hifian.hintahaukka.Service.HttpServiceMock;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 public class EnterPriceFragment extends Fragment {
 
@@ -50,7 +59,7 @@ public class EnterPriceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
-        EnterPriceFragmentArgs  args = EnterPriceFragmentArgs.fromBundle(getArguments());
+        EnterPriceFragmentArgs args = EnterPriceFragmentArgs.fromBundle(getArguments());
 
         selectedStore = args.getSelectedStore();
         scanResult = args.getScanResult();
