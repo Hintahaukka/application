@@ -27,7 +27,9 @@ jobs:
           name: Store Google Service Account
           command: |
             echo $GOOGLE_SERVICES_KEY > app/google-services.json
+            sed -i -e 's/\\"/'\"'/g' app/google-services.json
             echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
+            sed -i -e 's/\\"/'\"'/g' app/gcloud-service-key.json
           
       - run:
           name: Authorize gcloud and set config defaults
@@ -76,7 +78,9 @@ jobs:
           name: Store Google Service Account
           command: |
             echo $GOOGLE_SERVICES_KEY > app/google-services.json
+            sed -i -e 's/\\"/'\"'/g' app/google-services.json
             echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
+            sed -i -e 's/\\"/'\"'/g' app/gcloud-service-key.json
           
       - run:
           name: Authorize gcloud and set config defaults
