@@ -51,9 +51,9 @@
         android:text="@string/text_finding_prices"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toTopOf="@+id/counter" />
+        app:layout_constraintBottom_toTopOf="@+id/priceListView" />
 
-    <TextView
+    <!--TextView
         android:id="@+id/pricesTextView"
         android:layout_width="wrap_content"
         android:layout_height="350sp"
@@ -62,7 +62,16 @@
         android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
-        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
+        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" /-->
+
+    <ListView
+        android:id="@+id/priceListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/percentageTextField" />
 
     <com.sccomponents.widgets.ScSeekBar
         android:id="@+id/priceGauge"
@@ -80,7 +89,7 @@
         app:scc_stroke_size="20dp" />
 
     <TextView
-        android:id="@+id/counter"
+        android:id="@+id/percentageTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="bottom|center_horizontal"
