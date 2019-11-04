@@ -161,15 +161,15 @@ public class ListPricesFragment extends Fragment {
             }
 
             if (s!= null && s.getName() != null) {
-                pricesTextView.append("\n" + s.getName());
+                pricesTextView.append("" + s.getName());
             } else {
-                pricesTextView.append("\nTuntematon kauppa");
+                pricesTextView.append("Tuntematon kauppa");
             }
             String date = item.getTimestamp();
             pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
             double cents = item.getCents() / 100.0;
             String formattedPrice = String.format("%.02f", cents);
-            pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
+            pricesTextView.append("\nHinta: " + formattedPrice + "€\n\n");
         }
         if (pricesTextView.getText()=="") {
             pricesTextView.setText("Ei muita hintoja");
