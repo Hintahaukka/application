@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 
 import android.os.Bundle;
@@ -22,7 +22,13 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.io.InputStream;
-import java.util.Arrays;
+
+import hifian.hintahaukka.Service.HttpPostTask;
+import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.EnterPriceUtils;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 public class EnterPriceFragment extends Fragment {
 
@@ -33,10 +39,12 @@ public class EnterPriceFragment extends Fragment {
     private String storeName;
     private String productName;
     private TextView nameTextView;
+    private Button sendPriceButton;
+    private TextView enterEuros;
+    private TextView enterCents;
     private PriceListItem priceListItem;
     private PriceListItem[] prices;
     private StoreManager storeManager;
-    private HttpService httpService;
     private String[] parameterNames;
     private String[] parameters;
 
@@ -50,7 +58,7 @@ public class EnterPriceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
-        EnterPriceFragmentArgs  args = EnterPriceFragmentArgs.fromBundle(getArguments());
+        EnterPriceFragmentArgs args = EnterPriceFragmentArgs.fromBundle(getArguments());
 
         selectedStore = args.getSelectedStore();
         scanResult = args.getScanResult();
@@ -72,22 +80,15 @@ public class EnterPriceFragment extends Fragment {
 
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
         nameTextView.setText("Haetaan tuotenimi...\n");
+        enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
+        enterCents = (TextView) getView().findViewById(R.id.enterCents);
 
-        // find productName from backend to nameTextView
-        String productNameUrlString = "https://hintahaukka.herokuapp.com/getInfoAndPrices";
-        if (test) {
-            productNameUrlString = "https://hintahaukka.herokuapp.com/test/getInfoAndPrices";
-        }
-        httpService = this.createHttpService(productNameUrlString);
-        parameterNames = new String[]{"ean"};
-        parameters = new String[]{scanResult};
-        httpService.sendPostRequest(parameterNames, parameters);
-        String herokuResponse = null;
-        while (herokuResponse == null) {
-            // TODO: Do something while the post task is running. While-loop probably not the best way to wait.
-            herokuResponse = httpService.getPostResponse();
-        }
-        this.handleResponse(herokuResponse);
+        // Send button is disabled before all necessary data has been received
+        sendPriceButton = getView().findViewById(R.id.sendPriceBtn);
+        sendPriceButton.setEnabled(false);
+
+        // Get product info from scan result
+        new ProductInfoTask().execute(new String[]{scanResult});
 
         // Show store and ean
         this.createStoreManager();
@@ -101,29 +102,19 @@ public class EnterPriceFragment extends Fragment {
         TextView eanField = (TextView) getView().findViewById(R.id.eanField);
         eanField.setText("Viivakoodi: " + scanResult);
 
-        Button sendPriceButton = getView().findViewById(R.id.sendPriceBtn);
-        final TextView enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
-        final TextView enterCents = (TextView) getView().findViewById(R.id.enterCents);
-
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
-                parameterNames = new String[]{"ean", "cents", "storeId"};
-                parameters = new String[]{scanResult, cents, selectedStore};
-                String addPriceUrlString = "https://hintahaukka.herokuapp.com/addPrice";
-                if (test) {
-                    addPriceUrlString = "https://hintahaukka.herokuapp.com/test/addPrice";
-                }
-                httpService = createHttpService(addPriceUrlString);
 
-                httpService.sendPostRequest(parameterNames, parameters);
+                parameters = new String[]{scanResult, cents, selectedStore};
+                new SendPriceTask().execute(parameters);
+
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
                                 selectedStore, scanResult, cents, productName, prices, test ));
-
             }
         });
 
@@ -160,26 +151,27 @@ public class EnterPriceFragment extends Fragment {
      * @param response The JSON containing the product and price info
      */
     public void handleResponse(String response) {
-        if (response == null) {
-            nameTextView.setText("Tuotenimen hakeminen epäonnistui\n");
-        }
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            productName = jsonObject.getString("name");
+        if (response == null || response == "") {
+            nameTextView.setText("Tuotetietojen hakeminen epäonnistui\n");
+        } else {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                productName = jsonObject.getString("name");
 
-            JSONArray jsonArray = jsonObject.getJSONArray("prices");
-            int l = jsonArray.length();
-            prices = new PriceListItem[l];
+                JSONArray jsonArray = jsonObject.getJSONArray("prices");
+                int l = jsonArray.length();
+                prices = new PriceListItem[l];
 
-            for (int i = 0; i < l; i++) {
-                JSONObject j = jsonArray.getJSONObject(i);
-                prices[i] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
-                        j.getString("timestamp"));
+                for (int i = 0; i < l; i++) {
+                    JSONObject j = jsonArray.getJSONObject(i);
+                    prices[i] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
+                            j.getString("timestamp"));
+                }
+            } catch (JSONException e1) {
+                e1.printStackTrace();
             }
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-
         }
+
         // If the response contains no product name, put Unknown so that argument won't be null
         if (productName == null || productName.equals("")) {
             productName = "Tuotenimeä ei saatavilla";
@@ -192,6 +184,9 @@ public class EnterPriceFragment extends Fragment {
         }
         // we are now have productname, lets show it
         nameTextView.setText(productName);
+
+        // we may now proceed to next fragment when ready
+        sendPriceButton.setEnabled(true);
     }
 
 
@@ -214,14 +209,6 @@ public class EnterPriceFragment extends Fragment {
         }
     }
 
-    private HttpService createHttpService(String url) {
-        if (isRunningInTestEnvironment) {
-            return new HttpServiceMock(url);
-        } else {
-            return new HttpService(url);
-        }
-    }
-
     /**
      * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
      * Method calls the Main Activity, which causes a ClassCastException in test environment.
@@ -238,4 +225,60 @@ public class EnterPriceFragment extends Fragment {
         return this.prices;
     }
 
+    /**
+     * Sends the ean code to the server and receives product info.
+     */
+    private class ProductInfoTask extends HttpPostTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/getInfoAndPrices");
+            if (test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/getInfoAndPrices");
+            }
+            this.setParamNames(new String[]{"ean"});
+            if (isRunningInTestEnvironment) {
+                this.setMocked();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            handleResponse(response);
+        }
+    }
+
+    /**
+     * Sends the new price to the server.
+     */
+    private class SendPriceTask extends HttpPostTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/addPrice");
+            if (test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/addPrice");
+            }
+            this.setParamNames(new String[]{"ean", "cents", "storeId"});
+            if (isRunningInTestEnvironment) {
+                this.setMocked();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+        }
+    }
 }

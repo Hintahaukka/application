@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.Manifest;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,23 +15,23 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.HttpGetTask;
+
+
 
 public class SplashScreenActivity extends AppCompatActivity {
     public Location location;
-    public GpsActivity gpsActivity;
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        this.gpsActivity = new GpsActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         // Wake Heroku
-        String urlString = "https://hintahaukka.herokuapp.com/wake";
-        HttpService httpService = new HttpService(urlString);
-        httpService.sendGetRequest();
+        new WakeHerokuTask().execute("");
 
         requirePermissionToUseLocation(true);
     }
@@ -91,8 +90,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getLocation();
-                Intent intent = getIntentWithLocationArguments();
+                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(intent);
                 // close this activity
                 finish();
@@ -100,32 +98,24 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, SPLASH_TIME_OUT);
     }
 
-    public Location getLocation() {
-        location = gpsActivity.getLocation();
-        if (location == null) {
-            Log.e("SplashScreenActivity", "GPS unable to get value");
-            return null;
-        } else {
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            Log.i("SplashScreenActivity", "GPS lat = " + lat + " lon = " + lon);
+    /**
+     * Sends a wake request to the server.
+     */
+    private class WakeHerokuTask extends HttpGetTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/wake");
+        }
 
-            return location;
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
         }
     }
 
-    public Intent getIntentWithLocationArguments() {
-        Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-
-        if (location != null) {
-            intent.putExtra("lat", location.getLatitude());
-            intent.putExtra("lon", location.getLongitude());
-        } else {
-            Double def = 0.0;
-            intent.putExtra("lat", def);
-            intent.putExtra("lon", def);
-        }
-
-        return intent;
-    }
 }
