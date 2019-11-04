@@ -63,4 +63,20 @@
         app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
         tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
 
+    <TextView
+        android:id="@+id/averagePriceField"
+        android:layout_width="113dp"
+        android:layout_height="29dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top" />
+
+    <TextView
+        android:id="@+id/differencePercentageField"
+        android:layout_width="129dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/averagePriceField" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
