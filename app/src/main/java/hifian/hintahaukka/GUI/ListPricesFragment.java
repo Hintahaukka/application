@@ -8,11 +8,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sccomponents.widgets.ScArc;
@@ -20,8 +21,10 @@ import com.sccomponents.widgets.ScGauge;
 import com.sccomponents.widgets.ScSeekBar;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 
 import hifian.hintahaukka.Service.ListPricesUtils;
@@ -41,7 +44,6 @@ public class ListPricesFragment extends Fragment {
     private TextView averagePriceField;
     private TextView myPriceField;
     private TextView productField;
-    private TextView pricesTextView;
     private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
@@ -63,7 +65,6 @@ public class ListPricesFragment extends Fragment {
         productName = args.getProductName();
         selectedStore = args.getSelectedStore();
         cents = args.getCents();
-        // array of PriceListItems from database via enterPriceFragment
         priceList = args.getPriceList();
         test = args.getTest();
 
@@ -93,7 +94,6 @@ public class ListPricesFragment extends Fragment {
 
         //Showing other prices
         otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
-        pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
 
         //Showing average price and difference to average price
         averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
@@ -114,8 +114,8 @@ public class ListPricesFragment extends Fragment {
                 Color.parseColor("#EA3A3C")
         );
 
-        TextView counter = (TextView) getView().findViewById(R.id.counter);
-        assert counter != null;
+        TextView percentageText = (TextView) getView().findViewById(R.id.percentageTextField);
+        assert percentageText != null;
 
         // Normally, the user may move the pointer by touch.
         // So we need to disable that by resetting the value immediately if user tries to change it.
@@ -126,9 +126,9 @@ public class ListPricesFragment extends Fragment {
             }
         });
         if (differencePercentage >= 0) {
-            counter.setText(differencePercentage + "%\nkeskihintaa kalliimpi");
+            percentageText.setText(differencePercentage + "%\nkeskihintaa kalliimpi");
         } else {
-            counter.setText((0 - differencePercentage) + "%\nkeskihintaa halvempi");
+            percentageText.setText((0 - differencePercentage) + "%\nkeskihintaa halvempi");
         }
 
     }
@@ -142,16 +142,21 @@ public class ListPricesFragment extends Fragment {
 
 
     public void handlePricelist() {
-        // changed to handle array from enterPriceFragment
         otherPricesText.setText("Muut hinnat:\n");
-        pricesTextView.setText("");
-
         Store selected = storeManager.getStore(selectedStore);
-
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
-        // strores and prices from array
+        // Create the list view
+        final ListView listView;
+        try {
+            listView = (ListView) getView().findViewById(R.id.priceListView);
+        } catch (NullPointerException e) {
+            return;
+        }
+        final List<String> priceStrings = new ArrayList<>();
+
+        // Add price items to the list view
         for (PriceListItem item : priceList) {
 
             Store s = storeManager.getStore(item.getStoreId());
@@ -159,23 +164,32 @@ public class ListPricesFragment extends Fragment {
             if (item.getStoreId().equals(selectedStore)) {
                 continue;
             }
-
+            String priceToString = "";
             if (s!= null && s.getName() != null) {
-                pricesTextView.append("" + s.getName());
+                priceToString += s.getName();
             } else {
-                pricesTextView.append("Tuntematon kauppa");
+                priceToString += "Tuntematon kauppa";
             }
             String date = item.getTimestamp();
-            pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
+            priceToString += ("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
             double cents = item.getCents() / 100.0;
             String formattedPrice = String.format("%.02f", cents);
-            pricesTextView.append("\nHinta: " + formattedPrice + "€\n\n");
+            priceToString += ("\nHinta: " + formattedPrice + "€");
+            priceStrings.add(priceToString);
         }
-        if (pricesTextView.getText()=="") {
-            pricesTextView.setText("Ei muita hintoja");
+        if (priceStrings.size() == 0) {
+            priceStrings.add("Ei muita hintoja");
         }
-        // can first one be locked ??
-        pricesTextView.setMovementMethod(new ScrollingMovementMethod());
+        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_list_prices,priceStrings);
+        listView.setAdapter(listViewAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // What happens if user clicks a price item
+                // Currently nothing
+            }
+        });
 
         double myPrice = Integer.parseInt(this.cents) / 100.0;
         averagePrice = ListPricesUtils.getAveragePrice(priceList ,myPrice);

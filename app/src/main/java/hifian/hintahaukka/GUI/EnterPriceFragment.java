@@ -111,7 +111,6 @@ public class EnterPriceFragment extends Fragment {
 
                 parameters = new String[]{scanResult, cents, selectedStore};
                 new SendPriceTask().execute(parameters);
-
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
                                 selectedStore, scanResult, cents, productName, prices, test ));
