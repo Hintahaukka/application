@@ -1,6 +1,8 @@
 package hifian.hintahaukka.GUI;
 
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.sccomponents.widgets.ScArc;
+import com.sccomponents.widgets.ScGauge;
+import com.sccomponents.widgets.ScSeekBar;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -66,6 +72,41 @@ public class ListPricesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
+
+        // Create the price gauge
+        final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
+        assert priceGauge != null;
+
+        int testPrice= 10;
+
+        priceGauge.setStrokesCap(Paint.Cap.SQUARE);
+        priceGauge.setValue(testPrice, -50, 50);
+
+        priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
+        priceGauge.getBaseArc().setStrokeColors(
+                Color.parseColor("#55B20C"),
+                Color.parseColor("#FDE401"),
+                Color.parseColor("#EA3A3C")
+        );
+
+        TextView counter = (TextView) getView().findViewById(R.id.counter);
+        assert counter != null;
+
+        if (testPrice >= 0) {
+            counter.setText(testPrice + "%\nkeskihintaa kalliimpi");
+        } else {
+            counter.setText((0 - testPrice) + "% keskihintaa halvempi");
+        }
+
+        // Normally, the user may move the pointer by touch.
+        // So we need to disable that by resetting the value immediately if user tries to change it.
+        priceGauge.setOnEventListener(new ScGauge.OnEventListener() {
+            @Override
+            public void onValueChange(float degrees) {
+                priceGauge.setValue(testPrice, -50, 50);
+            }
+        });
+
 
         //Showing the store and price added by user
         myPriceField = (TextView) getView().findViewById(R.id.myPriceField);

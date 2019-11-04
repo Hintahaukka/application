@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
+        android:textSize="15sp"
         tools:text="Viivakoodi: 1234567" />
 
     <TextView
@@ -51,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/text_finding_prices"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
+        app:layout_constraintTop_toBottomOf="@+id/counter" />
 
     <TextView
         android:id="@+id/pricesTextView"
@@ -62,5 +63,32 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
         tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
+
+    <com.sccomponents.widgets.ScSeekBar
+        android:id="@+id/priceGauge"
+        android:layout_width="171sp"
+        android:layout_height="104sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
+        app:scc_angle_start="180"
+        app:scc_angle_sweep="180"
+        app:scc_halo_size="0dp"
+        app:scc_pointer_color="@color/colorPrimaryLight"
+        app:scc_pointer_radius="15dp"
+        app:scc_progress_color="#00ff0000"
+        app:scc_progress_size="10dp"
+        app:scc_stroke_size="20dp" />
+
+    <TextView
+        android:id="@+id/counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:text="0%"
+        android:textSize="20sp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/priceGauge"
+        app:layout_constraintStart_toStartOf="@+id/priceGauge"
+        app:layout_constraintTop_toBottomOf="@+id/priceGauge" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
