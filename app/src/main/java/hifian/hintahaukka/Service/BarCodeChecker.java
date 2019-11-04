@@ -1,6 +1,6 @@
 package hifian.hintahaukka.Service;
 
-import static java.lang.Boolean.FALSE;
+
 
 public class BarCodeChecker {
 
@@ -9,7 +9,7 @@ public class BarCodeChecker {
     }
 
     public boolean checkEan13(String scanResult) {
-        if (scanResult.length()!=13) return FALSE;
+        if (scanResult.length()!=13) return false;
         int odd=0;
         int even=0;
         int num;
