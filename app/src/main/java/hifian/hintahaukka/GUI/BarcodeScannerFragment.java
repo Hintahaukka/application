@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +22,12 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 
-import hifian.hintahaukka.GUI.BarcodeScannerFragmentArgs;
-import hifian.hintahaukka.GUI.BarcodeScannerFragmentDirections;
+
+import hifian.hintahaukka.Service.BarCodeChecker;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
-import static java.lang.Boolean.FALSE;
+
 
 
 public class BarcodeScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {
@@ -140,7 +140,8 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
     public void handleResult(Result result) {
         onDestroy();
         final String scanResult = result.getText();
-        if (checkEan13(scanResult)) {
+        BarCodeChecker bcCherker = new BarCodeChecker();
+        if (bcCherker.checkEan13(scanResult)) {
              Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
 
@@ -150,22 +151,5 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         }
     }
 
-    private boolean checkEan13(String scanResult) {
-        if (scanResult.length()!=13) return FALSE;
-        int odd=0;
-        int even=0;
-        int num;
-        for (int i=0;i<12;i++) {
-            num = Integer.parseInt(scanResult.substring(i, i+1));
-            if (i%2==0) {
-                odd += num;
-            } else {
-                even += num;
-            }
-        }
-        int sum = even*3 + odd;
-        int nextTen = (sum/10 + 1)*10;
-        return  (nextTen-sum)==Integer.parseInt(scanResult.substring(12,13));
 
-    }
 }
