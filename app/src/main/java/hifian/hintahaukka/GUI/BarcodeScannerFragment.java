@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 
+import hifian.hintahaukka.GUI.BarcodeScannerFragmentArgs;
+import hifian.hintahaukka.GUI.BarcodeScannerFragmentDirections;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;

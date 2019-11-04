@@ -13,6 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import hifian.hintahaukka.GUI.EnterPriceFragment;
+import hifian.hintahaukka.GUI.EnterPriceFragmentDirections;
+import hifian.hintahaukka.Service.PriceListItem;
+
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -29,7 +33,7 @@ public class EnterPriceFragmentTest {
     String scanResult = "scanResult";
     boolean test = false;
 
-    //default productName returned by HttpServiceMock
+    //default productName returned by mocked HttpPostTask
     String productName = "Omena";
 
     PriceListItem[] prices;
