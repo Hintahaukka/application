@@ -17,7 +17,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import hifian.hintahaukka.GUI.ListPricesFragmentArgs;
+
+import hifian.hintahaukka.Service.ListPricesUtils;
 import hifian.hintahaukka.Service.PriceListItem;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
@@ -31,6 +32,8 @@ public class ListPricesFragment extends Fragment {
     private String cents;
     private String selectedStore;
     private PriceListItem[] priceList;
+    private TextView averagePriceField;
+    private TextView differencePercentageField;
     private TextView myPriceField;
     private TextView productField;
     private TextView pricesTextView;
@@ -40,8 +43,8 @@ public class ListPricesFragment extends Fragment {
     private boolean test;
 
     private boolean isRunningInTestEnvironment;
-
-
+    private double averagePrice;
+    private int differencePercentage;
     public ListPricesFragment() {
         // Required empty public constructor
     }
@@ -69,6 +72,8 @@ public class ListPricesFragment extends Fragment {
 
         //Showing the store and price added by user
         myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
+
+
         Store s = storeManager.getStore(selectedStore);
         if (s!= null && s.getName() != null) {
             myPriceField.append(s.getName());
@@ -86,9 +91,16 @@ public class ListPricesFragment extends Fragment {
         //Showing other prices
         otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
         pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
+
+        //Showing average price and difference to average price
+        averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
+        differencePercentageField = (TextView) getView().findViewById(R.id.differencePercentageField);
+        
+
         this.handlePricelist();
-
-
+        
+        averagePriceField.setText("Keskihinta: " + averagePrice + "€");
+        differencePercentageField.setText("Ero keskiarvoon: " + differencePercentage + "%");
     }
 
     @Override
@@ -134,6 +146,10 @@ public class ListPricesFragment extends Fragment {
         }
         // can first one be locked ??
         pricesTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        averagePrice = ListPricesUtils.getAveragePrice(priceList ,myPrice);
+        differencePercentage = ListPricesUtils.getDifferenceToAveragePriceInPercentages(myPrice, averagePrice);
     }
 
     /**
