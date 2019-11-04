@@ -75,45 +75,8 @@ public class ListPricesFragment extends Fragment {
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
 
-        // Create the price gauge
-        final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
-        assert priceGauge != null;
-
-        int testPrice= 10;
-
-        priceGauge.setStrokesCap(Paint.Cap.SQUARE);
-        priceGauge.setValue(testPrice, -50, 50);
-
-        priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
-        priceGauge.getBaseArc().setStrokeColors(
-                Color.parseColor("#55B20C"),
-                Color.parseColor("#FDE401"),
-                Color.parseColor("#EA3A3C")
-        );
-
-        TextView counter = (TextView) getView().findViewById(R.id.counter);
-        assert counter != null;
-
-        if (testPrice >= 0) {
-            counter.setText(testPrice + "%\nkeskihintaa kalliimpi");
-        } else {
-            counter.setText((0 - testPrice) + "% keskihintaa halvempi");
-        }
-
-        // Normally, the user may move the pointer by touch.
-        // So we need to disable that by resetting the value immediately if user tries to change it.
-        priceGauge.setOnEventListener(new ScGauge.OnEventListener() {
-            @Override
-            public void onValueChange(float degrees) {
-                priceGauge.setValue(testPrice, -50, 50);
-            }
-        });
-
-
         //Showing the store and price added by user
         myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
-
-
         Store s = storeManager.getStore(selectedStore);
         if (s!= null && s.getName() != null) {
             myPriceField.append(s.getName());
@@ -134,10 +97,40 @@ public class ListPricesFragment extends Fragment {
 
         //Showing average price and difference to average price
         averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
-
         this.handlePricelist();
-        
         averagePriceField.setText("Keskihinta: " + averagePrice + "€");
+
+        // Create the price gauge
+        final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
+        assert priceGauge != null;
+
+        priceGauge.setStrokesCap(Paint.Cap.SQUARE);
+        priceGauge.setValue(differencePercentage, -50, 50);
+
+        priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
+        priceGauge.getBaseArc().setStrokeColors(
+                Color.parseColor("#55B20C"),
+                Color.parseColor("#FDE401"),
+                Color.parseColor("#EA3A3C")
+        );
+
+        TextView counter = (TextView) getView().findViewById(R.id.counter);
+        assert counter != null;
+
+        // Normally, the user may move the pointer by touch.
+        // So we need to disable that by resetting the value immediately if user tries to change it.
+        priceGauge.setOnEventListener(new ScGauge.OnEventListener() {
+            @Override
+            public void onValueChange(float degrees) {
+                priceGauge.setValue(differencePercentage, -50, 50);
+            }
+        });
+        if (differencePercentage >= 0) {
+            counter.setText(differencePercentage + "%\nkeskihintaa kalliimpi");
+        } else {
+            counter.setText((0 - differencePercentage) + "%\nkeskihintaa halvempi");
+        }
+
     }
 
     @Override
