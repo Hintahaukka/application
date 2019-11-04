@@ -81,13 +81,13 @@ public class StoreManager {
         Collections.sort(this.stores, new StoreDistanceComparator(lat, lon));
 
         int numberOfStoresToReturn = 10;
-        if(numberOfStoresToReturn > stores.size()) numberOfStoresToReturn = stores.size();
+        //if(numberOfStoresToReturn > stores.size()) numberOfStoresToReturn = stores.size();
 
         List<Store> storesToList = new ArrayList<>();
         for (int i = 0; i < numberOfStoresToReturn; i++) {
             // Include stores only within 500m (500m is approx. 0.009094 in lat&lon difference).
-            double dist = Math.hypot(stores.get(i).getLat() - lat, stores.get(i).getLon() - lon);
-            if(dist > 0.009094) break;
+            //double dist = Math.hypot(stores.get(i).getLat() - lat, stores.get(i).getLon() - lon);
+            //if(dist > 0.009094) break;
 
             storesToList.add(stores.get(i));
         }
