@@ -28,6 +28,7 @@ jobs:
           command: |
             echo $GOOGLE_SERVICES_KEY |> app/google-services.json	
             sed -i -e 's/\\"/'\"'/g' app/google-services.json
+            printenv $GOOGLE_SERVICES_KEY
             echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
             sed -i -e 's/\\"/'\"'/g' app/gcloud-service-key.json
       - run:
