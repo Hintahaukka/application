@@ -15,4 +15,5 @@
     <string name="button_update_location">Päivitä sijainti</string>
     <string name="text_ask_to_turn_location_on">Sijaintia ei löydy. Onko sijaintisi poissa käytöstä?</string>
     <string name="text_finding_stores">Kauppoja etsitään...</string>
+    <string name="key_user_id">key_user_id</string>
 </resources>
