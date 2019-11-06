@@ -3,7 +3,6 @@ package hifian.hintahaukka.GUI;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -21,7 +20,6 @@ import hifian.hintahaukka.Service.HttpGetTask;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
-    public Location location;
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
