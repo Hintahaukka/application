@@ -52,6 +52,7 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:$androidx_v4_version"
     implementation "androidx.test:core:$androixTestCore_version"
     implementation "me.dm7.barcodescanner:zxing:$zxing_version"
+    implementation "com.github.paroca72:sc-widgets:$sc_widgets_version"
 
     implementation "androidx.navigation:navigation-fragment:$navigation_version"
     implementation "androidx.navigation:navigation-ui:$navigation_version"
