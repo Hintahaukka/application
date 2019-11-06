@@ -26,6 +26,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String userId;
 
+    private int completedTasks = 0;
+    private final int TASKS_TO_COMPLETE = 3;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +47,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Check if permission has already been given earlier
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            // Permission has already been granted, we can go on to the app
-            permissionGranted();
+            // Permission has already been granted
+            taskCompleted();
 
         } else {
 
@@ -76,29 +79,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission was granted, we can go on to the app
-            permissionGranted();
+            // Permission was granted
+            taskCompleted();
 
         } else {
             // Permission denied, ask permission again
             requirePermissionToUseLocation(false);
         }
-    }
-
-    /**
-     * Continues to the actual app. Should be called only when permission to find location is
-     * granted by the user.
-     */
-    private void permissionGranted() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(intent);
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
     }
 
     /**
@@ -113,6 +100,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // If not, get a new id from the backend and write it in memory
         if (userId == null) {
             new GetNewIdTask().execute();
+        } else {
+            taskCompleted();
         }
 
     }
@@ -134,6 +123,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            taskCompleted();
         }
     }
 
@@ -160,7 +150,34 @@ public class SplashScreenActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(getString(R.string.key_user_id), userId);
             editor.apply();
+
+            taskCompleted();
         }
+    }
+
+    /**
+     * Counter for completed tasks to ensure that all required asynchronous tasks are completed
+     * before continuing to the app.
+     */
+    private void taskCompleted() {
+        completedTasks++;
+
+        if (completedTasks == TASKS_TO_COMPLETE) {
+            continueToApp();
+        }
+    }
+
+    /**
+     * Continues to the actual app. Should be called only when all required tasks have
+     * finished.
+     */
+    private void continueToApp() {
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+            // close this activity
+            finish();
+        }, SPLASH_TIME_OUT);
     }
 
 }
