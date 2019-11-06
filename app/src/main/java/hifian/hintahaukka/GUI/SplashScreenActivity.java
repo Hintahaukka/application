@@ -1,7 +1,9 @@
 package hifian.hintahaukka.GUI;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,7 @@ import hifian.hintahaukka.Service.HttpGetTask;
 public class SplashScreenActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         // Wake Heroku
         new WakeHerokuTask().execute("");
+
+        getUserId();
 
         requirePermissionToUseLocation(true);
     }
@@ -97,6 +102,22 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     /**
+     * Checks if a user id already exists. If not, get a new one from the server.
+     */
+    private void getUserId() {
+
+        // Check if there already is an id in the memory
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
+
+        // If not, get a new id from the backend and write it in memory
+        if (userId == null) {
+            new GetNewIdTask().execute();
+        }
+
+    }
+
+    /**
      * Sends a wake request to the server.
      */
     private class WakeHerokuTask extends HttpGetTask {
@@ -113,6 +134,32 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+        }
+    }
+
+    /**
+     * Gets a new user id from the server and writes it in local memory.
+     */
+    private class GetNewIdTask extends HttpGetTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/test/getNewId");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            userId = response;
+
+            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getString(R.string.key_user_id), userId);
+            editor.apply();
         }
     }
 
