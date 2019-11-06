@@ -27,13 +27,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/spacing_sides" />
 
-
     <TextView
         android:id="@+id/productField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
+        android:textSize="15sp"
         tools:text="Viivakoodi: 1234567" />
 
     <TextView
@@ -48,35 +48,65 @@
         android:id="@+id/otherPricesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/text_finding_prices"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
+        app:layout_constraintBottom_toTopOf="@+id/priceListView" />
 
-    <TextView
+    <!--TextView
         android:id="@+id/pricesTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="350sp"
+        android:layout_gravity="left"
         android:layout_marginTop="16dp"
         android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
-        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
+        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" /-->
+
+    <ListView
+        android:id="@+id/priceListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/percentageTextField" />
+
+    <com.sccomponents.widgets.ScSeekBar
+        android:id="@+id/priceGauge"
+        android:layout_width="171sp"
+        android:layout_height="104sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintTop_toBottomOf="@+id/averagePriceField"
+        app:scc_angle_start="180"
+        app:scc_angle_sweep="180"
+        app:scc_halo_size="0dp"
+        app:scc_pointer_color="@color/colorPrimaryLight"
+        app:scc_pointer_radius="15dp"
+        app:scc_progress_color="#00ff0000"
+        app:scc_progress_size="10dp"
+        app:scc_stroke_size="20dp" />
+
+    <TextView
+        android:id="@+id/percentageTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:text="0%"
+        android:textSize="20sp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/priceGauge"
+        app:layout_constraintStart_toStartOf="@+id/priceGauge"
+        app:layout_constraintTop_toBottomOf="@+id/priceGauge" />
 
     <TextView
         android:id="@+id/averagePriceField"
-        android:layout_width="113dp"
-        android:layout_height="29dp"
+        android:layout_width="118dp"
+        android:layout_height="32dp"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintEnd_toEndOf="@+id/priceGauge"
+        app:layout_constraintStart_toStartOf="@+id/priceGauge"
         app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top" />
-
-    <TextView
-        android:id="@+id/differencePercentageField"
-        android:layout_width="129dp"
-        android:layout_height="30dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/averagePriceField" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
