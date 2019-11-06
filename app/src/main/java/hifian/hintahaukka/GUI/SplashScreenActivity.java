@@ -1,9 +1,10 @@
 package hifian.hintahaukka.GUI;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -21,9 +22,12 @@ import hifian.hintahaukka.Service.HttpGetTask;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
-    public Location location;
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private String userId;
+
+    private int completedTasks = 0;
+    private final int TASKS_TO_COMPLETE = 3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Wake Heroku
         new WakeHerokuTask().execute("");
 
+        getUserId();
+
         requirePermissionToUseLocation(true);
     }
 
@@ -41,8 +47,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Check if permission has already been given earlier
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            // Permission has already been granted, we can go on to the app
-            permissionGranted();
+            // Permission has already been granted
+            taskCompleted();
 
         } else {
 
@@ -73,8 +79,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission was granted, we can go on to the app
-            permissionGranted();
+            // Permission was granted
+            taskCompleted();
 
         } else {
             // Permission denied, ask permission again
@@ -83,19 +89,21 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     /**
-     * Continues to the actual app. Should be called only when permission to find location is
-     * granted by the user.
+     * Checks if a user id already exists. If not, get a new one from the server.
      */
-    private void permissionGranted() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(intent);
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+    private void getUserId() {
+
+        // Check if there already is an id in the memory
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
+
+        // If not, get a new id from the backend and write it in memory
+        if (userId == null) {
+            new GetNewIdTask().execute();
+        } else {
+            taskCompleted();
+        }
+
     }
 
     /**
@@ -115,7 +123,61 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            taskCompleted();
         }
+    }
+
+    /**
+     * Gets a new user id from the server and writes it in local memory.
+     */
+    private class GetNewIdTask extends HttpGetTask {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/test/getNewId");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            userId = response;
+
+            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getString(R.string.key_user_id), userId);
+            editor.apply();
+
+            taskCompleted();
+        }
+    }
+
+    /**
+     * Counter for completed tasks to ensure that all required asynchronous tasks are completed
+     * before continuing to the app.
+     */
+    private void taskCompleted() {
+        completedTasks++;
+
+        if (completedTasks == TASKS_TO_COMPLETE) {
+            continueToApp();
+        }
+    }
+
+    /**
+     * Continues to the actual app. Should be called only when all required tasks have
+     * finished.
+     */
+    private void continueToApp() {
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+            // close this activity
+            finish();
+        }, SPLASH_TIME_OUT);
     }
 
 }
