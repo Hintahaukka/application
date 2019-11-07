@@ -18,4 +18,6 @@
     <string name="text_enter_username">Syötä nimimerkki</string>
     <string name="text_username_taken">Käyttäjätunnus on jo käytössä!</string>
     <string name="text_username_too_short">Käyttäjänimen tulee olla vähintään viisi merkkiä pitkä</string>
+    <string name="key_user_id">key_user_id</string>
+
 </resources>
