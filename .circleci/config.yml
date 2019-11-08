@@ -128,4 +128,4 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test$instrumentation
+      - test -test_type="instrumentation"
