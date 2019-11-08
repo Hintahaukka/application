@@ -34,19 +34,6 @@ android:layout_height="wrap_content"
 android:orientation="horizontal"
 app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
 
-    <TextView
-        android:id="@+id/usernameField"
-        android:layout_width="264dp"
-        android:layout_height="74dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="0.283"
-        tools:text="@string/text_enter_username" />
-
     <Button
         android:id="@+id/sendUsernameButton"
         android:layout_width="263dp"
@@ -56,7 +43,19 @@ app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/usernameField"
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameField" />
+
+    <EditText
+        android:id="@+id/usernameField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:ems="10"
+        android:hint="@string/text_enter_username"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
