@@ -59,6 +59,23 @@ jobs:
     working_directory: ~/code
     environment:
      JVM_OPTS: -Xmx3200m
+    parameters:
+      type:
+        description: Test type. instrumentation or robo.
+        type: enum
+        enum: ["instrumentation", "robo"]
+      apk_path:
+        description: APK path.
+        type: string
+        default: app/build/outputs/apk/debug/app-debug.apk
+      test_apk_path:
+        description: Test APK path.
+        type: string
+        default: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+      bucket_name:
+        description: Bucket name for cloud storage
+        type: string
+        default: cloud-test
     steps:
       - checkout
       - restore_cache:
@@ -95,11 +112,12 @@ jobs:
      
       - run:
           name: Test with Firebase Test Lab
-          command: >
-            sudo gcloud firebase test android run \ 
-              --app gs://app/build/outputs/apk/debug/app-debug.apk \ 
-              --test gs://app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \ 
-              --results-bucket=cloud-test-${GOOGLE_PROJECT_ID}
+          command: |
+              sudo gcloud firebase test android run \
+                --type=<< parameters.type >> \
+                --app=<< parameters.apk_path >> \
+                --test=<< parameters.test_apk_path >> \
+                --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID}
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
