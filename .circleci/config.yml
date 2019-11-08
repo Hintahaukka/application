@@ -62,8 +62,8 @@ jobs:
     parameters:
       test_type:
         description: Test type. instrumentation or robo.
-        type: enum
-        enum: ["instrumentation", "robo"]
+        type: string
+        default: instrumentation
       apk_path:
         description: APK path.
         type: string
@@ -129,4 +129,4 @@ workflows:
     jobs:
       - build
       - test 
-          test_type= "instrumentation"
+         
