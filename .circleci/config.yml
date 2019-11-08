@@ -60,7 +60,7 @@ jobs:
     environment:
      JVM_OPTS: -Xmx3200m
     parameters:
-      type:
+      test_type:
         description: Test type. instrumentation or robo.
         type: enum
         enum: ["instrumentation", "robo"]
@@ -114,7 +114,7 @@ jobs:
           name: Test with Firebase Test Lab
           command: |
               sudo gcloud firebase test android run \
-                --type=<< parameters.type >> \
+                --type=<< parameters.test_type >> \
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
                 --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID}
