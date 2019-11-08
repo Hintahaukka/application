@@ -72,23 +72,27 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Build debug APK and release APK
-          command: |
-            ./gradlew :app:assembleDebug
-            ./gradlew :app:assembleDebugAndroidTest
-      - run:
           name: Store Google Service Account
           command: |
-            echo $GOOGLE_SERVICES_KEY > app/google-services.json
-            sed -i -e 's/\\"/'\"'/g' app/google-services.json
-            echo $GCLOUD_SERVICE_KEY > app/gcloud-service-key.json
-            sed -i -e 's/\\"/'\"'/g' app/gcloud-service-key.json
-          
+            echo $GOOGLE_SERVICES_KEY | base64 -d > app/google-services.json	
+            echo $GCLOUD_SERVICE_KEY | base64 -d > app/gcloud-service-key.json
+      - run:
+          name: chmod for those files
+          command: |
+            sudo chmod +r app/gcloud-service-key.json
+            sudo chmod +r app/google-services.json
       - run:
           name: Authorize gcloud and set config defaults
           command: |
             sudo gcloud auth activate-service-account --key-file=app/gcloud-service-key.json
-            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}      
+      
+      - run:
+          name: Build debug APK and release APK
+          command: |
+            ./gradlew :app:assembleDebug
+            ./gradlew :app:assembleDebugAndroidTest
+     
       - run:
           name: Test with Firebase Test Lab
           command: >
