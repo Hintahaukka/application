@@ -129,4 +129,4 @@ workflows:
     jobs:
       - build
       - test 
-          test_type: "instrumentation"
+          test_type= "instrumentation"
