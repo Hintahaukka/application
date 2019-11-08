@@ -118,6 +118,7 @@ jobs:
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
                 --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID}
+                --environment-variables coverage=true,coverageFile=“/sdcard/coverage.ec”
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
