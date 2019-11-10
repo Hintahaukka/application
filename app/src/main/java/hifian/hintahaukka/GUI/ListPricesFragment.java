@@ -108,7 +108,8 @@ public class ListPricesFragment extends Fragment {
         final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
         assert priceGauge != null;
 
-        priceGauge.setStrokesCap(Paint.Cap.SQUARE);
+        priceGauge.setStrokesCap(Paint.Cap.ROUND);
+        differencePercentage = ListPricesUtils.getDifferenceToAveragePriceInPercentages(myPrice, averagePrice);
         priceGauge.setValue(differencePercentage, -50, 50);
 
         priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
@@ -130,11 +131,10 @@ public class ListPricesFragment extends Fragment {
             }
         });
         if (differencePercentage >= 0) {
-            percentageText.setText(differencePercentage + "%\nkeskihintaa kalliimpi");
+            percentageText.setText(differencePercentage + "% keskihintaa kalliimpi");
         } else {
-            percentageText.setText((0 - differencePercentage) + "%\nkeskihintaa halvempi");
+            percentageText.setText((0 - differencePercentage) + "% keskihintaa halvempi");
         }
-
     }
 
     @Override
