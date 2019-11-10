@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,10 +19,8 @@ import com.sccomponents.widgets.ScGauge;
 import com.sccomponents.widgets.ScSeekBar;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 
 import hifian.hintahaukka.Service.ListPricesUtils;
@@ -44,7 +40,6 @@ public class ListPricesFragment extends Fragment {
     private TextView averagePriceField;
     private TextView myPriceField;
     private TextView productField;
-    private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
