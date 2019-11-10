@@ -3,5 +3,5 @@
     <dimen name="text_large">30sp</dimen>
     <dimen name="padding_button">16dp</dimen>
     <dimen name="spacing_sides">16dp</dimen>
-    <dimen name="spacing_top_and_bottom">48dp</dimen>
+    <dimen name="spacing_top_and_bottom">24dp</dimen>
 </resources>
