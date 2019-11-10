@@ -76,13 +76,17 @@ public class ListPricesFragment extends Fragment {
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
 
-        //Showing the store and price added by user
-        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
+        //Showing the product info
+        productField = (TextView) getView().findViewById(R.id.productField);
+        productField.setText(productName);
+
+        //Showing the store
+        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
         Store s = storeManager.getStore(selectedStore);
         if (s!= null && s.getName() != null) {
-            myPriceField.append(s.getName());
+            storeField.setText(s.getName());
         } else {
-            myPriceField.append("Tuntematon kauppa");
+            storeField.setText("Tuntematon kauppa");
         }
         double myPrice = Integer.parseInt(this.cents) / 100.0;
         String formattedPrice = String.format("%.02f", myPrice);
