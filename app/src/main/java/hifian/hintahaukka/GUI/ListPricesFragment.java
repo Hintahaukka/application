@@ -67,7 +67,6 @@ public class ListPricesFragment extends Fragment {
         cents = args.getCents();
         priceList = args.getPriceList();
         test = args.getTest();
-
     }
 
     @Override

@@ -20,12 +20,12 @@ import hifian.hintahaukka.R;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 
-public class createUsernameFragment extends Fragment {
+public class CreateUsernameFragment extends Fragment {
 
     private TextView usernameField;
     private Button sendUsernameButton;
 
-    public createUsernameFragment() {
+    public CreateUsernameFragment() {
         // Required empty public constructor
     }
 
@@ -52,10 +52,10 @@ public class createUsernameFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                /*if (checkIfUserNameIsLongEnough(usernameField.getText().toString()) == false) {
+                if (checkIfUserNameIsLongEnough(usernameField.getText().toString()) == false) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Käyttäjätunnuksen tulee olla vähintään 5 merkkiä pitkä!", Toast.LENGTH_LONG);
                 }
-                if (checkIfUserNameIsTaken(usernameField.getText().toString()) == false) {
+                /*if (checkIfUserNameIsTaken(usernameField.getText().toString()) == false) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Käyttäjätunnus on jo käytössä!", Toast.LENGTH_LONG);
                 }
 

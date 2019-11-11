@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -27,8 +29,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private String userId;
 
     private int completedTasks = 0;
-    private final int TASKS_TO_COMPLETE = 3;
-
+    //private final int TASKS_TO_COMPLETE = 3;
+    private final int TASKS_TO_COMPLETE = 2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +38,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         // Wake Heroku
         new WakeHerokuTask().execute("");
-
+        requirePermissionToUseLocation(true);
         getUserId();
 
-        requirePermissionToUseLocation(true);
+
     }
 
     private void requirePermissionToUseLocation(boolean firstTimer) {
@@ -92,16 +94,26 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Checks if a user id already exists. If not, get a new one from the server.
      */
     private void getUserId() {
-
+        requirePermissionToUseLocation(true);
         // Check if there already is an id in the memory
-        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        //SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences(getString(R.string.key_user_id), 0);
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
         userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
+
 
         // If not, get a new id from the backend and write it in memory
         if (userId == null) {
-            new GetNewIdTask().execute();
+            //new GetNewIdTask().execute();
+            new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
+            startActivity(intent);
+            finish();
+            }, SPLASH_TIME_OUT);
+            //taskCompleted();
         } else {
             taskCompleted();
+            Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
         }
 
     }
@@ -130,7 +142,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     /**
      * Gets a new user id from the server and writes it in local memory.
      */
-    private class GetNewIdTask extends HttpGetTask {
+    /*private class GetNewIdTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -153,7 +165,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             taskCompleted();
         }
-    }
+    }*/
 
     /**
      * Counter for completed tasks to ensure that all required asynchronous tasks are completed
@@ -179,5 +191,4 @@ public class SplashScreenActivity extends AppCompatActivity {
             finish();
         }, SPLASH_TIME_OUT);
     }
-
 }
