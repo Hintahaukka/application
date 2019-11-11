@@ -2,6 +2,8 @@ package hifian.hintahaukka;
 
 import org.junit.Test;
 
+import hifian.hintahaukka.Service.EnterPriceUtils;
+
 import static org.junit.Assert.assertEquals;
 
 public class EnterPriceUtilsTest {

@@ -6,7 +6,7 @@
     app:startDestination="@id/storeListFragment">
     <fragment
         android:id="@+id/barcodeScannerFragment"
-        android:name="hifian.hintahaukka.BarcodeScannerFragment"
+        android:name="hifian.hintahaukka.GUI.BarcodeScannerFragment"
         android:label="Skannaa viivakoodi"
         tools:layout="@layout/fragment_barcode_scanner">
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/enterPriceFragment"
-        android:name="hifian.hintahaukka.EnterPriceFragment"
+        android:name="hifian.hintahaukka.GUI.EnterPriceFragment"
         android:label="Syötä tuotteen hinta"
         tools:layout="@layout/fragment_enter_price">
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/listPricesFragment"
-        android:name="hifian.hintahaukka.ListPricesFragment"
+        android:name="hifian.hintahaukka.GUI.ListPricesFragment"
         android:label="Hinnat muissa kaupoissa"
         tools:layout="@layout/fragment_list_prices">
         <argument
@@ -68,14 +68,14 @@
             app:argType="string" />
         <argument
             android:name="priceList"
-            app:argType="hifian.hintahaukka.PriceListItem[]" />
+            app:argType="hifian.hintahaukka.Service.PriceListItem[]" />
         <argument
             android:name="test"
             app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/storeListFragment"
-        android:name="hifian.hintahaukka.StoreListFragment"
+        android:name="hifian.hintahaukka.GUI.StoreListFragment"
         android:label="Valitse kauppa"
         tools:layout="@layout/fragment_store_list">
         <action
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/scanButtonFragment"
-        android:name="hifian.hintahaukka.ScanButtonFragment"
+        android:name="hifian.hintahaukka.GUI.ScanButtonFragment"
         android:label="@string/app_name">
         <action
             android:id="@+id/action_scanButtonFragment_to_barcodeScannerFragment"

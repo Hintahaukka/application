@@ -1,4 +1,4 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +22,12 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 
+
+import hifian.hintahaukka.Service.BarCodeChecker;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
+
 
 
 public class BarcodeScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {
@@ -137,7 +140,16 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
     public void handleResult(Result result) {
         onDestroy();
         final String scanResult = result.getText();
-        Navigation.findNavController(getView()).navigate(
+        BarCodeChecker bcCherker = new BarCodeChecker();
+        if (bcCherker.checkEan13(scanResult)) {
+             Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
+
+        } else {
+            // Barcode was not correct EAN13
+            Toast.makeText(getContext(), "Viivakoodi ei ole oikein! ", Toast.LENGTH_LONG).show();
+        }
     }
+
+
 }

@@ -1,21 +1,33 @@
-package hifian.hintahaukka;
+package hifian.hintahaukka.GUI;
 
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.sccomponents.widgets.ScArc;
+import com.sccomponents.widgets.ScGauge;
+import com.sccomponents.widgets.ScSeekBar;
 
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
+
+
+import hifian.hintahaukka.Service.ListPricesUtils;
+import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Domain.Store;
 
 
 public class ListPricesFragment extends Fragment {
@@ -25,17 +37,16 @@ public class ListPricesFragment extends Fragment {
     private String cents;
     private String selectedStore;
     private PriceListItem[] priceList;
+    private TextView averagePriceField;
     private TextView myPriceField;
     private TextView productField;
-    private TextView pricesTextView;
-    private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
 
     private boolean isRunningInTestEnvironment;
-
-
+    private double averagePrice;
+    private int differencePercentage;
     public ListPricesFragment() {
         // Required empty public constructor
     }
@@ -49,40 +60,80 @@ public class ListPricesFragment extends Fragment {
         productName = args.getProductName();
         selectedStore = args.getSelectedStore();
         cents = args.getCents();
-        // array of PriceListItems from database via enterPriceFragment
         priceList = args.getPriceList();
         test = args.getTest();
 
+        this.checkIfIsRunningInTestEnvironment();
+        createStoreManager();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.checkIfIsRunningInTestEnvironment();
-        createStoreManager();
-
-        //Showing the store and price added by user
-        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
-        Store s = storeManager.getStore(selectedStore);
-        if (s!= null && s.getName() != null) {
-            myPriceField.append(s.getName());
-        } else {
-            myPriceField.append("Tuntematon kauppa");
-        }
-        double myPrice = Integer.parseInt(this.cents) / 100.0;
-        String formattedPrice = String.format("%.02f", myPrice);
-        myPriceField.append("\nHinta: " + formattedPrice + "€\n");
 
         //Showing the product info
         productField = (TextView) getView().findViewById(R.id.productField);
         productField.setText(productName);
 
-        //Showing other prices
-        otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
-        pricesTextView = (TextView) getView().findViewById(R.id.pricesTextView);
-        this.handlePricelist();
+        //Showing the store
+        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
+        Store s = storeManager.getStore(selectedStore);
+        if (s!= null && s.getName() != null) {
+            storeField.setText(s.getName());
+        } else {
+            storeField.setText("Tuntematon kauppa");
+        }
 
+        // Showing the  price added by the user
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        String formattedPrice = String.format("%.02f", myPrice);
+        myPriceField = getView().findViewById(R.id.myPriceField);
+        myPriceField.setText("Hinta: " + formattedPrice + "€");
 
+        // Show average price
+        averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
+        averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
+        averagePriceField.setText("Keskihinta: " + averagePrice + "€");
+
+        // Create the price cauge
+        createPriceCauge();
+
+        //Create the price list
+        createPriceList();
+    }
+
+    private void createPriceCauge() {
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
+        assert priceGauge != null;
+
+        priceGauge.setStrokesCap(Paint.Cap.ROUND);
+        differencePercentage = ListPricesUtils.getDifferenceToAveragePriceInPercentages(myPrice, averagePrice);
+        priceGauge.setValue(differencePercentage, -50, 50);
+
+        priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
+        priceGauge.getBaseArc().setStrokeColors(
+                Color.parseColor("#55B20C"),
+                Color.parseColor("#FDE401"),
+                Color.parseColor("#EA3A3C")
+        );
+
+        TextView percentageText = (TextView) getView().findViewById(R.id.percentageTextField);
+        assert percentageText != null;
+
+        // Normally, the user may move the pointer by touch.
+        // So we need to disable that by resetting the value immediately if user tries to change it.
+        priceGauge.setOnEventListener(new ScGauge.OnEventListener() {
+            @Override
+            public void onValueChange(float degrees) {
+                priceGauge.setValue(differencePercentage, -50, 50);
+            }
+        });
+        if (differencePercentage >= 0) {
+            percentageText.setText(differencePercentage + "% keskihintaa kalliimpi");
+        } else {
+            percentageText.setText((0 - differencePercentage) + "% keskihintaa halvempi");
+        }
     }
 
     @Override
@@ -92,42 +143,18 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
-
-    public void handlePricelist() {
-        // changed to handle array from enterPriceFragment
-        otherPricesText.setText("Muut hinnat:\n");
-        pricesTextView.setText("");
+    public void createPriceList() {
+        // TODO: Handle empty list!
 
         Store selected = storeManager.getStore(selectedStore);
-
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
-        // strores and prices from array
-        for (PriceListItem item : priceList) {
+        PriceListAdapter adapter = new PriceListAdapter(
+                this.getContext(), R.layout.list_prices_item, Arrays.asList(priceList), storeManager);
 
-            Store s = storeManager.getStore(item.getStoreId());
-
-            if (item.getStoreId().equals(selectedStore)) {
-                continue;
-            }
-
-            if (s!= null && s.getName() != null) {
-                pricesTextView.append("\n" + s.getName());
-            } else {
-                pricesTextView.append("\nTuntematon kauppa");
-            }
-            String date = item.getTimestamp();
-            pricesTextView.append("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
-            double cents = item.getCents() / 100.0;
-            String formattedPrice = String.format("%.02f", cents);
-            pricesTextView.append("\nHinta: " + formattedPrice + "€\n");
-        }
-        if (pricesTextView.getText()=="") {
-            pricesTextView.setText("Ei muita hintoja");
-        }
-        // can first one be locked ??
-        pricesTextView.setMovementMethod(new ScrollingMovementMethod());
+        final ListView listView = getView().findViewById(R.id.priceListView);
+        listView.setAdapter(adapter);
     }
 
     /**

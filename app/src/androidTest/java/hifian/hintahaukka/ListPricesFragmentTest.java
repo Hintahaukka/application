@@ -7,19 +7,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.DataInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import hifian.hintahaukka.GUI.ListPricesFragment;
+import hifian.hintahaukka.Service.PriceListItem;
+
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 public class ListPricesFragmentTest {
@@ -69,11 +74,27 @@ public class ListPricesFragmentTest {
         launchListPricesFragment(bundle);
 
         // THEN - Both prices are listed with correct dates and store names
-        onView(withId(R.id.pricesTextView)).check(matches(withText(containsString("Pallon Teboil\n17.10.2019\nHinta: "
-                + String.format("%.02f", 1.0)))));
+        final DataInteraction firstPrice = onData(anything())
+                .inAdapterView(withId(R.id.priceListView))
+                .atPosition(0);
 
-        onView(withId(R.id.pricesTextView)).check(matches(withText(containsString("Stockmann Turku\n09.10.2019\nHinta: "
-                + String.format("%.02f", 2.5)))));
+        firstPrice.onChildView(withText("2,50€"))
+                .check(matches(isDisplayed()));
+        firstPrice.onChildView(withText("Stockmann Turku"))
+                .check(matches(isDisplayed()));
+        firstPrice.onChildView(withText("09.10.2019"))
+                .check(matches(isDisplayed()));
+
+        final DataInteraction secondPrice = onData(anything())
+                .inAdapterView(withId(R.id.priceListView))
+                .atPosition(1);
+
+        secondPrice.onChildView(withText("1,00€"))
+                .check(matches(isDisplayed()));
+        secondPrice.onChildView(withText("Pallon Teboil"))
+                .check(matches(isDisplayed()));
+        secondPrice.onChildView(withText("17.10.2019"))
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -92,7 +113,8 @@ public class ListPricesFragmentTest {
         launchListPricesFragment(bundle);
 
         // THEN - Store name Alepa Sturenkatu 40 and price 1,50€ are shown in price field
-        onView(withId(R.id.myPriceField)).check(matches(withText(containsString("Alepa Sturenkatu 40\nHinta: "
+        onView(withId(R.id.storeField)).check(matches(withText("Alepa Sturenkatu 40")));
+        onView(withId(R.id.myPriceField)).check(matches(withText(containsString("Hinta: "
                 + String.format("%.02f", 1.5)))));
     }
 
@@ -113,6 +135,33 @@ public class ListPricesFragmentTest {
 
         // THEN - Text Coca Cola is shown in product field
         onView(withId(R.id.productField)).check(matches(withText(containsString("Coca Cola"))));
+    }
+
+    @Test
+    public void priceDifferenceIsShownCorrectly() {
+        // GIVEN - There are prices of 1€ added to the product previously
+        PriceListItem[] myPrices = new PriceListItem[2];
+        myPrices[0] = new PriceListItem(100, "26197451" , "2019-10-17 19:48:56.9918");
+        myPrices[1] = new PriceListItem(100, "30288487", "2019-10-09 16:55:20.6143");
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArray("priceList", myPrices);
+        bundle.putString("selectedStore", selectedStore);
+        bundle.putString("scanResult", ean);
+        bundle.putString("productName", productName);
+        bundle.putBoolean("test", test);
+
+        // AND - Current price is 4e
+        bundle.putString("cents", "400");
+
+        // WHEN - On the list prices screen
+        launchListPricesFragment(bundle);
+
+        // THEN - The average price shown is 2€
+        onView(withId(R.id.averagePriceField)).check(matches(withText(containsString("2.0€"))));
+
+        // AND - Current price is shown to be 100% more expensive than average
+        onView(withId(R.id.percentageTextField)).check(matches(withText(containsString("100%"))));
     }
 
 }

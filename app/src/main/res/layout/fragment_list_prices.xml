@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListPricesFragment">
+    tools:context=".GUI.ListPricesFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_list_prices_top"
@@ -27,7 +27,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/spacing_sides" />
 
-
     <TextView
         android:id="@+id/productField"
         android:layout_width="wrap_content"
@@ -37,30 +36,77 @@
         tools:text="Viivakoodi: 1234567" />
 
     <TextView
-        android:id="@+id/myPriceField"
+        android:id="@+id/storeField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toBottomOf="@+id/productField"
-        tools:text="Kauppa: Punkten\nHinta: 3,50€" />
+        tools:text="Punkten" />
+
+    <TextView
+        android:id="@+id/myPriceField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/storeField"
+        tools:text="Hinta: 3,50€" />
 
     <TextView
         android:id="@+id/otherPricesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_finding_prices"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_other_prices"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/myPriceField" />
+        app:layout_constraintTop_toBottomOf="@+id/percentageTextField" />
+
+    <ListView
+        android:id="@+id/priceListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/otherPricesText" />
 
     <TextView
-        android:id="@+id/pricesTextView"
+        android:id="@+id/averagePriceField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:scrollbars="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
-        tools:text="Gottby kiosk\n17.10.2019\nHinta: 0.56€" />
+        app:layout_constraintTop_toBottomOf="@+id/myPriceField"
+        tools:text="Keskihinta: 5.20€" />
+
+    <com.sccomponents.widgets.ScSeekBar
+        android:id="@+id/priceGauge"
+        android:layout_width="0dp"
+        android:layout_height="125sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/averagePriceField"
+        app:scc_angle_start="180"
+        app:scc_angle_sweep="180"
+        app:scc_halo_size="0dp"
+        app:scc_pointer_color="@color/colorPrimaryLight"
+        app:scc_pointer_radius="15dp"
+        app:scc_progress_color="#00ff0000"
+        app:scc_progress_size="10dp"
+        app:scc_stroke_size="20dp" />
+
+    <TextView
+        android:id="@+id/percentageTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:padding="10dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/priceGauge"
+        app:layout_constraintStart_toStartOf="@+id/priceGauge"
+        app:layout_constraintTop_toBottomOf="@+id/priceGauge"
+        tools:text="20% keskihintaa kalliimpi" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
