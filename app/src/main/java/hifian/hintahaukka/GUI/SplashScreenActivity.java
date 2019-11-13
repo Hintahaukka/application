@@ -96,21 +96,17 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void getUserId() {
         requirePermissionToUseLocation(true);
         // Check if there already is an id in the memory
-        //SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
-        //SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences(getString(R.string.key_user_id), 0);
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
         userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
 
 
-        // If not, get a new id from the backend and write it in memory
+        // If not, move to the next activity
         if (userId == null) {
-            //new GetNewIdTask().execute();
             new Handler().postDelayed(() -> {
             Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
             startActivity(intent);
             finish();
             }, SPLASH_TIME_OUT);
-            //taskCompleted();
         } else {
             taskCompleted();
             Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
@@ -139,33 +135,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Gets a new user id from the server and writes it in local memory.
-     */
-    /*private class GetNewIdTask extends HttpGetTask {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/getNewId");
-        }
 
-        @Override
-        protected String doInBackground(String... params) {
-            return super.doInBackground(params);
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            userId = response;
-
-            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.key_user_id), userId);
-            editor.apply();
-
-            taskCompleted();
-        }
-    }*/
 
     /**
      * Counter for completed tasks to ensure that all required asynchronous tasks are completed

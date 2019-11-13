@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,8 +25,13 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
     private TextView usernameField;
     private Button sendUsernameButton;
-    private String userId;
+    private String nickname;
     private TextView firstTimeRegisterFied;
+    private String userId;
+    private String[] parameters;
+    private static int SPLASH_TIME_OUT = 1000;
+    private final int TASKS_TO_COMPLETE = 2;
+    private int completedTasks = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,30 +41,18 @@ public class CreateUsernameActivity extends AppCompatActivity {
         sendUsernameButton = (Button) findViewById(R.id.sendUsernameButton);
         firstTimeRegisterFied = (TextView) findViewById(R.id.firstTimeRegisterFied);
         firstTimeRegisterFied.setText(R.string.first_time_register_text);
+        new GetNewIdTask().execute();
 
         sendUsernameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if (checkIfUserNameIsLongEnough(usernameField.getText().toString()) == false) {
-                //    Snackbar.make(findViewById(android.R.id.content), R.string.text_username_too_short, Snackbar.LENGTH_LONG).show();
-                //} else {
-                    userId = usernameField.getText().toString();
-                    new GetNewIdTask().execute();
-                    new PostNewNicknameTask().execute(userId, userId);
-
-
-                    /*userId = usernameField.getText().toString();
-                    SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(getString(R.string.key_user_id), userId);
-                    editor.apply();*/
-
-                    Intent intent = new Intent(CreateUsernameActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    // close this activity
-                //}
-
+                if (checkIfUserNameIsLongEnough(usernameField.getText().toString()) == false) {
+                    Snackbar.make(findViewById(android.R.id.content), R.string.text_username_too_short, Snackbar.LENGTH_LONG).show();
+                } else {
+                    nickname = usernameField.getText().toString();
+                    parameters = new String[] {userId, nickname};
+                    new PostNewNicknameTask().execute(parameters);
+                }
             }
         });
     }
@@ -77,7 +72,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         return true;
     }
 
-
+    //Get a new id from backend
     private class GetNewIdTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {
@@ -93,26 +88,30 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             userId = response;
-
-            SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.key_user_id), userId);
-            editor.apply();
-
+            /**Snackbar.make(findViewById(android.R.id.content), "Response: " + userId, Snackbar.LENGTH_LONG).show();
+             * See if there was a response
+             */
+            taskCompleted();
         }
     }
 
 
 
-
+    //Post nickname with id to backend
     private class PostNewNicknameTask extends HttpPostTask {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getString(R.string.key_user_id), userId);
+            editor.apply();
             this.setUrlString("https://hintahaukka.herokuapp.com/test/updateNickname");
 
-            this.setParamNames(new String[]{"token","nickname"});
+            this.setParamNames(new String[]{"id","nickname"});
+
+            // Will be implemented later
             /*if (isRunningInTestEnvironment) {
                 this.setMocked();
             }*/
@@ -125,7 +124,24 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-
+            taskCompleted();
         }
     }
+
+    private void taskCompleted() {
+        completedTasks++;
+
+        if (completedTasks == TASKS_TO_COMPLETE) {
+            continueToApp();
+        }
+    }
+    
+    private void continueToApp() {
+        Intent intent = new Intent(CreateUsernameActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+
 }
