@@ -75,11 +75,7 @@ jobs:
       test_apk_path:
         description: Test APK path.
         type: string
-        default: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-      coverage:
-        description: coverage path.
-        type: string
-        default: coverage=true,coverageFile=“/sdcard/coverage.ec”      
+        default: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk  
       bucket_name:
         description: Bucket name for cloud storage
         type: string
@@ -125,10 +121,10 @@ jobs:
                 --type=<< parameters.test_type >> \
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
+                --directories-to-pull=<<parameters.dir_pull_path>> \
                 --results-bucket=<<parameters.bucket_name>>-${GOOGLE_PROJECT_ID} \
-                --environment-variables=<<parameters.coverage>> \                
-                --directories-to-pull=<<parameters.dir_pull_path>> 
-                
+                --environment-variables
+                coverage=true,coverageFile="/sdcard/coverage.ec"  
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
