@@ -130,6 +130,7 @@ jobs:
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
+            sudo mkdir /code/artifacts
             sudo gsutil -m cp -r  gs://${GCLOUD_BUCKET}/${GCLOUD_RESULT} /code/artifacts
 workflows:
   version: 2
