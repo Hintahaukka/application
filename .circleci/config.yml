@@ -125,8 +125,8 @@ jobs:
                 --type=<< parameters.test_type >> \
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
-                --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID} \
-                --environment-variables <<parameters.coverage>> \                
+                --results-bucket=<<parameters.bucket_name>>-${GOOGLE_PROJECT_ID} \
+                --environment-variables=<<parameters.coverage>> \                
                 --directories-to-pull=<<parameters.dir_pull_path>> 
                 
       - run:
