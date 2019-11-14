@@ -122,8 +122,8 @@ jobs:
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
                 --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID} \
-                --directories-to-pull=<<parameters.dir_pull_path>> \
-                --environment-variables=coverage=true,coverageFile=“/sdcard/coverage.ec”
+                --environment-variables coverage=true,coverageFile=“/sdcard/coverage.ec” \                
+                --directories-to-pull=<<parameters.dir_pull_path>> 
                 
       - run:
           name: Install gsutil dependency and copy test results data
