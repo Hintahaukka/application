@@ -76,6 +76,10 @@ jobs:
         description: Test APK path.
         type: string
         default: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+      coverage:
+        description: coverage path.
+        type: string
+        default: coverage=true,coverageFile=“/sdcard/coverage.ec”      
       bucket_name:
         description: Bucket name for cloud storage
         type: string
@@ -122,7 +126,7 @@ jobs:
                 --app=<< parameters.apk_path >> \
                 --test=<< parameters.test_apk_path >> \
                 --results-bucket <<parameters.bucket_name>>-${GOOGLE_PROJECT_ID} \
-                --environment-variables coverage=true,coverageFile=“/sdcard/coverage.ec” \                
+                --environment-variables <<parameters.coverage>> \                
                 --directories-to-pull=<<parameters.dir_pull_path>> 
                 
       - run:
