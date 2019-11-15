@@ -94,7 +94,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void getUserId() {
 
         // Check if there already is an id in the memory
-        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
 
         // If not, get a new id from the backend and write it in memory
@@ -146,7 +146,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             userId = response;
 
-            SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(getString(R.string.key_user_id), userId);
             editor.apply();
