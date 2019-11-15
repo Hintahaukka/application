@@ -47,6 +47,8 @@ public class EnterPriceFragment extends Fragment {
     private StoreManager storeManager;
     private String[] parameterNames;
     private String[] parameters;
+    private TextView productNameField;
+    private TextView enterProductNameField;
 
     private boolean isRunningInTestEnvironment;
 
@@ -82,6 +84,8 @@ public class EnterPriceFragment extends Fragment {
         nameTextView.setText("Haetaan tuotenimi...\n");
         enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
         enterCents = (TextView) getView().findViewById(R.id.enterCents);
+        productNameField = (TextView) getView().findViewById(R.id.productNameField);
+        enterProductNameField = (TextView) getView().findViewById(R.id.enterProductNameField);
 
         // Send button is disabled before all necessary data has been received
         sendPriceButton = getView().findViewById(R.id.sendPriceBtn);
