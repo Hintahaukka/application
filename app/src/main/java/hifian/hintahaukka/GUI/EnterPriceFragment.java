@@ -110,8 +110,9 @@ public class EnterPriceFragment extends Fragment {
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
-
-                parameters = new String[]{scanResult, cents, selectedStore};
+                String userId = getUserId();
+                System.out.println(userId);
+                parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
@@ -267,7 +268,7 @@ public class EnterPriceFragment extends Fragment {
             if (test) {
                 this.setUrlString("https://hintahaukka.herokuapp.com/test/addPrice");
             }
-            this.setParamNames(new String[]{"ean", "cents", "storeId"});
+            this.setParamNames(new String[]{"ean", "cents", "storeId", "id"});
             if (isRunningInTestEnvironment) {
                 this.setMocked();
             }
@@ -284,6 +285,9 @@ public class EnterPriceFragment extends Fragment {
     }
 
     private String getUserId() {
+        if (isRunningInTestEnvironment) {
+            return "1234567890123456789012345678901";
+        }
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return sharedPreferences.getString(getString(R.string.key_user_id), null);
     }
