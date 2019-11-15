@@ -104,6 +104,6 @@
     <fragment
         android:id="@+id/shoppingCartFragment"
         android:name="hifian.hintahaukka.GUI.ShoppingCartFragment"
-        android:label="fragment_shopping_cart"
+        android:label="@string/shopping_cart"
         tools:layout="@layout/fragment_shopping_cart" />
 </navigation>
