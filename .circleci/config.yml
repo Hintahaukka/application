@@ -135,8 +135,8 @@ jobs:
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
-            sudo mkdir /app/build/reports
-            sudo gsutil -m cp -r  gs://${GCLOUD_BUCKET}/${GCLOUD_RESULT} /app/build/reports
+            sudo mkdir app/build/reports
+            sudo gsutil -m cp -r  gs://${GCLOUD_BUCKET}/${GCLOUD_RESULT} app/build/reports
 workflows:
   version: 2
   build_and_test:
