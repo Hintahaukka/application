@@ -78,7 +78,7 @@ public class ListPricesFragmentTest {
                 .inAdapterView(withId(R.id.priceListView))
                 .atPosition(0);
 
-        firstPrice.onChildView(withText("2,50€"))
+        firstPrice.onChildView(withText(String.format("%.02f", 250/100.0) + "€"))
                 .check(matches(isDisplayed()));
         firstPrice.onChildView(withText("Stockmann Turku"))
                 .check(matches(isDisplayed()));
@@ -89,7 +89,7 @@ public class ListPricesFragmentTest {
                 .inAdapterView(withId(R.id.priceListView))
                 .atPosition(1);
 
-        secondPrice.onChildView(withText("1,00€"))
+        secondPrice.onChildView(withText(String.format("%.02f", 100/100.0) + "€"))
                 .check(matches(isDisplayed()));
         secondPrice.onChildView(withText("Pallon Teboil"))
                 .check(matches(isDisplayed()));
