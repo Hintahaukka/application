@@ -1,6 +1,8 @@
 package hifian.hintahaukka.GUI;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -279,5 +281,10 @@ public class EnterPriceFragment extends Fragment {
         @Override
         protected void onPostExecute(String response) {
         }
+    }
+
+    private String getUserId() {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(getString(R.string.key_user_id), null);
     }
 }
