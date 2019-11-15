@@ -111,7 +111,6 @@ public class EnterPriceFragment extends Fragment {
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
                 String userId = getUserId();
-                System.out.println(userId);
                 parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
                 Navigation.findNavController(getView()).navigate(
