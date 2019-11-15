@@ -110,6 +110,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
             taskCompleted();
             Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
+            /**
+             * Show ID when debugging
+            Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
+             */
         }
 
     }

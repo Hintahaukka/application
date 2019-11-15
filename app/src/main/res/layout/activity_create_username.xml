@@ -41,16 +41,15 @@
         android:text="@string/button_send"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/usernameField"
-        app:layout_constraintVertical_bias="0.735" />
+        app:layout_constraintVertical_bias="0.147" />
 
     <EditText
         android:id="@+id/usernameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="56dp"
         android:ems="10"
         android:hint="@string/text_enter_username"
         android:inputType="textPersonName"
@@ -62,10 +61,10 @@
         android:id="@+id/firstTimeRegisterFied"
         android:layout_width="264dp"
         android:layout_height="84dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
