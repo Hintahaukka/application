@@ -3,8 +3,10 @@
 
     <item
         android:id="@+id/storeListFragment"
+        android:icon="@drawable/ic_euro_symbol_black_24dp"
         android:title="@string/scan_product" />
     <item
         android:id="@+id/shoppingCartFragment"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
         android:title="@string/shopping_cart" />
 </menu>
