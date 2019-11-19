@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,10 +19,8 @@ import com.sccomponents.widgets.ScGauge;
 import com.sccomponents.widgets.ScSeekBar;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 
 import hifian.hintahaukka.Service.ListPricesUtils;
@@ -44,7 +40,6 @@ public class ListPricesFragment extends Fragment {
     private TextView averagePriceField;
     private TextView myPriceField;
     private TextView productField;
-    private TextView otherPricesText;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
@@ -67,43 +62,56 @@ public class ListPricesFragment extends Fragment {
         cents = args.getCents();
         priceList = args.getPriceList();
         test = args.getTest();
+
+
+
+        this.checkIfIsRunningInTestEnvironment();
+        createStoreManager();
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.checkIfIsRunningInTestEnvironment();
-        createStoreManager();
-
-        //Showing the store and price added by user
-        myPriceField = (TextView) getView().findViewById(R.id.myPriceField);
-        Store s = storeManager.getStore(selectedStore);
-        if (s!= null && s.getName() != null) {
-            myPriceField.append(s.getName());
-        } else {
-            myPriceField.append("Tuntematon kauppa");
-        }
-        double myPrice = Integer.parseInt(this.cents) / 100.0;
-        String formattedPrice = String.format("%.02f", myPrice);
-        myPriceField.append("\nHinta: " + formattedPrice + "€\n");
 
         //Showing the product info
         productField = (TextView) getView().findViewById(R.id.productField);
         productField.setText(productName);
 
-        //Showing other prices
-        otherPricesText = (TextView) getView().findViewById(R.id.otherPricesText);
+        //Showing the store
+        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
+        Store s = storeManager.getStore(selectedStore);
+        if (s!= null && s.getName() != null) {
+            storeField.setText(s.getName());
+        } else {
+            storeField.setText("Tuntematon kauppa");
+        }
 
-        //Showing average price and difference to average price
+        // Showing the  price added by the user
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
+        String formattedPrice = String.format("%.02f", myPrice);
+        myPriceField = getView().findViewById(R.id.myPriceField);
+        myPriceField.setText("Hinta: " + formattedPrice + "€");
+
+        // Show average price
         averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
-        this.handlePricelist();
+        averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
         averagePriceField.setText("Keskihinta: " + averagePrice + "€");
 
-        // Create the price gauge
+        // Create the price cauge
+        createPriceCauge();
+
+        //Create the price list
+        createPriceList();
+    }
+
+    private void createPriceCauge() {
+        double myPrice = Integer.parseInt(this.cents) / 100.0;
         final ScSeekBar priceGauge = (ScSeekBar) getView().findViewById(R.id.priceGauge);
         assert priceGauge != null;
 
-        priceGauge.setStrokesCap(Paint.Cap.SQUARE);
+        priceGauge.setStrokesCap(Paint.Cap.ROUND);
+        differencePercentage = ListPricesUtils.getDifferenceToAveragePriceInPercentages(myPrice, averagePrice);
         priceGauge.setValue(differencePercentage, -50, 50);
 
         priceGauge.getBaseArc().setFillingColors(ScArc.FillingColors.GRADIENT);
@@ -125,11 +133,10 @@ public class ListPricesFragment extends Fragment {
             }
         });
         if (differencePercentage >= 0) {
-            percentageText.setText(differencePercentage + "%\nkeskihintaa kalliimpi");
+            percentageText.setText(differencePercentage + "% keskihintaa kalliimpi");
         } else {
-            percentageText.setText((0 - differencePercentage) + "%\nkeskihintaa halvempi");
+            percentageText.setText((0 - differencePercentage) + "% keskihintaa halvempi");
         }
-
     }
 
     @Override
@@ -139,60 +146,18 @@ public class ListPricesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list_prices, container, false);
     }
 
+    public void createPriceList() {
+        // TODO: Handle empty list!
 
-    public void handlePricelist() {
-        otherPricesText.setText("Muut hinnat:\n");
         Store selected = storeManager.getStore(selectedStore);
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
-        // Create the list view
-        final ListView listView;
-        try {
-            listView = (ListView) getView().findViewById(R.id.priceListView);
-        } catch (NullPointerException e) {
-            return;
-        }
-        final List<String> priceStrings = new ArrayList<>();
+        PriceListAdapter adapter = new PriceListAdapter(
+                this.getContext(), R.layout.list_prices_item, Arrays.asList(priceList), storeManager);
 
-        // Add price items to the list view
-        for (PriceListItem item : priceList) {
-
-            Store s = storeManager.getStore(item.getStoreId());
-
-            if (item.getStoreId().equals(selectedStore)) {
-                continue;
-            }
-            String priceToString = "";
-            if (s!= null && s.getName() != null) {
-                priceToString += s.getName();
-            } else {
-                priceToString += "Tuntematon kauppa";
-            }
-            String date = item.getTimestamp();
-            priceToString += ("\n"+ date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
-            double cents = item.getCents() / 100.0;
-            String formattedPrice = String.format("%.02f", cents);
-            priceToString += ("\nHinta: " + formattedPrice + "€");
-            priceStrings.add(priceToString);
-        }
-        if (priceStrings.size() == 0) {
-            priceStrings.add("Ei muita hintoja");
-        }
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this.getContext(),R.layout.textview_list_prices,priceStrings);
-        listView.setAdapter(listViewAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // What happens if user clicks a price item
-                // Currently nothing
-            }
-        });
-
-        double myPrice = Integer.parseInt(this.cents) / 100.0;
-        averagePrice = ListPricesUtils.getAveragePrice(priceList ,myPrice);
-        differencePercentage = ListPricesUtils.getDifferenceToAveragePriceInPercentages(myPrice, averagePrice);
+        final ListView listView = getView().findViewById(R.id.priceListView);
+        listView.setAdapter(adapter);
     }
 
     /**
