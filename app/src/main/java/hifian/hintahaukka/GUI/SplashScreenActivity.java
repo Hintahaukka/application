@@ -135,8 +135,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-
-
     /**
      * Counter for completed tasks to ensure that all required asynchronous tasks are completed
      * before continuing to the app.

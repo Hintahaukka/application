@@ -62,13 +62,11 @@
         android:id="@+id/enterPriceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="128dp"
         android:text="@string/text_enter_price"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/enterEuros"
         app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
-        app:layout_constraintTop_toBottomOf="@+id/nameField"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/enterProductNameField" />
 
     <EditText
         android:id="@+id/enterEuros"
@@ -84,7 +82,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline_enter_price_bottom"
         app:layout_constraintEnd_toStartOf="@+id/label_euros"
         app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
-        app:layout_constraintTop_toTopOf="@+id/guideline_enter_price_top" />
+        app:layout_constraintTop_toBottomOf="@+id/enterPriceText"
+        app:layout_constraintVertical_bias="0.152" />
 
     <TextView
         android:id="@+id/label_euros"
@@ -144,5 +143,28 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_enter_price_right"
         app:layout_constraintStart_toEndOf="@+id/label_cents"
         app:layout_constraintTop_toTopOf="@+id/label_cents" />
+
+    <EditText
+        android:id="@+id/enterProductNameField"
+        android:layout_width="256dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="144dp"
+        android:ems="10"
+        android:hint="@string/TuotteenNimenSyottoOhje"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
+        app:layout_constraintTop_toBottomOf="@+id/nameField" />
+
+    <Button
+        android:id="@+id/sendProdNameBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_product_name"
+        app:layout_constraintBottom_toBottomOf="@+id/enterProductNameField"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_enter_price_right"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/enterProductNameField"
+        app:layout_constraintTop_toTopOf="@+id/enterProductNameField"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
