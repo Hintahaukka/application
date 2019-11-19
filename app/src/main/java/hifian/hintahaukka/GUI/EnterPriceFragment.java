@@ -1,6 +1,8 @@
 package hifian.hintahaukka.GUI;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -114,8 +116,8 @@ public class EnterPriceFragment extends Fragment {
                 String cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
-
-                parameters = new String[]{scanResult, cents, selectedStore};
+                String userId = getUserId();
+                parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
@@ -287,7 +289,7 @@ public class EnterPriceFragment extends Fragment {
             if (test) {
                 this.setUrlString("https://hintahaukka.herokuapp.com/test/addPrice");
             }
-            this.setParamNames(new String[]{"ean", "cents", "storeId"});
+            this.setParamNames(new String[]{"ean", "cents", "storeId", "id"});
             if (isRunningInTestEnvironment) {
                 this.setMocked();
             }
@@ -302,7 +304,7 @@ public class EnterPriceFragment extends Fragment {
         protected void onPostExecute(String response) {
         }
     }
-
+  
     /**
      * Sends the product name to the server.
      */
@@ -329,5 +331,13 @@ public class EnterPriceFragment extends Fragment {
         @Override
         protected void onPostExecute(String response) {
         }
+    }
+
+    private String getUserId() {
+        if (isRunningInTestEnvironment) {
+            return "1234567890123456789012345678901";
+        }
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(getString(R.string.key_user_id), null);
     }
 }
