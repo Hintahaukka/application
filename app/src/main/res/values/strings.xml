@@ -21,4 +21,6 @@
     <string name="key_user_id">key_user_id</string>
     <string name="text_other_prices">Muut hinnat:</string>
     <string name="text_enter_name">Syötä nimi:</string>
+    <string name="TuotteenNimenSyottoOhje">Syötä tuotteen nimi</string>
+    <string name="send_product_name">Lähetä</string>
 </resources>
