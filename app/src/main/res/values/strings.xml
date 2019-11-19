@@ -30,4 +30,5 @@
     <string name="send_product_name">Lähetä</string>
     <string name="shopping_cart">Ostoskori</string>
     <string name="scan_product">Skannaa tuote</string>
+    <string name="text_faulty_barcode">Virheellinen viivakoodi!</string>
 </resources>

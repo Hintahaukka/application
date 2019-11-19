@@ -1,10 +1,7 @@
 package hifian.hintahaukka.GUI;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -20,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.Result;
 
 
+import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.BarCodeChecker;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -138,16 +137,21 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
 
     @Override
     public void handleResult(Result result) {
-        onDestroy();
         final String scanResult = result.getText();
         BarCodeChecker bcCherker = new BarCodeChecker();
         if (bcCherker.checkEan13(scanResult)) {
+            onDestroy();
              Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
 
         } else {
             // Barcode was not correct EAN13
-            Toast.makeText(getContext(), "Viivakoodi ei ole oikein! ", Toast.LENGTH_LONG).show();
+            /**Mun mielestä toast on parempivaihtoehto tässä koska toastin teksi tulee keskelle näyttöä.
+              Jätän Snackbarin koodin tähän jos myöhemmin Snackbar osoittautuu paremmaksi vaihtoehdoksi.
+            */
+            Toast.makeText(getContext(), R.string.text_faulty_barcode, Toast.LENGTH_LONG).show();
+            //Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.text_faulty_barcode, Snackbar.LENGTH_LONG).show();
+            onResume();
         }
     }
 
