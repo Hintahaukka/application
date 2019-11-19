@@ -1,14 +1,20 @@
 package hifian.hintahaukka.GUI;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +33,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.InputStream;
@@ -100,6 +107,7 @@ public class StoreListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.checkIfIsRunningInTestEnvironment();
         updateLocationAndStoreList();
+        showPoints();
 
         getView().findViewById(R.id.button_update_location).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +253,21 @@ public class StoreListFragment extends Fragment {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
+    }
+
+    public void showPoints() {
+        if (isRunningInTestEnvironment) {
+            return;
+        }
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int pointsTotal = sharedPreferences.getInt(getString(R.string.key_points_total), 0);
+        int pointsUnused = sharedPreferences.getInt(getString(R.string.key_points_unused), 0);
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
+        View headerView = navigationView.getHeaderView(0);
+        TextView pointsField = (TextView) headerView.findViewById(R.id.pointsField);
+        SpannableString spanString = new SpannableString("Pisteet: "+ pointsTotal + "\nKäytettävissä: " + pointsUnused + "\n");
+        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+        pointsField.setText(spanString);
     }
     
 }

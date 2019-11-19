@@ -38,6 +38,7 @@ public class EnterPriceFragment extends Fragment {
     private String selectedStore;
     private String scanResult;
     private boolean test;
+    private String cents;
 
     private String storeName;
     private String productName;
@@ -114,16 +115,13 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cents = EnterPriceUtils.turnEnteredPriceToCents(
+                sendPriceButton.setEnabled(false);
+                cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
                 String userId = getUserId();
                 parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
-                Navigation.findNavController(getView()).navigate(
-                        EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, prices, test ));
-                hideKeyboard(view);
             }
         });
 
@@ -304,6 +302,17 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            if (response != null && response != "") {
+                try {
+                    String[] points = response.split(":");
+                    int pointsTotal = Integer.parseInt(points[0]);
+                    int pointsUnused = Integer.parseInt(points[1]);
+                    updatePoints(pointsTotal, pointsUnused);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            moveToNextFragment();
         }
     }
   
@@ -347,5 +356,19 @@ public class EnterPriceFragment extends Fragment {
         InputMethodManager inputManager = (InputMethodManager) v.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void updatePoints(int pointsTotal, int pointsUnused) {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(getString(R.string.key_points_total), pointsTotal);
+        editor.putInt(getString(R.string.key_points_unused), pointsUnused);
+        editor.apply();
+    }
+
+    private void moveToNextFragment() {
+        Navigation.findNavController(getView()).navigate(
+                EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
+                        selectedStore, scanResult, cents, productName, prices, test ));
     }
 }
