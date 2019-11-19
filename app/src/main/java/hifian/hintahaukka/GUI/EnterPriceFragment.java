@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -122,6 +123,7 @@ public class EnterPriceFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
                                 selectedStore, scanResult, cents, productName, prices, test ));
+                hideKeyboard(view);
             }
         });
 
@@ -339,5 +341,11 @@ public class EnterPriceFragment extends Fragment {
         }
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return sharedPreferences.getString(getString(R.string.key_user_id), null);
+    }
+
+    public static void hideKeyboard(@NonNull View v) {
+        InputMethodManager inputManager = (InputMethodManager) v.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }
