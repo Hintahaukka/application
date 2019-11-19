@@ -63,8 +63,11 @@ public class ListPricesFragment extends Fragment {
         priceList = args.getPriceList();
         test = args.getTest();
 
+
+
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
+
     }
 
     @Override
