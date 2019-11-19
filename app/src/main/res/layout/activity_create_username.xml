@@ -36,14 +36,15 @@
 
     <Button
         android:id="@+id/sendUsernameButton"
-        android:layout_width="263dp"
-        android:layout_height="51dp"
+        android:layout_width="83dp"
+        android:layout_height="43dp"
         android:text="@string/button_send"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintBottom_toBottomOf="@+id/usernameField"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/usernameField"
-        app:layout_constraintVertical_bias="0.147" />
+        app:layout_constraintHorizontal_bias="0.746"
+        app:layout_constraintStart_toEndOf="@+id/usernameField"
+        app:layout_constraintTop_toTopOf="@+id/usernameField"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/usernameField"
@@ -53,7 +54,6 @@
         android:ems="10"
         android:hint="@string/text_enter_username"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/firstTimeRegisterFied" />
 
@@ -63,8 +63,6 @@
         android:layout_height="84dp"
         android:layout_marginTop="20dp"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 

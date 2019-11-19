@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,17 +19,13 @@ import com.google.android.material.snackbar.Snackbar;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
-
 public class SplashScreenActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String userId;
 
     private int completedTasks = 0;
-    //private final int TASKS_TO_COMPLETE = 3;
-    private final int TASKS_TO_COMPLETE = 2;
+    private final int TASKS_TO_COMPLETE = 4;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +91,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void getUserId() {
         requirePermissionToUseLocation(true);
         // Check if there already is an id in the memory
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
 
 
@@ -109,7 +104,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             }, SPLASH_TIME_OUT);
         } else {
             taskCompleted();
-            Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
             /**
              * Show ID when debugging
             Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
@@ -121,6 +115,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     /**
      * Sends a wake request to the server.
      */
+
+
     private class WakeHerokuTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {

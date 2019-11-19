@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,8 +17,6 @@ import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 import hifian.hintahaukka.Service.HttpPostTask;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
 public class CreateUsernameActivity extends AppCompatActivity {
 
     private TextView usernameField;
@@ -29,11 +25,12 @@ public class CreateUsernameActivity extends AppCompatActivity {
     private TextView firstTimeRegisterFied;
     private String userId;
     private String[] parameters;
-    private static int SPLASH_TIME_OUT = 1000;
-    private final int TASKS_TO_COMPLETE = 2;
-    private int completedTasks = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        View view = this.getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_username);
 
@@ -47,7 +44,14 @@ public class CreateUsernameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkIfUserNameIsLongEnough(usernameField.getText().toString()) == false) {
+                    //Hide keyboard to show error message
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     Snackbar.make(findViewById(android.R.id.content), R.string.text_username_too_short, Snackbar.LENGTH_LONG).show();
+
+                } else if (checkIfUserNameIsTooLong(usernameField.getText().toString()) == false) {
+                    //Hide keyboard to show error message
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    Snackbar.make(findViewById(android.R.id.content), R.string.text_username_too_long, Snackbar.LENGTH_LONG).show();
                 } else {
                     nickname = usernameField.getText().toString();
                     parameters = new String[] {userId, nickname};
@@ -64,9 +68,17 @@ public class CreateUsernameActivity extends AppCompatActivity {
     }*/
 
 
-    //Method to check username is atleast 5 characters long
+    //Method to check username is atleast 2 characters long
     public boolean checkIfUserNameIsLongEnough(String username) {
-        if (username.length() < 5) {
+        if (username.length() < 3) {
+            return false;
+        }
+        return true;
+    }
+
+    //Method to check username length is less than 20
+    public boolean checkIfUserNameIsTooLong(String username) {
+        if (username.length() > 20) {
             return false;
         }
         return true;
@@ -91,7 +103,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
             /**Snackbar.make(findViewById(android.R.id.content), "Response: " + userId, Snackbar.LENGTH_LONG).show();
              * See if there was a response
              */
-            taskCompleted();
+
         }
     }
 
@@ -103,10 +115,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            SharedPreferences sharedPreferences = getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.key_user_id), userId);
-            editor.apply();
+
             this.setUrlString("https://hintahaukka.herokuapp.com/test/updateNickname");
 
             this.setParamNames(new String[]{"id","nickname"});
@@ -124,18 +133,18 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            taskCompleted();
-        }
-    }
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getString(R.string.key_user_id), userId);
+            editor.apply();
 
-    private void taskCompleted() {
-        completedTasks++;
-
-        if (completedTasks == TASKS_TO_COMPLETE) {
             continueToApp();
+
         }
     }
-    
+
+
+
     private void continueToApp() {
         Intent intent = new Intent(CreateUsernameActivity.this, MainActivity.class);
         startActivity(intent);
