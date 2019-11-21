@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ public class EnterPriceFragment extends Fragment {
     private StoreManager storeManager;
     private String[] parameterNames;
     private String[] parameters;
+    private TextView enterProductNameField;
+    private Button sendProductNameButton;
 
     private boolean isRunningInTestEnvironment;
 
@@ -82,6 +85,10 @@ public class EnterPriceFragment extends Fragment {
 
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
         nameTextView.setText("Haetaan tuotenimi...\n");
+        enterProductNameField = (TextView) getView().findViewById(R.id.enterProductNameField);
+        enterProductNameField.setVisibility(View.INVISIBLE);
+        sendProductNameButton = getView().findViewById(R.id.sendProdNameBtn);
+        sendProductNameButton.setVisibility(View.INVISIBLE);
         enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
         enterCents = (TextView) getView().findViewById(R.id.enterCents);
 
@@ -116,6 +123,7 @@ public class EnterPriceFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(
                         EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
                                 selectedStore, scanResult, cents, productName, prices, test ));
+                hideKeyboard(view);
             }
         });
 
@@ -173,9 +181,25 @@ public class EnterPriceFragment extends Fragment {
             }
         }
 
-        // If the response contains no product name, put Unknown so that argument won't be null
+        // If the response contains no product name, the field and button for product name input are shown.
         if (productName == null || productName.equals("")) {
-            productName = "Tuotenimeä ei saatavilla";
+            productName = "";
+
+            enterProductNameField.setVisibility(View.VISIBLE);
+            sendProductNameButton.setVisibility(View.VISIBLE);
+
+            sendProductNameButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String userInputProductName = enterProductNameField.getText().toString();
+                    if(userInputProductName.length() > 1) {
+                        new SendProductNameTask().execute(scanResult, getUserId(), userInputProductName);
+                        sendProductNameButton.setEnabled(false);
+                        enterProductNameField.setEnabled(false);
+                        enterProductNameField.setText("Kiitos!");
+                    }
+                }
+            });
         }
         // If the responce contains no price list, create a fake, so that argument won't be null
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
@@ -183,7 +207,7 @@ public class EnterPriceFragment extends Fragment {
             prices = new PriceListItem[1];
             prices[0] = new PriceListItem(0, selectedStore, "timestamp");
         }
-        // we are now have productname, lets show it
+        // Showing of the product name
         nameTextView.setText(productName);
 
         // we may now proceed to next fragment when ready
@@ -282,6 +306,34 @@ public class EnterPriceFragment extends Fragment {
         protected void onPostExecute(String response) {
         }
     }
+  
+    /**
+     * Sends the product name to the server.
+     */
+    private class SendProductNameTask extends HttpPostTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/updateProductName");
+            if (test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/updateProductName");
+            }
+            this.setParamNames(new String[]{"ean", "id", "productName"});
+            if (isRunningInTestEnvironment) {
+                this.setMocked();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+        }
+    }
 
     private String getUserId() {
         if (isRunningInTestEnvironment) {
@@ -290,4 +342,11 @@ public class EnterPriceFragment extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return sharedPreferences.getString(getString(R.string.key_user_id), null);
     }
+
+    public static void hideKeyboard(@NonNull View v) {
+        InputMethodManager inputManager = (InputMethodManager) v.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
 }
+

@@ -101,4 +101,12 @@
             android:name="selectedStore"
             app:argType="string" />
     </fragment>
+<<<<<<< HEAD
+=======
+    <fragment
+        android:id="@+id/shoppingCartFragment"
+        android:name="hifian.hintahaukka.GUI.ShoppingCartFragment"
+        android:label="@string/shopping_cart"
+        tools:layout="@layout/fragment_shopping_cart" />
+>>>>>>> c70bca1f5c131a7b5381444c4b0a6bc2ade9445e
 </navigation>
