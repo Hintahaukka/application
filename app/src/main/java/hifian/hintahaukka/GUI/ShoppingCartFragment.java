@@ -3,16 +3,29 @@ package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import java.util.List;
+
+import hifian.hintahaukka.Database.ShoppingCart;
 import hifian.hintahaukka.R;
 
 
 public class ShoppingCartFragment extends Fragment {
+
+    private ShoppingCartViewModel viewModel;
 
 
     public ShoppingCartFragment() {
@@ -24,4 +37,26 @@ public class ShoppingCartFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView shoppingCartList = getActivity().findViewById(R.id.shopping_cart_list);
+        ShoppingCartListAdapter adapter = new ShoppingCartListAdapter(getContext());
+        shoppingCartList.setAdapter(adapter);
+        shoppingCartList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
+        viewModel.getShoppingCarts().observe(getViewLifecycleOwner(), new Observer<List<ShoppingCart>>() {
+            @Override
+            public void onChanged(List<ShoppingCart> shoppingCarts) {
+                adapter.setShoppingCarts(shoppingCarts);
+            }
+        });
+
+        Button newCartButton = getView().findViewById(R.id.button_new_shopping_cart);
+        newCartButton.setOnClickListener(buttonView -> {
+            EditText newNameField = getView().findViewById(R.id.edittext_new_shopping_cart_name);
+            viewModel.insert(new ShoppingCart(newNameField.getText().toString()));
+        });
+    }
 }

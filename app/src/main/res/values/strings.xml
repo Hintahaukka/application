@@ -31,4 +31,6 @@
     <string name="shopping_cart">Ostoskori</string>
     <string name="scan_product">Skannaa tuote</string>
     <string name="text_faulty_barcode">Virheellinen viivakoodi!</string>
+    <string name="text_add">Lisää</string>
+    <string name="hint_add_new_shopping_cart">Lisää uusi ostoskori</string>
 </resources>
