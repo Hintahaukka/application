@@ -60,6 +60,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.google.android.gms:play-services-location:$google_play_services_location_version"
     implementation "com.google.android.material:material:$material_design_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$arch_lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$arch_lifecycle_version"
 
     // Dependencies for local unit tests
     implementation 'androidx.appcompat:appcompat:1.0.2'
