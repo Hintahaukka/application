@@ -113,7 +113,11 @@ public abstract class HttpPostTask extends AsyncTask<String, String, String> {
     }
 
     private String createMockResponse(String... params) {
-        if (paramNames.length == 1 && paramNames[0] == "ean") {
+        if (paramNames.length == 1 && paramNames[0] == "ean" && params[0].equals("scanResultWithProductName")) {
+            return "{\"ean\":\"1\",\"name\": \"Omena\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
+        } else if (paramNames.length == 1 && paramNames[0] == "ean" && params[0].equals("scanResultWithoutProductName")) {
+            return "{\"ean\":\"1\",\"name\": \"\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
+        } else if(paramNames.length == 1 && paramNames[0] == "ean"){
             return "{\"ean\":\"1\",\"name\": \"Omena\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
         } else {
             return "";

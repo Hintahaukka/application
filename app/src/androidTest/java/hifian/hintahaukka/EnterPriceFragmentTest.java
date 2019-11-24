@@ -24,13 +24,15 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 public class EnterPriceFragmentTest {
 
     String selectedStore = "selectedStore";
-    String scanResult = "scanResult";
     boolean test = false;
 
     //default productName returned by mocked HttpPostTask
@@ -44,7 +46,7 @@ public class EnterPriceFragmentTest {
     // this running Fragment
     EnterPriceFragment thisFragment;
 
-    private void launchEnterPriceFragment() {
+    private void launchEnterPriceFragment(String scanResult) {
         Bundle bundle = new Bundle();
         bundle.putString("selectedStore", selectedStore);
         bundle.putString("scanResult", scanResult);
@@ -68,7 +70,7 @@ public class EnterPriceFragmentTest {
     public void typedPriceIsPassedToTheNextFragment() {
 
         // GIVEN - On the enter price screen
-        launchEnterPriceFragment();
+        launchEnterPriceFragment("scanResult");
 
         // WHEN - User types price 2,50€ and clicks send
         onView(withId(R.id.enterEuros)).perform(typeText("2"));
@@ -81,7 +83,7 @@ public class EnterPriceFragmentTest {
         prices = thisFragment.getPrices();
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "250", productName, prices, test));
+                        selectedStore, "scanResult", "250", productName, prices, test));
 
 
     }
@@ -90,7 +92,7 @@ public class EnterPriceFragmentTest {
     public void ifPriceFieldsAreEmptyThePricePassedToTheNextFragmentIsZero() {
 
         // GIVEN - On the enter price screen
-        launchEnterPriceFragment();
+        launchEnterPriceFragment("scanResult");
 
         // WHEN - User clicks send without typing a price
         onView(withId(R.id.sendPriceBtn)).perform(click());
@@ -99,14 +101,14 @@ public class EnterPriceFragmentTest {
         prices = thisFragment.getPrices();
         verify(mockNavController).navigate(
                 EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                        selectedStore, scanResult, "0", productName, prices, test));
+                        selectedStore, "scanResult", "0", productName, prices, test));
     }
 
     @Test
     public void typingCommaMovesFocusToEnterCents() {
 
         // GIVEN - On the enter price screen
-        launchEnterPriceFragment();
+        launchEnterPriceFragment("scanResult");
 
         // WHEN - User types price with comma
         onView(withId(R.id.enterEuros)).perform(typeText("2,50"));
@@ -120,7 +122,7 @@ public class EnterPriceFragmentTest {
     public void typingDotMovesFocusToEnterCents() {
 
         // GIVEN - On the enter price screen
-        launchEnterPriceFragment();
+        launchEnterPriceFragment("scanResult");
 
         // WHEN - User types price with dot
         onView(withId(R.id.enterEuros)).perform(typeText("2.50"));
@@ -128,5 +130,34 @@ public class EnterPriceFragmentTest {
         // THEN - Comma is removed and the price is divided to right fields
         onView(withId(R.id.enterEuros)).check(matches((withText("2"))));
         onView(withId(R.id.enterCents)).check(matches((withText("50"))));
+    }
+
+    @Test
+    public void fieldAndButtonForProductNameEntryAreShownAndFunctionalIfThereIsNoProductName() {
+
+        // GIVEN - On the enter price screen, product does not have a name
+        launchEnterPriceFragment("scanResultWithoutProductName");
+
+        // WHEN - User types in the name of the product and pushes the send button
+        onView(withId(R.id.enterProductNameField)).perform(typeText("Fazer suklaapatukka"));
+        onView(withId(R.id.sendProdNameBtn)).perform(click());
+
+        // THEN - Thank you is displayed and field and button are disabled.
+        onView(withId(R.id.enterProductNameField)).check(matches(withText("Kiitos!")));
+        onView(withId(R.id.enterProductNameField)).check(matches(not(isEnabled())));
+        onView(withId(R.id.sendProdNameBtn)).check(matches(not(isEnabled())));
+
+    }
+
+    @Test
+    public void fieldAndButtonForProductNameEntryAreNotShownIfThereIsProductName() {
+
+        // GIVEN - On the enter price screen, product does have a name
+        launchEnterPriceFragment("scanResultWithProductName");
+
+        // THEN - Field and button are not shown.
+        onView(withId(R.id.enterProductNameField)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.sendProdNameBtn)).check(matches(not(isDisplayed())));
+
     }
 }
