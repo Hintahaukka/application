@@ -192,7 +192,7 @@ public class EnterPriceFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     String userInputProductName = enterProductNameField.getText().toString();
-                    if(userInputProductName.length() > 1) {
+                    if(2 <= userInputProductName.length() && userInputProductName.length() <= 150) {
                         new SendProductNameTask().execute(scanResult, getUserId(), userInputProductName);
                         sendProductNameButton.setEnabled(false);
                         enterProductNameField.setEnabled(false);
