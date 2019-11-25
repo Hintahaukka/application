@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+    implementation "com.google.firebase:firebase-analytics:17.2.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$android_appcompat_v7_version"
     implementation "androidx.constraintlayout:constraintlayout:$androidx_constraitlayout_version"
@@ -66,9 +67,7 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core_version"
 
-
-
-    // Dependencies for Android end-to-end tests
+   // Dependencies for Android end-to-end tests
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
     androidTestImplementation "androidx.test:runner:$androixTestCore_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core_version"
@@ -76,10 +75,16 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:0.5'
+
+ 
+  // option for tests testCompile assertJCore   testCompile junit   androidTestCompile supportTest.espressoCore   androidTestCompile supportTest.rules
 }
 
 jacocoAndroidUnitTestReport {
     csv.enabled false
     html.enabled true
     xml.enabled true
+}
+if (System.getenv("GOOGLE_SERVICES_KEY") != null){ 
+apply plugin: 'com.google.gms.google-services'
 }

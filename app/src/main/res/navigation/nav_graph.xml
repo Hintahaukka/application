@@ -106,4 +106,5 @@
         android:name="hifian.hintahaukka.GUI.ShoppingCartFragment"
         android:label="@string/shopping_cart"
         tools:layout="@layout/fragment_shopping_cart" />
+
 </navigation>

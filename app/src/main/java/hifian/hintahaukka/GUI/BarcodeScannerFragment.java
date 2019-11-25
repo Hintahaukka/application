@@ -157,3 +157,4 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
 
 
 }
+
