@@ -1,6 +1,8 @@
 package hifian.hintahaukka.GUI;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +38,7 @@ public class EnterPriceFragment extends Fragment {
     private String selectedStore;
     private String scanResult;
     private boolean test;
+    private String cents;
 
     private String storeName;
     private String productName;
@@ -47,6 +51,8 @@ public class EnterPriceFragment extends Fragment {
     private StoreManager storeManager;
     private String[] parameterNames;
     private String[] parameters;
+    private TextView enterProductNameField;
+    private Button sendProductNameButton;
 
     private boolean isRunningInTestEnvironment;
 
@@ -80,6 +86,10 @@ public class EnterPriceFragment extends Fragment {
 
         nameTextView = (TextView) getView().findViewById(R.id.nameField);
         nameTextView.setText("Haetaan tuotenimi...\n");
+        enterProductNameField = (TextView) getView().findViewById(R.id.enterProductNameField);
+        enterProductNameField.setVisibility(View.INVISIBLE);
+        sendProductNameButton = getView().findViewById(R.id.sendProdNameBtn);
+        sendProductNameButton.setVisibility(View.INVISIBLE);
         enterEuros = (TextView) getView().findViewById(R.id.enterEuros);
         enterCents = (TextView) getView().findViewById(R.id.enterCents);
 
@@ -105,15 +115,15 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cents = EnterPriceUtils.turnEnteredPriceToCents(
+                // Disable send button so it won't be pressed twice if there is delay
+                sendPriceButton.setEnabled(false);
+                // Send price
+                cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
-
-                parameters = new String[]{scanResult, cents, selectedStore};
+                String userId = getUserId();
+                parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
-                Navigation.findNavController(getView()).navigate(
-                        EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, prices, test ));
             }
         });
 
@@ -171,9 +181,25 @@ public class EnterPriceFragment extends Fragment {
             }
         }
 
-        // If the response contains no product name, put Unknown so that argument won't be null
+        // If the response contains no product name, the field and button for product name input are shown.
         if (productName == null || productName.equals("")) {
-            productName = "Tuotenimeä ei saatavilla";
+            productName = "";
+
+            enterProductNameField.setVisibility(View.VISIBLE);
+            sendProductNameButton.setVisibility(View.VISIBLE);
+
+            sendProductNameButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String userInputProductName = enterProductNameField.getText().toString();
+                    if(2 <= userInputProductName.length() && userInputProductName.length() <= 150) {
+                        new SendProductNameTask().execute(scanResult, getUserId(), userInputProductName);
+                        sendProductNameButton.setEnabled(false);
+                        enterProductNameField.setEnabled(false);
+                        enterProductNameField.setText("Kiitos!");
+                    }
+                }
+            });
         }
         // If the responce contains no price list, create a fake, so that argument won't be null
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
@@ -181,7 +207,7 @@ public class EnterPriceFragment extends Fragment {
             prices = new PriceListItem[1];
             prices[0] = new PriceListItem(0, selectedStore, "timestamp");
         }
-        // we are now have productname, lets show it
+        // Showing of the product name
         nameTextView.setText(productName);
 
         // we may now proceed to next fragment when ready
@@ -254,7 +280,7 @@ public class EnterPriceFragment extends Fragment {
     }
 
     /**
-     * Sends the new price to the server.
+     * Sends the new price to the server and receives points. Then moves to the next fragment.
      */
     private class SendPriceTask extends HttpPostTask {
 
@@ -265,7 +291,46 @@ public class EnterPriceFragment extends Fragment {
             if (test) {
                 this.setUrlString("https://hintahaukka.herokuapp.com/test/addPrice");
             }
-            this.setParamNames(new String[]{"ean", "cents", "storeId"});
+            this.setParamNames(new String[]{"ean", "cents", "storeId", "id"});
+            if (isRunningInTestEnvironment) {
+                this.setMocked();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return super.doInBackground(params);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null && response != "") {
+                try {
+                    String[] points = response.split(":");
+                    int pointsTotal = Integer.parseInt(points[0]);
+                    int pointsUnused = Integer.parseInt(points[1]);
+                    updatePoints(pointsTotal, pointsUnused);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            moveToNextFragment();
+        }
+    }
+  
+    /**
+     * Sends the product name to the server.
+     */
+    private class SendProductNameTask extends HttpPostTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.setUrlString("https://hintahaukka.herokuapp.com/updateProductName");
+            if (test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/updateProductName");
+            }
+            this.setParamNames(new String[]{"ean", "id", "productName"});
             if (isRunningInTestEnvironment) {
                 this.setMocked();
             }
@@ -280,4 +345,39 @@ public class EnterPriceFragment extends Fragment {
         protected void onPostExecute(String response) {
         }
     }
+
+    /**
+     * Fetches the user id from memory.
+     * @return user id
+     */
+    private String getUserId() {
+        if (isRunningInTestEnvironment) {
+            return "1234567890123456789012345678901";
+        }
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(getString(R.string.key_user_id), null);
+    }
+
+    /**
+     * Updates points to memory.
+     * @param pointsTotal total points
+     * @param pointsUnused unused points
+     */
+    private void updatePoints(int pointsTotal, int pointsUnused) {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(getString(R.string.key_points_total), pointsTotal);
+        editor.putInt(getString(R.string.key_points_unused), pointsUnused);
+        editor.apply();
+    }
+
+    /**
+     * Navigates to list prices fragment.
+     */
+    private void moveToNextFragment() {
+        Navigation.findNavController(getView()).navigate(
+                EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
+                        selectedStore, scanResult, cents, productName, prices, test ));
+    }
 }
+
