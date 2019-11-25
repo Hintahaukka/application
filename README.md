@@ -66,9 +66,11 @@ Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se an
 7. Syötä tuotteen hinta ja paina "Lähetä"
 8. Tuotteen hinta muissa kaupoissa tulee näkyville.
 
+<!--
 ## Credits
 
 TODO
+-->
 
 ## Lisenssi
 
