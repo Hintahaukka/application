@@ -20,6 +20,8 @@
     <string name="text_username_too_short">Käyttäjänimen tulee olla vähintään kaksi merkkiä pitkä</string>
     <string name="text_username_too_long">Käyttäjänimi saa olla korkeintaan 20 merkkiä pitkä</string>
     <string name="key_user_id">key_user_id</string>
+    <string name="key_points_total">key_points_total</string>
+    <string name="key_points_unused">key_points_unused</string>
     <string name="first_time_register_text">Tervetuloa Hintahaukka sovellukseen\nSyötä nimimerkki jatkaaksesi</string>
     <string name="preference_file_key">hifian_hintahaukka_preference_file_key</string>
     <string name="text_other_prices">Muut hinnat:</string>

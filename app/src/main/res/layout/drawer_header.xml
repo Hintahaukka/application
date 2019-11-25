@@ -15,4 +15,12 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/ic_hintahaukka_logo" />
+
+    <TextView
+        android:id="@+id/pointsField"
+        android:layout_width="@dimen/drawer_header_logo_size"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:text="Pisteet" />
 </LinearLayout>

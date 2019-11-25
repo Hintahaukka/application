@@ -16,9 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +38,7 @@ public class EnterPriceFragment extends Fragment {
     private String selectedStore;
     private String scanResult;
     private boolean test;
+    private String cents;
 
     private String storeName;
     private String productName;
@@ -114,16 +115,15 @@ public class EnterPriceFragment extends Fragment {
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cents = EnterPriceUtils.turnEnteredPriceToCents(
+                // Disable send button so it won't be pressed twice if there is delay
+                sendPriceButton.setEnabled(false);
+                // Send price
+                cents = EnterPriceUtils.turnEnteredPriceToCents(
                         enterEuros.getText().toString(),
                         enterCents.getText().toString());
                 String userId = getUserId();
                 parameters = new String[]{scanResult, cents, selectedStore, userId};
                 new SendPriceTask().execute(parameters);
-                Navigation.findNavController(getView()).navigate(
-                        EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
-                                selectedStore, scanResult, cents, productName, prices, test ));
-                hideKeyboard(view);
             }
         });
 
@@ -280,7 +280,7 @@ public class EnterPriceFragment extends Fragment {
     }
 
     /**
-     * Sends the new price to the server.
+     * Sends the new price to the server and receives points. Then moves to the next fragment.
      */
     private class SendPriceTask extends HttpPostTask {
 
@@ -304,6 +304,17 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            if (response != null && response != "") {
+                try {
+                    String[] points = response.split(":");
+                    int pointsTotal = Integer.parseInt(points[0]);
+                    int pointsUnused = Integer.parseInt(points[1]);
+                    updatePoints(pointsTotal, pointsUnused);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            moveToNextFragment();
         }
     }
   
@@ -335,6 +346,10 @@ public class EnterPriceFragment extends Fragment {
         }
     }
 
+    /**
+     * Fetches the user id from memory.
+     * @return user id
+     */
     private String getUserId() {
         if (isRunningInTestEnvironment) {
             return "1234567890123456789012345678901";
@@ -343,10 +358,26 @@ public class EnterPriceFragment extends Fragment {
         return sharedPreferences.getString(getString(R.string.key_user_id), null);
     }
 
-    public static void hideKeyboard(@NonNull View v) {
-        InputMethodManager inputManager = (InputMethodManager) v.getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    /**
+     * Updates points to memory.
+     * @param pointsTotal total points
+     * @param pointsUnused unused points
+     */
+    private void updatePoints(int pointsTotal, int pointsUnused) {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(getString(R.string.key_points_total), pointsTotal);
+        editor.putInt(getString(R.string.key_points_unused), pointsUnused);
+        editor.apply();
+    }
+
+    /**
+     * Navigates to list prices fragment.
+     */
+    private void moveToNextFragment() {
+        Navigation.findNavController(getView()).navigate(
+                EnterPriceFragmentDirections.actionEnterPriceFragmentToListPricesFragment(
+                        selectedStore, scanResult, cents, productName, prices, test ));
     }
 }
 
