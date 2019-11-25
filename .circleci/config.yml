@@ -126,17 +126,18 @@ jobs:
                 --results-dir=results \
                 --environment-variables \
                 coverage="true",coverageFile="/sdcard/coverage.ec"  
-      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: /app/build/reports
-          destination: reports
-      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: /app/build/test-results
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
             sudo mkdir app/build/reports
             sudo gsutil -m cp -r  gs://${GCLOUD_BUCKET}/${GCLOUD_RESULT} app/build/reports
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
+          path: /app/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: /app/build/test-results
+    
 workflows:
   version: 2
   build_and_test:
