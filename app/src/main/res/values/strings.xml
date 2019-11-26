@@ -20,6 +20,7 @@
     <string name="text_username_too_short">Käyttäjänimen tulee olla vähintään kaksi merkkiä pitkä</string>
     <string name="text_username_too_long">Käyttäjänimi saa olla korkeintaan 20 merkkiä pitkä</string>
     <string name="key_user_id">key_user_id</string>
+    <string name="key_user_name">key_user_name</string>
     <string name="key_points_total">key_points_total</string>
     <string name="key_points_unused">key_points_unused</string>
     <string name="first_time_register_text">Tervetuloa Hintahaukka sovellukseen\nSyötä nimimerkki jatkaaksesi</string>
@@ -31,4 +32,12 @@
     <string name="shopping_cart">Ostoskori</string>
     <string name="scan_product">Skannaa tuote</string>
     <string name="text_faulty_barcode">Virheellinen viivakoodi!</string>
+    <string name="rank_1">Linnunmuna</string>
+    <string name="rank_2">Untuvikko</string>
+    <string name="rank_3">Poikanen</string>
+    <string name="rank_4">Varpushaukka</string>
+    <string name="rank_5">Hiirihaukka</string>
+    <string name="rank_6">Kanahaukka</string>
+    <string name="rank_7">Jalohaukka</string>
+    <string name="rank_8">Hintahaukka</string>
 </resources>

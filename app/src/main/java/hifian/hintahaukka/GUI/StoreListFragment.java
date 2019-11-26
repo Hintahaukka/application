@@ -1,7 +1,5 @@
 package hifian.hintahaukka.GUI;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -40,11 +38,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import hifian.hintahaukka.GUI.MainActivity;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
-import hifian.hintahaukka.GUI.StoreListFragmentDirections;
+import hifian.hintahaukka.Service.UserManager;
 
 public class StoreListFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
@@ -107,7 +104,7 @@ public class StoreListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.checkIfIsRunningInTestEnvironment();
         updateLocationAndStoreList();
-        showPoints();
+        showUserInfo();
 
         getView().findViewById(R.id.button_update_location).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,17 +252,23 @@ public class StoreListFragment extends Fragment {
                 Looper.getMainLooper());
     }
 
-    public void showPoints() {
+    /**
+     * Shows user info in the menu
+     */
+    public void showUserInfo() {
         if (isRunningInTestEnvironment) {
             return;
         }
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        int pointsTotal = sharedPreferences.getInt(getString(R.string.key_points_total), 0);
-        int pointsUnused = sharedPreferences.getInt(getString(R.string.key_points_unused), 0);
+        UserManager userManager = new UserManager(this.getActivity());
+        String userName = userManager.getUserName();
+        int pointsTotal = userManager.getPointsTotal();
+        int pointsUnused = userManager.getPointsUnused();
+        String rank = userManager.getRank();
+
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         View headerView = navigationView.getHeaderView(0);
         TextView pointsField = (TextView) headerView.findViewById(R.id.pointsField);
-        SpannableString spanString = new SpannableString("Pisteet: "+ pointsTotal + "\nKäytettävissä: " + pointsUnused + "\n");
+        SpannableString spanString = new SpannableString(userName + "\nTaso: " + rank + "\nPisteet: "+ pointsTotal + "\nKäytettävissä: " + pointsUnused + "\n");
         spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
         pointsField.setText(spanString);
     }

@@ -48,7 +48,6 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         selectedStore = args.getSelectedStore();
         test = args.getTest();
 
-        //selectedStore = getIntent().getExtras().getString("selectedStore");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
 //                Toast.makeText(getContext(), "Permission is granted!", Toast.LENGTH_LONG).show();
@@ -143,14 +142,13 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
             onDestroy();
              Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
-
         } else {
             // Barcode was not correct EAN13
             /**Mun mielestä toast on parempivaihtoehto tässä koska toastin teksi tulee keskelle näyttöä.
               Jätän Snackbarin koodin tähän jos myöhemmin Snackbar osoittautuu paremmaksi vaihtoehdoksi.
             */
-            Toast.makeText(getContext(), R.string.text_faulty_barcode, Toast.LENGTH_LONG).show();
-            //Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.text_faulty_barcode, Snackbar.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), R.string.text_faulty_barcode, Toast.LENGTH_LONG).show();
+            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.text_faulty_barcode, Snackbar.LENGTH_LONG).show();
             onResume();
         }
     }
