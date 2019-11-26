@@ -19,7 +19,7 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import hifian.hintahaukka.Database.ShoppingCart;
+import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.R;
 
 
@@ -46,17 +46,17 @@ public class ShoppingCartFragment extends Fragment {
         shoppingCartList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
-        viewModel.getShoppingCarts().observe(getViewLifecycleOwner(), new Observer<List<ShoppingCart>>() {
+        viewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
             @Override
-            public void onChanged(List<ShoppingCart> shoppingCarts) {
-                adapter.setShoppingCarts(shoppingCarts);
+            public void onChanged(List<Product> products) {
+                adapter.setProducts(products);
             }
         });
 
         Button newCartButton = getView().findViewById(R.id.button_new_shopping_cart);
         newCartButton.setOnClickListener(buttonView -> {
             EditText newNameField = getView().findViewById(R.id.edittext_new_shopping_cart_name);
-            viewModel.insert(new ShoppingCart(newNameField.getText().toString()));
+            viewModel.insert(new Product(newNameField.getText().toString(), "defaultEAN"));
         });
     }
 }

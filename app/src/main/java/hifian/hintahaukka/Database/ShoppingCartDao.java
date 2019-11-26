@@ -11,9 +11,9 @@ import java.util.List;
 public interface ShoppingCartDao {
 
     @Insert
-    public void insert(ShoppingCart shoppingCart);
+    public void insert(Product product);
 
-    @Query("SELECT * FROM shopping_cart_table")
-    LiveData<List<ShoppingCart>> getShoppingCarts();
+    @Query("SELECT * FROM Products")
+    LiveData<List<Product>> getProducts();
 
 }

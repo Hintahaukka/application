@@ -8,25 +8,25 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import hifian.hintahaukka.Database.ShoppingCart;
+import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Database.ShoppingCartRepository;
 
 public class ShoppingCartViewModel extends AndroidViewModel {
 
     private ShoppingCartRepository repository;
-    private LiveData<List<ShoppingCart>> shoppingCarts;
+    private LiveData<List<Product>> products;
 
     public ShoppingCartViewModel(@NonNull Application application) {
         super(application);
         repository = new ShoppingCartRepository(application);
-        shoppingCarts = repository.getShoppingCarts();
+        products = repository.getProducts();
     }
 
-    public LiveData<List<ShoppingCart>> getShoppingCarts() {
-        return shoppingCarts;
+    public LiveData<List<Product>> getProducts() {
+        return products;
     }
 
-    public void insert(ShoppingCart shoppingCart) {
-        repository.insert(shoppingCart);
+    public void insert(Product product) {
+        repository.insert(product);
     }
 }

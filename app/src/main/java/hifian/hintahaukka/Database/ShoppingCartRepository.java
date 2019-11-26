@@ -9,21 +9,21 @@ import java.util.List;
 public class ShoppingCartRepository {
 
     private ShoppingCartDao shoppingCartDao;
-    private LiveData<List<ShoppingCart>> shoppingCarts;
+    private LiveData<List<Product>> products;
 
     public ShoppingCartRepository(Application application) {
         ShoppingCartDatabase db = ShoppingCartDatabase.getDatabase(application);
         shoppingCartDao = db.shoppingCartDao();
-        shoppingCarts = shoppingCartDao.getShoppingCarts();
+        products = shoppingCartDao.getProducts();
     }
 
-    public LiveData<List<ShoppingCart>> getShoppingCarts() {
-        return shoppingCarts;
+    public LiveData<List<Product>> getProducts() {
+        return products;
     }
 
-    public void insert(ShoppingCart shoppingCart) {
+    public void insert(Product product) {
         ShoppingCartDatabase.databaseWriteExecutor.execute(() -> {
-            shoppingCartDao.insert(shoppingCart);
+            shoppingCartDao.insert(product);
         });
     }
 }

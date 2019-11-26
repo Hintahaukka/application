@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import hifian.hintahaukka.Database.ShoppingCart;
+import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.R;
 
 public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartListAdapter.ShoppingCartViewHolder>  {
@@ -26,7 +26,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     }
 
     private final LayoutInflater inflater;
-    private List<ShoppingCart> shoppingCarts; //Cached copy of shopping carts
+    private List<Product> products; //Cached copy of products
 
     ShoppingCartListAdapter(Context context) {
         inflater = LayoutInflater.from(context);
@@ -41,24 +41,23 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
 
     @Override
     public void onBindViewHolder(@NonNull ShoppingCartViewHolder holder, int position) {
-        if (shoppingCarts != null) {
-            ShoppingCart current = shoppingCarts.get(position);
+        if (products != null) {
+            Product current = products.get(position);
             holder.cartNameView.setText(current.getName());
         } else {
             // Covers the case of data not being ready yet
-            holder.cartNameView.setText("Ostoskori");
         }
     }
 
-    void setShoppingCarts(List<ShoppingCart> shoppingCarts) {
-        this.shoppingCarts = shoppingCarts;
+    void setProducts(List<Product> products) {
+        this.products = products;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (shoppingCarts != null) {
-            return shoppingCarts.size();
+        if (products != null) {
+            return products.size();
         } else {
             return 0;
         }
