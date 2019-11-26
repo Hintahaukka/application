@@ -181,7 +181,7 @@ public class ListPricesFragment extends Fragment {
             }
 
             ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
-            viewModel.insert(new Product(productName, ean));
+            viewModel.insert(new Product(ean, productName));
             Snackbar.make(buttonView, R.string.message_added_to_cart, Snackbar.LENGTH_LONG).show();
         });
     }
