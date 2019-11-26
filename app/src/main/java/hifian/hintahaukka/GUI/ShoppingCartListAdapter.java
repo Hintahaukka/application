@@ -17,11 +17,13 @@ import hifian.hintahaukka.R;
 public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartListAdapter.ShoppingCartViewHolder>  {
 
     class ShoppingCartViewHolder extends RecyclerView.ViewHolder {
-        private final TextView cartNameView;
+        private final TextView productNameView;
+        private final TextView productEanView;
 
         private ShoppingCartViewHolder(View itemView) {
             super(itemView);
-            cartNameView = itemView.findViewById(R.id.text_shopping_cart_name);
+            productNameView = itemView.findViewById(R.id.text_product_name);
+            productEanView = itemView.findViewById(R.id.text_product_ean);
         }
     }
 
@@ -43,7 +45,8 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     public void onBindViewHolder(@NonNull ShoppingCartViewHolder holder, int position) {
         if (products != null) {
             Product current = products.get(position);
-            holder.cartNameView.setText(current.getName());
+            holder.productNameView.setText(current.getName());
+            holder.productEanView.setText(current.getEan());
         } else {
             // Covers the case of data not being ready yet
         }

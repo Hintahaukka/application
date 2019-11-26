@@ -6,9 +6,15 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_shopping_cart_name"
+        android:id="@+id/text_product_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        tools:text="Perjantaikori" />
+        android:textSize="@dimen/text_medium"
+        tools:text="Härkis original 250g" />
+
+    <TextView
+        android:id="@+id/text_product_ean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="6430043013219" />
 </LinearLayout>

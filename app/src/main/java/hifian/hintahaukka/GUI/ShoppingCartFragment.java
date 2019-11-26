@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import java.util.List;
 
@@ -51,12 +49,6 @@ public class ShoppingCartFragment extends Fragment {
             public void onChanged(List<Product> products) {
                 adapter.setProducts(products);
             }
-        });
-
-        Button newCartButton = getView().findViewById(R.id.button_new_shopping_cart);
-        newCartButton.setOnClickListener(buttonView -> {
-            EditText newNameField = getView().findViewById(R.id.edittext_new_shopping_cart_name);
-            viewModel.insert(new Product(newNameField.getText().toString(), "defaultEAN"));
         });
     }
 }

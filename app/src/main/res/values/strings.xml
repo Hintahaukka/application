@@ -33,4 +33,6 @@
     <string name="text_faulty_barcode">Virheellinen viivakoodi!</string>
     <string name="text_add">Lisää</string>
     <string name="hint_add_new_shopping_cart">Lisää uusi ostoskori</string>
+    <string name="button_add_to_cart">Lisää ostoskoriin</string>
+    <string name="message_added_to_cart">Tuote lisätty ostoskoriin!</string>
 </resources>

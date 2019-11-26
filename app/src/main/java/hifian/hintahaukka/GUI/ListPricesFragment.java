@@ -10,13 +10,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sccomponents.widgets.ScArc;
 import com.sccomponents.widgets.ScGauge;
 import com.sccomponents.widgets.ScSeekBar;
@@ -26,6 +30,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 
+import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Service.ListPricesUtils;
 import hifian.hintahaukka.Service.PriceListItem;
 import hifian.hintahaukka.R;
@@ -106,6 +111,14 @@ public class ListPricesFragment extends Fragment {
 
         //Create the price list
         createPriceList();
+
+        // Set up "add to cart" -button
+        Button addToCartButton = getView().findViewById(R.id.button_add_to_cart);
+        addToCartButton.setOnClickListener(buttonView -> {
+            ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
+            viewModel.insert(new Product(productName, ean));
+            Snackbar.make(buttonView, R.string.message_added_to_cart, Snackbar.LENGTH_LONG).show();
+        });
     }
 
     private void createPriceCauge() {
