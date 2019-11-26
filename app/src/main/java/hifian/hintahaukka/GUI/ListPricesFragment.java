@@ -113,12 +113,7 @@ public class ListPricesFragment extends Fragment {
         createPriceList();
 
         // Set up "add to cart" -button
-        Button addToCartButton = getView().findViewById(R.id.button_add_to_cart);
-        addToCartButton.setOnClickListener(buttonView -> {
-            ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
-            viewModel.insert(new Product(productName, ean));
-            Snackbar.make(buttonView, R.string.message_added_to_cart, Snackbar.LENGTH_LONG).show();
-        });
+        setUpAddToCartButton();
     }
 
     private void createPriceCauge() {
@@ -174,6 +169,21 @@ public class ListPricesFragment extends Fragment {
 
         final ListView listView = getView().findViewById(R.id.priceListView);
         listView.setAdapter(adapter);
+    }
+
+    private void setUpAddToCartButton() {
+        Button addToCartButton = getView().findViewById(R.id.button_add_to_cart);
+        addToCartButton.setOnClickListener(buttonView -> {
+            if (productName.equals("")) {
+                Snackbar.make(buttonView, R.string.message_product_needs_a_name_to_be_added_to_cart,
+                        Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
+            viewModel.insert(new Product(productName, ean));
+            Snackbar.make(buttonView, R.string.message_added_to_cart, Snackbar.LENGTH_LONG).show();
+        });
     }
 
     /**
