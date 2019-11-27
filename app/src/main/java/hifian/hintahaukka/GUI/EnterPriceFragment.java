@@ -1,8 +1,5 @@
 package hifian.hintahaukka.GUI;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -32,6 +28,7 @@ import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.EnterPriceUtils;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
+import hifian.hintahaukka.Service.UserManager;
 
 public class EnterPriceFragment extends Fragment {
 
@@ -354,8 +351,8 @@ public class EnterPriceFragment extends Fragment {
         if (isRunningInTestEnvironment) {
             return "1234567890123456789012345678901";
         }
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return sharedPreferences.getString(getString(R.string.key_user_id), null);
+        UserManager userManager = new UserManager(this.getActivity());
+        return userManager.getUserId();
     }
 
     /**
@@ -364,11 +361,8 @@ public class EnterPriceFragment extends Fragment {
      * @param pointsUnused unused points
      */
     private void updatePoints(int pointsTotal, int pointsUnused) {
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(getString(R.string.key_points_total), pointsTotal);
-        editor.putInt(getString(R.string.key_points_unused), pointsUnused);
-        editor.apply();
+        UserManager userManager = new UserManager(this.getActivity());
+        userManager.updatePoints(pointsTotal, pointsUnused);
     }
 
     /**

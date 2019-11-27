@@ -2,7 +2,6 @@ package hifian.hintahaukka.GUI;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 import hifian.hintahaukka.Service.HttpPostTask;
+import hifian.hintahaukka.Service.UserManager;
 
 public class CreateUsernameActivity extends AppCompatActivity {
 
@@ -61,12 +61,10 @@ public class CreateUsernameActivity extends AppCompatActivity {
         });
     }
 
-
     //Method to check if username is taken
     /*public boolean checkIfUserNameIsTaken(String username) {
         //Will be implemented later
     }*/
-
 
     //Method to check username is atleast 2 characters long
     public boolean checkIfUserNameIsLongEnough(String username) {
@@ -100,14 +98,8 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             userId = response;
-            /**Snackbar.make(findViewById(android.R.id.content), "Response: " + userId, Snackbar.LENGTH_LONG).show();
-             * See if there was a response
-             */
-
         }
     }
-
-
 
     //Post nickname with id to backend
     private class PostNewNicknameTask extends HttpPostTask {
@@ -133,24 +125,23 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.key_user_id), userId);
-            editor.apply();
 
+            updateUserIdAndNickName();
             continueToApp();
 
         }
     }
 
-
+    private void updateUserIdAndNickName() {
+        UserManager userManager = new UserManager(this);
+        userManager.setUserId(userId);
+        userManager.setUserName(nickname);
+    }
 
     private void continueToApp() {
         Intent intent = new Intent(CreateUsernameActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-
-
 
 }
