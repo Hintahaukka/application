@@ -59,10 +59,14 @@ dependencies {
     implementation "com.github.paroca72:sc-widgets:$sc_widgets_version"
     implementation "androidx.navigation:navigation-fragment:$navigation_version"
     implementation "androidx.navigation:navigation-ui:$navigation_version"
-    implementation "androidx.fragment:fragment-testing:1.1.0"
+    implementation "androidx.fragment:fragment-testing:1.2.0-rc02"
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.google.android.gms:play-services-location:$google_play_services_location_version"
     implementation "com.google.android.material:material:$material_design_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$arch_lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$arch_lifecycle_version"
 
     // Dependencies for local unit tests
     implementation 'androidx.appcompat:appcompat:1.0.2'

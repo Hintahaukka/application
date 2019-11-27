@@ -32,6 +32,11 @@
     <string name="shopping_cart">Ostoskori</string>
     <string name="scan_product">Skannaa tuote</string>
     <string name="text_faulty_barcode">Virheellinen viivakoodi!</string>
+    <string name="text_add">Lisää</string>
+    <string name="hint_add_new_shopping_cart">Lisää uusi ostoskori</string>
+    <string name="button_add_to_cart">Lisää ostoskoriin</string>
+    <string name="message_added_to_cart">Tuote lisätty ostoskoriin!</string>
+    <string name="message_product_needs_a_name_to_be_added_to_cart">Lisää tuotteelle nimi voidaksesi lisätä sen ostoskoriin!</string>
     <string name="rank_1">Linnunmuna</string>
     <string name="rank_2">Untuvikko</string>
     <string name="rank_3">Poikanen</string>
