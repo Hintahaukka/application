@@ -79,7 +79,6 @@ public abstract class HttpPostTask extends AsyncTask<String, String, String> {
                 builder.appendQueryParameter(paramNames[i], params[i]);
             }
             String query = builder.build().getEncodedQuery();
-
             urlConnection.connect();
 
             DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
@@ -88,9 +87,7 @@ public abstract class HttpPostTask extends AsyncTask<String, String, String> {
             out.flush();
             out.close();
 
-
             int responseCode=urlConnection.getResponseCode();
-
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

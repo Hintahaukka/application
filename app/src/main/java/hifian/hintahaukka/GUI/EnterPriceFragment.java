@@ -23,7 +23,7 @@ import org.json.JSONException;
 import java.io.InputStream;
 
 import hifian.hintahaukka.Service.HttpPostTask;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.EnterPriceUtils;
 import hifian.hintahaukka.Service.StoreManager;
@@ -156,7 +156,7 @@ public class EnterPriceFragment extends Fragment {
      * Parses the product name and an array of prices based on the JSON response.
      * @param response The JSON containing the product and price info
      */
-    public void handleResponse(String response) {
+    public void parseProductInfo(String response) {
         if (response == null || response == "") {
             nameTextView.setText("Tuotetietojen hakeminen epäonnistui\n");
         } else {
@@ -171,7 +171,7 @@ public class EnterPriceFragment extends Fragment {
                 for (int i = 0; i < l; i++) {
                     JSONObject j = jsonArray.getJSONObject(i);
                     prices[i] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
-                            j.getString("timestamp"));
+                            j.getString("timestamp"), scanResult);
                 }
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -203,7 +203,7 @@ public class EnterPriceFragment extends Fragment {
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
         if (prices == null) {
             prices = new PriceListItem[1];
-            prices[0] = new PriceListItem(0, selectedStore, "timestamp");
+            prices[0] = new PriceListItem(0, selectedStore, "timestamp", scanResult);
         }
         // Showing of the product name
         nameTextView.setText(productName);
@@ -273,7 +273,7 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            handleResponse(response);
+            parseProductInfo(response);
         }
     }
 

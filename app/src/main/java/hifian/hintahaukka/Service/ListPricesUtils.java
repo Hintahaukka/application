@@ -1,7 +1,7 @@
 package hifian.hintahaukka.Service;
 
 
-
+import hifian.hintahaukka.Domain.PriceListItem;
 
 public class ListPricesUtils {
 
