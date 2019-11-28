@@ -194,6 +194,7 @@ public class EnterPriceFragment extends Fragment {
                         sendProductNameButton.setEnabled(false);
                         enterProductNameField.setEnabled(false);
                         enterProductNameField.setText("Kiitos!");
+                        productName = userInputProductName;
                     }
                 }
             });
