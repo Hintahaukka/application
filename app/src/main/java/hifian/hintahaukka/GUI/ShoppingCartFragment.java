@@ -121,7 +121,6 @@ public class ShoppingCartFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            System.out.println("Response: " + response);
             parseShoppingCartPricesInfo(response);
             moveToCompareShoppingCartsFragment();
         }
