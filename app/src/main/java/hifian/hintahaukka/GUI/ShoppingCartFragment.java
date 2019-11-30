@@ -185,7 +185,7 @@ public class ShoppingCartFragment extends Fragment {
 
     /**
      * Fetches user's unused points from memory
-     * @return
+     * @return user's unused points
      */
     public int getPointsUnused() {
         if (isRunningInTestEnvironment) {
@@ -196,7 +196,7 @@ public class ShoppingCartFragment extends Fragment {
 
     /**
      * Fetches the user id from memory
-     * @return
+     * @return user id
      */
     public String getUserId() {
         if (isRunningInTestEnvironment) {
