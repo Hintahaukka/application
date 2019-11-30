@@ -21,9 +21,10 @@ import hifian.hintahaukka.Service.UserManager;
 public class SplashScreenActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private boolean isNewUser = false;
     private String userId;
     private int completedTasks = 0;
-    private final int TASKS_TO_COMPLETE = 4;
+    private final int TASKS_TO_COMPLETE = 3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,22 +82,17 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Checks if a user id already exists. If not, get a new one from the server.
      */
     private void getUserId() {
-        requirePermissionToUseLocation(true);
+
         // Check if there already is an id in the memory
         UserManager userManager = new UserManager(this);
         userId = userManager.getUserId();
 
-        // If not, move to the next activity
+        // If not, mark as new user (to be guided to create username in continueToApp())
         if (userId == null) {
-            new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
-            startActivity(intent);
-            finish();
-            }, SPLASH_TIME_OUT);
-        } else {
-            taskCompleted();
+           isNewUser = true;
         }
 
+        taskCompleted();
     }
 
     /**
@@ -136,11 +132,22 @@ public class SplashScreenActivity extends AppCompatActivity {
      * finished.
      */
     private void continueToApp() {
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-            startActivity(intent);
-            // close this activity
-            finish();
-        }, SPLASH_TIME_OUT);
+
+        // New users are navigated to create username
+        if(isNewUser) {
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        } else {
+
+            // Old users navigate straight to the app
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        }
     }
 }
