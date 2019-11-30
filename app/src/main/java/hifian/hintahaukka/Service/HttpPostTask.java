@@ -110,14 +110,16 @@ public abstract class HttpPostTask extends AsyncTask<String, String, String> {
     }
 
     private String createMockResponse(String... params) {
-        if (paramNames.length == 1 && paramNames[0] == "ean" && params[0].equals("scanResultWithProductName")) {
+        if (paramNames.length == 1 && paramNames[0].equals("ean") && params[0].equals("scanResultWithProductName")) {
             return "{\"ean\":\"1\",\"name\": \"Omena\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
-        } else if (paramNames.length == 1 && paramNames[0] == "ean" && params[0].equals("scanResultWithoutProductName")) {
+        } else if (paramNames.length == 1 && paramNames[0].equals("ean") && params[0].equals("scanResultWithoutProductName")) {
             return "{\"ean\":\"1\",\"name\": \"\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
-        } else if(paramNames.length == 1 && paramNames[0] == "ean"){
+        } else if(paramNames.length == 1 && paramNames[0].equals("ean")) {
             return "{\"ean\":\"1\",\"name\": \"Omena\",\"prices\":[{\"cents\":110,\"storeId\":\"1\",\"timestamp\":\"2019-10-07 19:48:56.9918\"},{\"cents\":120,\"storeId\":\"2\",\"timestamp\":\"2019-10-07 19:48:57.356073\"}]}";
-        } else if (paramNames.length == 4 && paramNames[0] == "ean" && paramNames[1] == "cents" && paramNames[2] == "storeId" && paramNames[3] == "id") {
+        } else if (paramNames.length == 4 && paramNames[0].equals("ean") && paramNames[1].equals("cents") && paramNames[2].equals("storeId") && paramNames[3].equals("id")) {
             return "30:10";
+        } else if (paramNames.length == 3 && paramNames[0].equals("id") && paramNames[1].equals("ean1") && paramNames[2].equals("ean2")) {
+            return "{\"pointsTotal\": 100,\"pointsUnused\": 50,\"pricesOfStores\": [{\"googleStoreId\": \"1\",\"storeCentsTotal\": 600,\"pricesInStore\": [{\"ean\": \"6414893083202\",\"cents\": 200,\"timestamp\": \"2019-11-27 15:39:33.997642\"},{\"ean\": \"6411402106407\",\"cents\": 300,\"timestamp\": \"\"}]}]}";
         } else {
             return "";
         }

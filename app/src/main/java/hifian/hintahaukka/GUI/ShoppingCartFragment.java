@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,8 @@ public class ShoppingCartFragment extends Fragment {
     private int cartSize;
     private Button compareShoppingCartsButton;
     private PricesInStore[] shoppingCartPrices;
+    private boolean isRunningInTestEnvironment;
+    private int testMessage;
 
 
     public ShoppingCartFragment() {
@@ -52,6 +56,7 @@ public class ShoppingCartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        checkIfIsRunningInTestEnvironment();
         RecyclerView shoppingCartList = getActivity().findViewById(R.id.shopping_cart_list);
         ShoppingCartListAdapter adapter = new ShoppingCartListAdapter(getContext());
         shoppingCartList.setAdapter(adapter);
@@ -65,7 +70,7 @@ public class ShoppingCartFragment extends Fragment {
                 adapter.setProducts(products);
                 cartSize = products.size();
                 productList = products;
-                if (cartSize == 0) {
+                if (cartSize == 0 && !isRunningInTestEnvironment) {
                     compareShoppingCartsButton.setVisibility(View.INVISIBLE);
                 } else {
                     compareShoppingCartsButton.setVisibility(View.VISIBLE);
@@ -73,21 +78,23 @@ public class ShoppingCartFragment extends Fragment {
             }
         });
 
-        UserManager userManager = new UserManager(getActivity());
-
         compareShoppingCartsButton = getView().findViewById(R.id.button_compare_shopping_cart_prices);
 
         compareShoppingCartsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                compareShoppingCartsButton.setEnabled(false);
-                String userId = userManager.getUserId();
-                String[] parameters = new String[cartSize + 1];
-                parameters[0] = userId;
-                for (int i = 0; i < cartSize; i ++) {
-                    parameters[i + 1] = productList.get(i).getEan();
+                if (getPointsUnused() < cartSize) {
+                    showMessage(R.string.text_not_enough_points);
+                } else {
+                    compareShoppingCartsButton.setEnabled(false);
+                    String userId = getUserId();
+                    String[] parameters = new String[cartSize + 1];
+                    parameters[0] = userId;
+                    for (int i = 0; i < cartSize; i ++) {
+                        parameters[i + 1] = productList.get(i).getEan();
+                    }
+                    new ShoppingCartPricesTask().execute(parameters);
                 }
-                new ShoppingCartPricesTask().execute(parameters);
             }
         });
     }
@@ -107,11 +114,10 @@ public class ShoppingCartFragment extends Fragment {
                 paramNames[i] = "ean" + i;
             }
             this.setParamNames(paramNames);
-            /*
+
             if (isRunningInTestEnvironment) {
                 this.setMocked();
             }
-            */
         }
 
         @Override
@@ -122,7 +128,12 @@ public class ShoppingCartFragment extends Fragment {
         @Override
         protected void onPostExecute(String response) {
             parseShoppingCartPricesInfo(response);
-            moveToCompareShoppingCartsFragment();
+            // If the responce contains no price info, show a message, otherwise continue to next fragment
+            if (shoppingCartPrices == null) {
+                showMessage(R.string.text_no_shopping_cart_prices_found);
+            } else {
+                moveToCompareShoppingCartsFragment();
+            }
         }
     }
 
@@ -131,10 +142,12 @@ public class ShoppingCartFragment extends Fragment {
                 ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(shoppingCartPrices));
     }
 
+    /**
+     * Parses the JSON response to create the shoppingCartPrices list and to update user's points.
+     * @param response JSON response from the server
+     */
     public void parseShoppingCartPricesInfo(String response) {
-        if (response == null || response == "") {
-            // Do something
-        } else {
+        if (response != null && !response.equals("")) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray jsonArray = jsonObject.getJSONArray("pricesOfStores");
@@ -168,11 +181,68 @@ public class ShoppingCartFragment extends Fragment {
                 e1.printStackTrace();
             }
         }
+    }
 
-        // If the responce contains no price info, create a fake, so that argument won't be null
-        if (shoppingCartPrices == null) {
-            shoppingCartPrices = new PricesInStore[1];
-            shoppingCartPrices[0] = new PricesInStore("", 0, new PriceListItem[1]);
+    /**
+     * Fetches user's unused points from memory
+     * @return
+     */
+    public int getPointsUnused() {
+        if (isRunningInTestEnvironment) {
+            return 2;
         }
+        return new UserManager(getActivity()).getPointsUnused();
+    }
+
+    /**
+     * Fetches the user id from memory
+     * @return
+     */
+    public String getUserId() {
+        if (isRunningInTestEnvironment) {
+            return "123567890123456789012345678901";
+        }
+        return new UserManager(getActivity()).getUserId();
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
+        }
+    }
+
+    /**
+     * This method is used in tests
+     * @param productList Product list representing the list in database
+     */
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+        this.cartSize = productList.size();
+    }
+
+    public PricesInStore[] getShoppingCartPrices() {
+        return this.shoppingCartPrices;
+    }
+
+    /**
+     * Shows the message in the application. In tests updates the testMessage variable instead.
+     * @param message The R.string integer to be shown
+     */
+    public void showMessage(int message) {
+        if (isRunningInTestEnvironment) {
+            this.testMessage = message;
+        } else {
+            Snackbar.make(getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    public int getTestMessage() {
+        return testMessage;
     }
 }
