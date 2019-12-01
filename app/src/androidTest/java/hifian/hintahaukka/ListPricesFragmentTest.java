@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import hifian.hintahaukka.GUI.ListPricesFragment;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -35,7 +35,7 @@ public class ListPricesFragmentTest {
     boolean test = false;
     String productName = "Omena";
     String cents = "100";
-    PriceListItem[] prices = {new PriceListItem(80, "30326364" , "2019-10-17 19:48:56.9918")};
+    PriceListItem[] prices = {new PriceListItem(80, "30326364" , "2019-10-17 19:48:56.9918", null)};
 
     // mock NavController
     NavController mockNavController;
@@ -59,8 +59,8 @@ public class ListPricesFragmentTest {
 
         // GIVEN - There are two prices added to the product previously
         PriceListItem[] myPrices = new PriceListItem[2];
-        myPrices[0] = new PriceListItem(100, "26197451" , "2019-10-17 19:48:56.9918");
-        myPrices[1] = new PriceListItem(250, "30288487", "2019-10-09 16:55:20.6143");
+        myPrices[0] = new PriceListItem(100, "26197451" , "2019-10-17 19:48:56.9918", null);
+        myPrices[1] = new PriceListItem(250, "30288487", "2019-10-09 16:55:20.6143", null);
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArray("priceList", myPrices);
@@ -141,8 +141,8 @@ public class ListPricesFragmentTest {
     public void priceDifferenceIsShownCorrectly() {
         // GIVEN - There are prices of 1€ added to the product previously
         PriceListItem[] myPrices = new PriceListItem[2];
-        myPrices[0] = new PriceListItem(100, "26197451" , "2019-10-17 19:48:56.9918");
-        myPrices[1] = new PriceListItem(100, "30288487", "2019-10-09 16:55:20.6143");
+        myPrices[0] = new PriceListItem(100, "26197451" , "2019-10-17 19:48:56.9918", null);
+        myPrices[1] = new PriceListItem(100, "30288487", "2019-10-09 16:55:20.6143", null);
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArray("priceList", myPrices);

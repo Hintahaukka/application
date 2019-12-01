@@ -32,7 +32,7 @@ import java.util.Comparator;
 
 import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Service.ListPricesUtils;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;

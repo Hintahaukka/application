@@ -3,7 +3,7 @@ package hifian.hintahaukka;
 
 import org.junit.Test;
 import hifian.hintahaukka.Service.ListPricesUtils;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,8 +13,8 @@ public class ListPricesUtilsTest {
     @Test
     public void calculatingAveragePriceWorksCorrectly() {
         PriceListItem[] priceListItem = new PriceListItem[2];
-        priceListItem[0] = new PriceListItem(100, null, null);
-        priceListItem[1] = new PriceListItem(200, null, null);
+        priceListItem[0] = new PriceListItem(100, null, null, null);
+        priceListItem[1] = new PriceListItem(200, null, null, null);
 
 
         double average = ListPricesUtils.getAveragePrice(priceListItem, 3);
@@ -25,8 +25,8 @@ public class ListPricesUtilsTest {
     @Test
     public void calculatingDifferencePercentageToAveragePriceWorksCorrectly() {
         PriceListItem[] priceListItem = new PriceListItem[2];
-        priceListItem[0] = new PriceListItem(100, null, null);
-        priceListItem[1] = new PriceListItem(200, null, null);
+        priceListItem[0] = new PriceListItem(100, null, null, null);
+        priceListItem[1] = new PriceListItem(200, null, null, null);
 
 
         double average = ListPricesUtils.getAveragePrice(priceListItem, 3);
