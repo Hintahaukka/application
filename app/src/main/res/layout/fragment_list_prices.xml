@@ -35,7 +35,7 @@
         app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
 
     <TextView
-        android:id="@+id/productField"
+        android:id="@+id/eanField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/productField"
+        app:layout_constraintTop_toBottomOf="@+id/eanField"
         tools:text="Punkten" />
 
     <TextView

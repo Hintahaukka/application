@@ -34,7 +34,7 @@ public class ListPricesFragment2 extends Fragment {
     private PriceListItem[] priceList;
     private TextView averagePriceField;
     private TextView myPriceField;
-    private TextView productField;
+    private TextView eanField;
     private TextView productNameField;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
@@ -74,14 +74,16 @@ public class ListPricesFragment2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        //Showing the product info
-        productField = (TextView) getView().findViewById(R.id.productField);
-        productField.setText(ean);
+        /**Showing the product info
+        Looks kinda ugly, decide later whether to show or not
+
+        eanField = (TextView) getView().findViewById(R.id.eanField);
+        eanField.setText(ean);
+         */
 
         //Showing the product name
         productNameField = (TextView) getView().findViewById(R.id.productNameField);
         productNameField.setText(productName);
-
 
         createPriceList();
 

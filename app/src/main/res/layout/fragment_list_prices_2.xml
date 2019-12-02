@@ -35,21 +35,12 @@
         app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
 
     <TextView
-        android:id="@+id/productField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
-        tools:text="6415849725456" />
-
-    <TextView
         android:id="@+id/productNameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/productField"
+        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
         tools:text="ED Original 0,5l" />
 
     <ListView
@@ -59,8 +50,10 @@
         android:layout_gravity="right"
         app:layout_constraintBottom_toTopOf="@+id/guideline_list_prices_bottom"
         app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
         app:layout_constraintTop_toBottomOf="@+id/productNameField"
+        app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/list_prices_item" />
 
 

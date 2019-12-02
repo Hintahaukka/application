@@ -83,7 +83,7 @@ public class ListPricesFragment extends Fragment {
         hideKeyboard(view);
 
             //Showing the product info
-            productField = (TextView) getView().findViewById(R.id.productField);
+            productField = (TextView) getView().findViewById(R.id.eanField);
             productField.setText(productName);
 
             //Showing the store

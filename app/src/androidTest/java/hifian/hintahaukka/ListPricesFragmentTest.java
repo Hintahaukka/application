@@ -134,7 +134,7 @@ public class ListPricesFragmentTest {
         launchListPricesFragment(bundle);
 
         // THEN - Text Coca Cola is shown in product field
-        onView(withId(R.id.productField)).check(matches(withText(containsString("Coca Cola"))));
+        onView(withId(R.id.eanField)).check(matches(withText(containsString("Coca Cola"))));
     }
 
     @Test
