@@ -80,7 +80,7 @@
         tools:listitem="@layout/list_prices_item" />
 
     <TextView
-        android:id="@+id/averagePriceField"
+        android:id="@+id/productNameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -95,7 +95,7 @@
         android:layout_height="125sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/averagePriceField"
+        app:layout_constraintTop_toBottomOf="@+id/productNameField"
         app:scc_angle_start="180"
         app:scc_angle_sweep="180"
         app:scc_halo_size="0dp"

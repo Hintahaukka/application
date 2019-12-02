@@ -55,20 +55,23 @@
         tools:layout="@layout/fragment_list_prices">
         <argument
             android:name="selectedStore"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="scanResult"
             app:argType="string" />
         <argument
             android:name="cents"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
 
             android:name="productName"
             app:argType="string" />
         <argument
             android:name="priceList"
-            app:argType="hifian.hintahaukka.Service.PriceListItem[]" />
+            app:argType="hifian.hintahaukka.Service.PriceListItem[]"
+            app:nullable="true" />
         <argument
             android:name="test"
             app:argType="boolean" />
@@ -105,6 +108,30 @@
         android:id="@+id/shoppingCartFragment"
         android:name="hifian.hintahaukka.GUI.ShoppingCartFragment"
         android:label="@string/shopping_cart"
-        tools:layout="@layout/fragment_shopping_cart" />
+        tools:layout="@layout/fragment_shopping_cart" >
+        <action
+            android:id="@+id/action_shoppingCartFragment_to_listPricesFragment22"
+            app:destination="@id/listPricesFragment2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPricesFragment2"
+        android:name="hifian.hintahaukka.GUI.ListPricesFragment2"
+        android:label="Tuotteen hinnat">
+        <argument
+            android:name="productName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="scanResult"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="priceList"
+            app:argType="hifian.hintahaukka.Service.PriceListItem[]" />
+    </fragment>
 
 </navigation>

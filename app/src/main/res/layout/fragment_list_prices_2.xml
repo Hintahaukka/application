@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GUI.ListPricesFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/spacing_top_and_bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
+
+    <TextView
+        android:id="@+id/productField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_list_prices_top"
+        tools:text="6415849725456" />
+
+    <TextView
+        android:id="@+id/productNameField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/productField"
+        tools:text="ED Original 0,5l" />
+
+    <ListView
+        android:id="@+id/priceListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="right"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_list_prices_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/productNameField"
+        tools:listitem="@layout/list_prices_item" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

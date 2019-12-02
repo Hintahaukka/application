@@ -13,22 +13,14 @@ import java.util.List;
 
 import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.R;
+import hifian.hintahaukka.Service.RecyclerViewClickListener;
 
 public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartListAdapter.ShoppingCartViewHolder>  {
 
-    class ShoppingCartViewHolder extends RecyclerView.ViewHolder {
-        private final TextView productNameView;
-        private final TextView productEanView;
-
-        private ShoppingCartViewHolder(View itemView) {
-            super(itemView);
-            productNameView = itemView.findViewById(R.id.text_product_name);
-            productEanView = itemView.findViewById(R.id.text_product_ean);
-        }
-    }
-
-    private final LayoutInflater inflater;
+    private RecyclerViewClickListener listener;
+    private  LayoutInflater inflater;
     private List<Product> products; //Cached copy of products
+
 
     ShoppingCartListAdapter(Context context) {
         inflater = LayoutInflater.from(context);
@@ -64,5 +56,34 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         } else {
             return 0;
         }
+    }
+
+    public Product getProductAt(int position) {
+        return products.get(position);
+    }
+
+    class ShoppingCartViewHolder extends RecyclerView.ViewHolder {
+        private final TextView productNameView;
+        private final TextView productEanView;
+
+        public ShoppingCartViewHolder(View itemView) {
+            super(itemView);
+            productNameView = itemView.findViewById(R.id.text_product_name);
+            productEanView = itemView.findViewById(R.id.text_product_ean);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onProductClick(products.get(position));
+                    }
+                }
+            });
+        }
+    }
+
+    public void setOnProductClickListener(RecyclerViewClickListener listener) {
+        this.listener = listener;
     }
 }

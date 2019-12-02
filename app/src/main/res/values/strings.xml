@@ -45,4 +45,7 @@
     <string name="rank_6">Kanahaukka</string>
     <string name="rank_7">Jalohaukka</string>
     <string name="rank_8">Hintahaukka</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
