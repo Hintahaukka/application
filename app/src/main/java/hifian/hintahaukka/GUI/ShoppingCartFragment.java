@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +174,7 @@ public class ShoppingCartFragment extends Fragment {
 
                 int pointsTotal = jsonObject.getInt("pointsTotal");
                 int pointsUnused = jsonObject.getInt("pointsUnused");
-                // TODO: Update points (not yet implemented because backend sends wrong points)
+                new UserManager(getContext()).updatePoints(pointsTotal, pointsUnused);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
