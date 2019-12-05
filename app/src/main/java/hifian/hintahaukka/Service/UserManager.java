@@ -2,7 +2,15 @@ package hifian.hintahaukka.Service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.view.View;
+import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+
+import hifian.hintahaukka.GUI.MainActivity;
 import hifian.hintahaukka.R;
 
 /**
@@ -119,6 +127,32 @@ public class UserManager {
         editor.putInt(context.getString(R.string.key_points_total), pointsTotal);
         editor.putInt(context.getString(R.string.key_points_unused), pointsUnused);
         editor.apply();
+        updatePointsToUIView();
+    }
+
+    /**
+     * Update's user's points to the navigation drawer header
+     */
+    public void updatePointsToUIView() {
+        String userName = getUserName();
+        int pointsTotal = getPointsTotal();
+        int pointsUnused = getPointsUnused();
+        String rank = getRank();
+
+        NavigationView navigationView;
+        try {
+            navigationView = ((MainActivity) context).findViewById(R.id.navView);
+        } catch (ClassCastException e) {
+            // In testing environment, casting to MainActivity causes exception.
+            // In that case don't update the points to the UI
+            return;
+        }
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView pointsField = (TextView) headerView.findViewById(R.id.pointsField);
+        SpannableString spanString = new SpannableString(userName + "\nTaso: " + rank + "\nPisteet: "+ pointsTotal + "\nKäytettävissä: " + pointsUnused + "\n");
+        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+        pointsField.setText(spanString);
     }
 
 }

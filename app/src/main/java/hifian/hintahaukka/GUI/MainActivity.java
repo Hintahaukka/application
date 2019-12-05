@@ -2,7 +2,6 @@ package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,6 +13,7 @@ import java.io.InputStream;
 
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Service.UserManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navView = findViewById(R.id.navView);
         NavigationUI.setupWithNavController(navView, navController);
+        new UserManager(this).updatePointsToUIView();
 
 
         this.storeManager = new StoreManager();
