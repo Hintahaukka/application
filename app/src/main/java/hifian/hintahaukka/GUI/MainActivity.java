@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         // Configure top-level destinations that show a menu icon instead of up button on top left corner
         // and set drawer layout for navigation drawer
         appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.storeListFragment, R.id.shoppingCartFragment)
+                new AppBarConfiguration.Builder(R.id.storeListFragment, R.id.shoppingCartFragment, R.id.topPlayersFragment)
                         .setDrawerLayout(findViewById(R.id.drawerLayout))
                         .build();
 
