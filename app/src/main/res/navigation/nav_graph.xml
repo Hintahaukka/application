@@ -124,9 +124,9 @@
             app:argType="hifian.hintahaukka.Domain.PricesInStore[]" />
     </fragment>
     <fragment
-        android:id="@+id/topPlayersFragment"
-        android:name="hifian.hintahaukka.GUI.TopPlayersFragment"
-        android:label="@string/top_players"
-        tools:layout="@layout/fragment_top_players" />
+        android:id="@+id/leaderboardFragment"
+        android:name="hifian.hintahaukka.GUI.LeaderboardFragment"
+        android:label="@string/leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
 
 </navigation>

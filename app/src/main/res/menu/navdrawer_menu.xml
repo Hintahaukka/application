@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_shopping_cart_black_24dp"
         android:title="@string/shopping_cart" />
     <item
-        android:id="@+id/topPlayersFragment"
+        android:id="@+id/leaderboardFragment"
         android:icon="@drawable/ic_format_list_numbered_black_24dp"
-        android:title="@string/top_players" />
+        android:title="@string/leaderboard" />
 </menu>
