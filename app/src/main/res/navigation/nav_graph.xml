@@ -123,5 +123,10 @@
             android:name="shoppingCartPrices"
             app:argType="hifian.hintahaukka.Domain.PricesInStore[]" />
     </fragment>
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="hifian.hintahaukka.GUI.LeaderboardFragment"
+        android:label="@string/leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
 
 </navigation>

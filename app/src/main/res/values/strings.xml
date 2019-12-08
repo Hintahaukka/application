@@ -48,4 +48,8 @@
     <string name="button_compare_shopping_cart_prices">Hae parhaat hinnat</string>
     <string name="text_no_shopping_cart_prices_found">Hintatietoja ei saatavilla</string>
     <string name="text_not_enough_points">Pisteet eivät riitä!</string>
+    <string name="leaderboard">Ahkerimmat hintahaukat</string>
+    <string name="text_position">Sijoitus</string>
+    <string name="text_nickname">Nimimerkki</string>
+    <string name="text_points">Pisteet</string>
 </resources>
