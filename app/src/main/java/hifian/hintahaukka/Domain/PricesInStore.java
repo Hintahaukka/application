@@ -26,6 +26,7 @@ public class PricesInStore implements Parcelable {
     }
 
     public PriceListItem[] getPrices() {
+
         return prices;
     }
 

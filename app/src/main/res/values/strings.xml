@@ -48,4 +48,7 @@
     <string name="button_compare_shopping_cart_prices">Hae parhaat hinnat</string>
     <string name="text_no_shopping_cart_prices_found">Hintatietoja ei saatavilla</string>
     <string name="text_not_enough_points">Pisteet eivät riitä!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

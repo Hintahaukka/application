@@ -63,7 +63,7 @@ public class CompareShoppingCartsFragmentTest {
 
         // THEN - Both total prices are listed with store names
         final DataInteraction firstPrice = onData(anything())
-                .inAdapterView(withId(R.id.shoppingCartPriceListView))
+                .inAdapterView(withId(R.id.storePriceListView))
                 .atPosition(0);
 
         firstPrice.onChildView(withText(String.format("%.02f", 250/100.0) + "€"))
@@ -72,7 +72,7 @@ public class CompareShoppingCartsFragmentTest {
                 .check(matches(isDisplayed()));
 
         final DataInteraction secondPrice = onData(anything())
-                .inAdapterView(withId(R.id.shoppingCartPriceListView))
+                .inAdapterView(withId(R.id.storePriceListView))
                 .atPosition(1);
 
         secondPrice.onChildView(withText(String.format("%.02f", 520/100.0) + "€"))
