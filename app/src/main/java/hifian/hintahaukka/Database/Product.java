@@ -1,6 +1,5 @@
 package hifian.hintahaukka.Database;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,16 +7,16 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Products")
 public class Product {
 
-    @NonNull
-    @PrimaryKey
-    private String ean;
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
+    private String ean;
     private String name;
 
 
-    public Product(@NonNull String ean, String name) {
-        this.name = name;
+    public Product(String ean, String name) {
         this.ean = ean;
+        this.name = name;
     }
 
     public String getName() {
