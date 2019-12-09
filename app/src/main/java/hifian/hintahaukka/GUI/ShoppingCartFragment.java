@@ -37,7 +37,6 @@ public class ShoppingCartFragment extends Fragment {
     private String productName;
     private PriceListItem[] prices;
     private String productEan;
-    private String storeId;
     private boolean isRunningInTestEnvironment;
 
     public ShoppingCartFragment() {
@@ -61,12 +60,6 @@ public class ShoppingCartFragment extends Fragment {
         adapter.setOnProductClickListener(new RecyclerViewClickListener() {
             @Override
             public void onProductClick(Product product) {
-                //Toast.makeText(getContext(), product.getName() + "", Toast.LENGTH_LONG).show();
-                /*Navigation.findNavController(getView()).navigate(
-                        ShoppingCartFragmentDirections.actionShoppingCartFragmentToListPricesFragment
-                                (null, product.getEan(), null, product.getName(), new PriceListItem[1], true)
-                );*/
-
                 productEan = product.getEan();
                 productName = product.getName();
                 new ProductInfoTask().execute(product.getEan());

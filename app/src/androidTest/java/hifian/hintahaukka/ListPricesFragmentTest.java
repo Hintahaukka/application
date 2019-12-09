@@ -134,7 +134,7 @@ public class ListPricesFragmentTest {
         launchListPricesFragment(bundle);
 
         // THEN - Text Coca Cola is shown in product field
-        onView(withId(R.id.eanField)).check(matches(withText(containsString("Coca Cola"))));
+        onView(withId(R.id.productField)).check(matches(withText(containsString("Coca Cola"))));
     }
 
     @Test
@@ -158,7 +158,7 @@ public class ListPricesFragmentTest {
         launchListPricesFragment(bundle);
 
         // THEN - The average price shown is 2€
-        onView(withId(R.id.productNameField)).check(matches(withText(containsString("2.0€"))));
+        onView(withId(R.id.averagePriceField)).check(matches(withText(containsString("2.0€"))));
 
         // AND - Current price is shown to be 100% more expensive than average
         onView(withId(R.id.percentageTextField)).check(matches(withText(containsString("100%"))));

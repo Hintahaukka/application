@@ -1,7 +1,5 @@
 package hifian.hintahaukka.GUI;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +14,8 @@ import android.widget.TextView;
 
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Comparator;
 
-import hifian.hintahaukka.Domain.Store;
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.Service.ListPricesUtils;
 import hifian.hintahaukka.Service.PriceListItem;
 import hifian.hintahaukka.Service.StoreManager;
 
@@ -29,19 +24,12 @@ public class ListPricesFragment2 extends Fragment {
 
     private String ean;
     private String productName;
-    private String cents;
-    private String selectedStore;
     private PriceListItem[] priceList;
-    private TextView averagePriceField;
-    private TextView myPriceField;
-    private TextView eanField;
     private TextView productNameField;
     private StoreManager storeManager;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private boolean test;
     private boolean isRunningInTestEnvironment;
-    private double averagePrice;
-    private int differencePercentage;
 
 
 
@@ -73,16 +61,8 @@ public class ListPricesFragment2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        /**Showing the product info
-        Looks kinda ugly, decide later whether to show or not
-
-        eanField = (TextView) getView().findViewById(R.id.eanField);
-        eanField.setText(ean);
-         */
-
         //Showing the product name
-        productNameField = (TextView) getView().findViewById(R.id.productNameField);
+        productNameField = (TextView) getView().findViewById(R.id.averagePriceField);
         productNameField.setText(productName);
 
         createPriceList();

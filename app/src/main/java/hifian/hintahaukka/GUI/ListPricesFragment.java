@@ -83,7 +83,7 @@ public class ListPricesFragment extends Fragment {
         hideKeyboard(view);
 
             //Showing the product info
-            productField = (TextView) getView().findViewById(R.id.eanField);
+            productField = (TextView) getView().findViewById(R.id.productField);
             productField.setText(productName);
 
             //Showing the store
@@ -102,7 +102,7 @@ public class ListPricesFragment extends Fragment {
             myPriceField.setText("Hinta: " + formattedPrice + "€");
 
             // Show average price
-            averagePriceField = (TextView) getView().findViewById(R.id.productNameField);
+            averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
             averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
             averagePriceField.setText("Keskihinta: " + averagePrice + "€");
 

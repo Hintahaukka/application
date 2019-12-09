@@ -35,7 +35,7 @@
         app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
 
     <TextView
-        android:id="@+id/productNameField"
+        android:id="@+id/averagePriceField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/productNameField"
+        app:layout_constraintTop_toBottomOf="@+id/averagePriceField"
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/list_prices_item" />
 
