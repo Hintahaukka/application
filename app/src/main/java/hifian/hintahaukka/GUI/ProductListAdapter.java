@@ -70,6 +70,7 @@ public class ProductListAdapter extends ArrayAdapter<PriceListItem> {
         if (date.length() != 0) {
             return (date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
         }
-        return null;
+        return getContext().getString(R.string.text_price_is_average);
+
     }
 }

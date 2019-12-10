@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Rodeo Energy Drink 0,5L"
-        android:textSize="30" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/text_price"

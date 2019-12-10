@@ -39,7 +39,7 @@ public class PriceListAdapter extends ArrayAdapter<PriceListItem> {
 
         View view = inflater.inflate(R.layout.list_prices_item, null);
         TextView price = view.findViewById(R.id.text_price);
-        TextView shop = view.findViewById(R.id.text_price);
+        TextView shop = view.findViewById(R.id.text_shop);
         TextView timestamp = view.findViewById(R.id.text_timestamp);
 
         PriceListItem item = priceList.get(position);
