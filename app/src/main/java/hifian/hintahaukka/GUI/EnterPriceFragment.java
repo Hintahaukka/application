@@ -374,7 +374,7 @@ public class EnterPriceFragment extends Fragment {
         UserManager userManager = new UserManager(this.getActivity());
         int total = userManager.getPointsTotal();
         int unused = userManager.getPointsUnused();
-        updatePoints(total + 5, unused + 5);
+        updatePoints(total + pointsToAdd, unused + pointsToAdd);
     }
 
     /**
