@@ -10,16 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import hifian.hintahaukka.Domain.User;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
+import hifian.hintahaukka.Service.LeaderboardUtils;
 
 
 public class LeaderboardFragment extends Fragment {
@@ -47,32 +43,10 @@ public class LeaderboardFragment extends Fragment {
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
 
-            try {
-                List<User> leaderboard = new ArrayList<>();
-                JSONArray array = new JSONArray(response);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject userObject = array.getJSONObject(i);
-
-                    // Ignore possible users without a nickname
-                    String nickname;
-                    try {
-                        nickname = userObject.getString("nickname");
-                    } catch (Exception e) {
-                        continue;
-                    }
-
-                    int points = userObject.getInt("points");
-                    leaderboard.add(new User(nickname, points));
-                }
-
-                // Create leaderboard ListView with the fetched leaderboard data
-                LeaderboardListAdapter adapter = new LeaderboardListAdapter(getContext(), R.layout.leaderboard_item, leaderboard);
-                final ListView listView = getView().findViewById(R.id.list_leaderboard);
-                listView.setAdapter(adapter);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            List<User> leaderboard = LeaderboardUtils.parseLeaderboardFromJSONRespose(response);
+            LeaderboardListAdapter adapter = new LeaderboardListAdapter(getContext(), R.layout.leaderboard_item, leaderboard);
+            final ListView listView = getView().findViewById(R.id.list_leaderboard);
+            listView.setAdapter(adapter);
         }
     }
 

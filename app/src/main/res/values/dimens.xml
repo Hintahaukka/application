@@ -7,4 +7,5 @@
     <dimen name="drawer_header_margin">40sp</dimen>
     <dimen name="drawer_header_logo_size">140sp</dimen>
     <dimen name="text_medium">24sp</dimen>
+    <dimen name="margin_scan_button">48dp</dimen>
 </resources>
