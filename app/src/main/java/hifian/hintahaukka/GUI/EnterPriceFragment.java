@@ -368,7 +368,7 @@ public class EnterPriceFragment extends Fragment {
 
     /**
      * Adds points and updates them to memory
-     * @param pointsToAdd
+     * @param pointsToAdd number of points to be added to total and unused points
      */
     private void addPoints(int pointsToAdd) {
         UserManager userManager = new UserManager(this.getActivity());
