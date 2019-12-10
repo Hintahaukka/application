@@ -52,4 +52,5 @@
     <string name="text_position">Sijoitus</string>
     <string name="text_nickname">Nimimerkki</string>
     <string name="text_points">Pisteet</string>
+    <string name="store_leaderboard_title">Ahkerimmat hintahaukat kaupassa</string>
 </resources>

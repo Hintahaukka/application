@@ -15,10 +15,7 @@ import androidx.navigation.Navigation;
 
 import java.io.InputStream;
 
-import hifian.hintahaukka.GUI.MainActivity;
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.GUI.ScanButtonFragmentArgs;
-import hifian.hintahaukka.GUI.ScanButtonFragmentDirections;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
 
@@ -58,7 +55,7 @@ public class ScanButtonFragment extends Fragment {
         this.createStoreManager();
         TextView showStore = getView().findViewById(R.id.showStore);
         Store store = storeManager.getStore(selectedStore);
-        showStore.setText("Valittu kauppa: " + store.getName());
+        showStore.setText(getString(R.string.store_leaderboard_title) + " " + store.getName());
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
