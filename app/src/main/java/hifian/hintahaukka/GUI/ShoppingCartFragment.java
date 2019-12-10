@@ -3,10 +3,12 @@ package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +57,9 @@ public class ShoppingCartFragment extends Fragment {
         ShoppingCartListAdapter adapter = new ShoppingCartListAdapter(getContext());
         shoppingCartList.setAdapter(adapter);
         shoppingCartList.setLayoutManager(new LinearLayoutManager(getContext()));
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(shoppingCartList);
 
         viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
 
@@ -243,4 +248,44 @@ public class ShoppingCartFragment extends Fragment {
         return testMessage;
     }
 
+    /**
+     * Deletes the product from te database. Shows a snackbar that allows to cancel the deletion.
+     * @param product Product to delete
+     */
+    public void deleteProduct(Product product) {
+        ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
+        viewModel.delete(product);
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.product_deleted_from_shopping_cart, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.undo_delete, v -> viewModel.insert(product));
+        snackbar.show();
+    }
+
+    /**
+     * Handles what happens when user swipes a product in the shopping cart product list
+     */
+    private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+
+        private ShoppingCartListAdapter mAdapter;
+
+        public SwipeToDeleteCallback(ShoppingCartListAdapter adapter) {
+            // Handle only swipes to left
+            super(0,ItemTouchHelper.LEFT);
+            mAdapter = adapter;
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            // This method is not needed
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            // Delete the product that was swiped
+            int position = viewHolder.getAdapterPosition();
+            Product product = mAdapter.getProduct(position);
+            deleteProduct(product);
+        }
+
+    }
 }

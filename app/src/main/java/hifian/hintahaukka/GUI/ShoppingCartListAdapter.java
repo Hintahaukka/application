@@ -1,5 +1,6 @@
 package hifian.hintahaukka.GUI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -64,5 +68,9 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         } else {
             return 0;
         }
+    }
+
+    public Product getProduct(int position) {
+        return products.get(position);
     }
 }
