@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONArray;
@@ -52,8 +51,7 @@ public class ShoppingCartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
         checkIfIsRunningInTestEnvironment();
-        //RecyclerView shoppingCartList = view.findViewById(R.id.shopping_cart_list);
-        //return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        test = true;
         return view;
     }
 
