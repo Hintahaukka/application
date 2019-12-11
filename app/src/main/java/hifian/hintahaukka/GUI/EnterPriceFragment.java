@@ -106,7 +106,7 @@ public class EnterPriceFragment extends Fragment {
         } else {
             storeField.setText("Tuntematon kauppa");
         }
-        TextView eanField = (TextView) getView().findViewById(R.id.eanField);
+        TextView eanField = (TextView) getView().findViewById(R.id.productField);
         eanField.setText("Viivakoodi: " + scanResult);
 
         sendPriceButton.setOnClickListener(new View.OnClickListener() {

@@ -43,7 +43,7 @@
         tools:text="Kauppa: Punkten" />
 
     <TextView
-        android:id="@+id/eanField"
+        android:id="@+id/productField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/guideline_enter_price_left"
-        app:layout_constraintTop_toBottomOf="@+id/eanField"
+        app:layout_constraintTop_toBottomOf="@+id/productField"
         tools:text="Haetaan tuotenimeä..." />
 
     <TextView
