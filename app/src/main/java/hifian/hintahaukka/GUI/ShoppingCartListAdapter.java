@@ -87,7 +87,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     public void setOnProductClickListener(RecyclerViewClickListener listener) {
         this.listener = listener;
     }
-}
+
 
     public Product getProduct(int position) {
         return products.get(position);
