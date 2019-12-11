@@ -58,6 +58,7 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         }
     }
 
+
     public Product getProductAt(int position) {
         return products.get(position);
     }
@@ -87,3 +88,9 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         this.listener = listener;
     }
 }
+
+    public Product getProduct(int position) {
+        return products.get(position);
+    }
+}
+

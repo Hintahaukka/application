@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.CreateUsernameFragment">
+    tools:context=".GUI.CreateUsernameActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/guideline_create_username_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="@dimen/spacing_top_and_bottom" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
+        android:id="@+id/guideline_create_username_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/spacing_sides" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline_create_username_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/spacing_sides" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
+        android:id="@+id/guideline_create_username_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -36,34 +36,37 @@
 
     <Button
         android:id="@+id/sendUsernameButton"
-        android:layout_width="83dp"
-        android:layout_height="43dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/button_send"
         app:layout_constraintBottom_toBottomOf="@+id/usernameField"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.746"
-        app:layout_constraintStart_toEndOf="@+id/usernameField"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_create_username_right"
         app:layout_constraintTop_toTopOf="@+id/usernameField"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/usernameField"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/text_enter_username"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/firstTimeRegisterFied" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline_create_username_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/sendUsernameButton"
+        app:layout_constraintStart_toStartOf="@+id/guideline_create_username_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_create_username_top" />
 
     <TextView
-        android:id="@+id/firstTimeRegisterFied"
-        android:layout_width="264dp"
-        android:layout_height="84dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        android:id="@+id/firstTimeRegisterField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/first_time_register_text"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintBottom_toTopOf="@+id/usernameField"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_create_username_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_create_username_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_create_username_top" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

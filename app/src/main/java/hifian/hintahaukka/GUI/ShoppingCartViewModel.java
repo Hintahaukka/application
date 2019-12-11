@@ -29,4 +29,6 @@ public class ShoppingCartViewModel extends AndroidViewModel {
     public void insert(Product product) {
         repository.insert(product);
     }
+
+    public void delete(Product product) { repository.delete(product); }
 }
