@@ -22,7 +22,6 @@ public class CreateUsernameActivity extends AppCompatActivity {
     private TextView usernameField;
     private Button sendUsernameButton;
     private String nickname;
-    private TextView firstTimeRegisterFied;
     private String userId;
     private String[] parameters;
 
@@ -36,8 +35,6 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         usernameField = (TextView) findViewById(R.id.usernameField);
         sendUsernameButton = (Button) findViewById(R.id.sendUsernameButton);
-        firstTimeRegisterFied = (TextView) findViewById(R.id.firstTimeRegisterFied);
-        firstTimeRegisterFied.setText(R.string.first_time_register_text);
         new GetNewIdTask().execute();
 
         sendUsernameButton.setOnClickListener(new View.OnClickListener() {
