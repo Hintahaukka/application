@@ -65,4 +65,8 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
             return 0;
         }
     }
+
+    public Product getProduct(int position) {
+        return products.get(position);
+    }
 }
