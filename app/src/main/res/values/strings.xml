@@ -23,7 +23,7 @@
     <string name="key_user_name">key_user_name</string>
     <string name="key_points_total">key_points_total</string>
     <string name="key_points_unused">key_points_unused</string>
-    <string name="first_time_register_text">Tervetuloa Hintahaukka sovellukseen\nSyötä nimimerkki jatkaaksesi</string>
+    <string name="first_time_register_text">Tervetuloa Hintahaukka-sovellukseen! Syötä nimimerkki jatkaaksesi:</string>
     <string name="preference_file_key">hifian_hintahaukka_preference_file_key</string>
     <string name="text_other_prices">Muut hinnat:</string>
     <string name="text_enter_name">Syötä nimi:</string>
