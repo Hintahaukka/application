@@ -1,11 +1,13 @@
 package hifian.hintahaukka.GUI;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,13 +59,17 @@ public class PriceListAdapter extends ArrayAdapter<PriceListItem> {
     }
 
     private String parseStore(PriceListItem item) {
-        Store s = storeManager.getStore(item.getStoreId());
+        Log.i("virhe", "Item.storeId: " + item.getStoreId());
+        if (item.getStoreId() != null) {
+            Store s = storeManager.getStore(item.getStoreId());
 
-        if (s != null && s.getName() != null) {
-            return s.getName();
-        } else {
-            return "Tuntematon kauppa";
+            if (s != null && s.getName() != null) {
+                return s.getName();
+            } else {
+                return "Tuntematon kauppa";
+            }
         }
+        return "Tuntematon kauppa";
     }
 
     private String parseTimestamp(PriceListItem item) {

@@ -37,16 +37,13 @@ public class EnterPriceFragment extends Fragment {
     private boolean test;
     private String cents;
 
-    private String storeName;
     private String productName;
     private TextView nameTextView;
     private Button sendPriceButton;
     private TextView enterEuros;
     private TextView enterCents;
-    private PriceListItem priceListItem;
     private PriceListItem[] prices;
     private StoreManager storeManager;
-    private String[] parameterNames;
     private String[] parameters;
     private TextView enterProductNameField;
     private Button sendProductNameButton;
@@ -106,7 +103,7 @@ public class EnterPriceFragment extends Fragment {
         } else {
             storeField.setText("Tuntematon kauppa");
         }
-        TextView eanField = (TextView) getView().findViewById(R.id.eanField);
+        TextView eanField = (TextView) getView().findViewById(R.id.productField);
         eanField.setText("Viivakoodi: " + scanResult);
 
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +196,7 @@ public class EnterPriceFragment extends Fragment {
                 }
             });
         }
-        // If the responce contains no price list, create a fake, so that argument won't be null
+        // If the response contains no price list, create a fake, so that argument won't be null
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
         if (prices == null) {
             prices = new PriceListItem[1];
@@ -341,6 +338,9 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            if (response.equals("success")) {
+                addPoints(5);
+            }
         }
     }
 
@@ -364,6 +364,17 @@ public class EnterPriceFragment extends Fragment {
     private void updatePoints(int pointsTotal, int pointsUnused) {
         UserManager userManager = new UserManager(this.getActivity());
         userManager.updatePoints(pointsTotal, pointsUnused);
+    }
+
+    /**
+     * Adds points and updates them to memory
+     * @param pointsToAdd number of points to be added to total and unused points
+     */
+    private void addPoints(int pointsToAdd) {
+        UserManager userManager = new UserManager(this.getActivity());
+        int total = userManager.getPointsTotal();
+        int unused = userManager.getPointsUnused();
+        updatePoints(total + pointsToAdd, unused + pointsToAdd);
     }
 
     /**

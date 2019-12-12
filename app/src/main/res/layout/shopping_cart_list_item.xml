@@ -16,5 +16,6 @@
         android:id="@+id/text_product_ean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         tools:text="6430043013219" />
 </LinearLayout>
