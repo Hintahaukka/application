@@ -25,11 +25,11 @@ import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
 
 public class ScanButtonFragment extends Fragment {
-    private boolean test;
+    private boolean test = true;
     private String selectedStore;
     private StoreManager storeManager;
     private boolean isRunningInTestEnvironment;
-
+    private CheckBox databaseCheckBox;
     public ScanButtonFragment() {
         // Required empty public constructor
     }
@@ -62,15 +62,16 @@ public class ScanButtonFragment extends Fragment {
         Store store = storeManager.getStore(selectedStore);
         showStore.setText(getString(R.string.store_leaderboard_title) + " " + store.getName());
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
+        databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
+        databaseCheckBox.setVisibility(View.INVISIBLE);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CheckBox databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
-                if (databaseCheckBox.isChecked()) {
+                /*if (databaseCheckBox.isChecked()) {
                     test = true;
                 } else {
                     test = false;
-                }
+                }*/
 
                 Navigation.findNavController(getView()).navigate(
                         ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(selectedStore, test));
@@ -87,8 +88,8 @@ public class ScanButtonFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        CheckBox databaseCheckBox = getView().findViewById(R.id.checkbox_test_database);
-        test = databaseCheckBox.isChecked();
+        //CheckBox databaseCheckBox = getView().findViewById(R.id.checkbox_test_database);
+        //test = databaseCheckBox.isChecked();
         new GetStoreLeaderboardTask().execute(new String[]{selectedStore});
     }
 

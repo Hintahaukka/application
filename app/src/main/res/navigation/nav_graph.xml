@@ -128,6 +128,23 @@
         <argument
             android:name="shoppingCartPrices"
             app:argType="hifian.hintahaukka.Domain.PricesInStore[]" />
+        <action
+            android:id="@+id/action_compareShoppingCartsFragment_to_pricesInSelectedStoreFragment"
+            app:destination="@id/pricesInSelectedStoreFragment" />
+        <argument
+            android:name="eanWithNames"
+            app:argType="hifian.hintahaukka.Domain.ParcelableHashMap" />
+    </fragment>
+    <fragment
+        android:id="@+id/pricesInSelectedStoreFragment"
+        android:name="hifian.hintahaukka.GUI.PricesInSelectedStoreFragment"
+        android:label="Hinnat valitussa kaupassa">
+        <argument
+            android:name="pricesInSelectedStore"
+            app:argType="hifian.hintahaukka.Domain.PriceListItem[]" />
+        <argument
+            android:name="eanWithNames"
+            app:argType="hifian.hintahaukka.Domain.ParcelableHashMap" />
     </fragment>
     <fragment
         android:id="@+id/leaderboardFragment"

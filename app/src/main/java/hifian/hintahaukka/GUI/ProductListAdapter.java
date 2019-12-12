@@ -1,37 +1,34 @@
 package hifian.hintahaukka.GUI;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.List;
 
-import hifian.hintahaukka.Domain.Store;
-import hifian.hintahaukka.R;
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PriceListItem;
+import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 
-public class PriceListAdapter extends ArrayAdapter<PriceListItem> {
-
+public class ProductListAdapter extends ArrayAdapter<PriceListItem> {
     Context context;
     int resource;
     List<PriceListItem> priceList;
     StoreManager storeManager;
+    ParcelableHashMap<String, String> eanWithNames;
 
-    public PriceListAdapter(Context context, int resource, List<PriceListItem> priceList, StoreManager storeManager) {
+    public ProductListAdapter(Context context, int resource, List<PriceListItem> priceList, StoreManager storeManager, ParcelableHashMap<String, String> eanWithNames) {
         super(context, resource, priceList);
         this.context = context;
         this.resource = resource;
         this.priceList = priceList;
         this.storeManager = storeManager;
+        this.eanWithNames = eanWithNames;
     }
 
     @NonNull
@@ -39,15 +36,15 @@ public class PriceListAdapter extends ArrayAdapter<PriceListItem> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.list_prices_item, null);
+        View view = inflater.inflate(R.layout.list_products_in_store, null);
         TextView price = view.findViewById(R.id.text_price);
-        TextView shop = view.findViewById(R.id.text_shop);
+        TextView text_product_name = view.findViewById(R.id.text_product_name);
         TextView timestamp = view.findViewById(R.id.text_timestamp);
 
         PriceListItem item = priceList.get(position);
 
         price.setText(parsePrice(item));
-        shop.setText(parseStore(item));
+        text_product_name.setText(eanWithNames.get(item.getEan()));
         timestamp.setText(parseTimestamp(item));
 
         return view;
@@ -58,22 +55,12 @@ public class PriceListAdapter extends ArrayAdapter<PriceListItem> {
         return String.format("%.02f", cents) + "€";
     }
 
-    private String parseStore(PriceListItem item) {
-        Log.i("virhe", "Item.storeId: " + item.getStoreId());
-        if (item.getStoreId() != null) {
-            Store s = storeManager.getStore(item.getStoreId());
-
-            if (s != null && s.getName() != null) {
-                return s.getName();
-            } else {
-                return "Tuntematon kauppa";
-            }
-        }
-        return "Tuntematon kauppa";
-    }
-
     private String parseTimestamp(PriceListItem item) {
         String date = item.getTimestamp();
+        if (date.length() != 0) {
             return (date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
+        }
+        return getContext().getString(R.string.text_price_is_average);
+
     }
 }

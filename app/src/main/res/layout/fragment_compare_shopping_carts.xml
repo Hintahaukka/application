@@ -35,7 +35,7 @@
         app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
 
     <ListView
-        android:id="@+id/shoppingCartPriceListView"
+        android:id="@+id/storePriceListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline_compare_shopping_carts_bottom"

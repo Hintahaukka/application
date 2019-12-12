@@ -7,18 +7,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
+import hifian.hintahaukka.Domain.ParcelableHashMap;
+import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Domain.PricesInStore;
-import hifian.hintahaukka.Domain.Store;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 
@@ -26,9 +31,12 @@ import hifian.hintahaukka.Service.StoreManager;
 public class CompareShoppingCartsFragment extends Fragment {
 
     private PricesInStore[] pricesInStores;
+    private PriceListItem[] pricesInSelectedStore;
     private StoreManager storeManager;
     private boolean isRunningInTestEnvironment;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
+    private PricesInStore pricesInStore;
+    public ParcelableHashMap<String, String> eanWithNames;
 
     public CompareShoppingCartsFragment() {
         // Required empty public constructor
@@ -38,9 +46,8 @@ public class CompareShoppingCartsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CompareShoppingCartsFragmentArgs args = CompareShoppingCartsFragmentArgs.fromBundle(getArguments());
-
         pricesInStores = args.getShoppingCartPrices();
-
+        eanWithNames = args.getEanWithNames();
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
     }
@@ -63,8 +70,18 @@ public class CompareShoppingCartsFragment extends Fragment {
         ShoppingCartPriceListAdapter adapter = new ShoppingCartPriceListAdapter(
                 this.getContext(), R.layout.list_prices_item, Arrays.asList(pricesInStores), storeManager);
 
-        final ListView listView = getView().findViewById(R.id.shoppingCartPriceListView);
+        final ListView listView = getView().findViewById(R.id.storePriceListView);
         listView.setAdapter(adapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                pricesInStore = (PricesInStore) adapterView.getItemAtPosition(i);
+                moveToTheNextFragment(pricesInStore);
+
+            }
+        });
     }
 
 
@@ -98,5 +115,10 @@ public class CompareShoppingCartsFragment extends Fragment {
         }
     }
 
-
+    private void moveToTheNextFragment(PricesInStore pricesInStore) {
+        pricesInSelectedStore = pricesInStore.getPrices();
+        Navigation.findNavController(getView()).navigate(
+                CompareShoppingCartsFragmentDirections.actionCompareShoppingCartsFragmentToPricesInSelectedStoreFragment(pricesInSelectedStore, eanWithNames)
+        );
+    }
 }
