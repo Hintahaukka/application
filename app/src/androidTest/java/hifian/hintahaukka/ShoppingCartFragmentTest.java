@@ -68,7 +68,7 @@ public class ShoppingCartFragmentTest {
 
         verify(mockNavController).navigate(
                 ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(
-                        prices));
+                        prices, null));
     }
 
     @Test
