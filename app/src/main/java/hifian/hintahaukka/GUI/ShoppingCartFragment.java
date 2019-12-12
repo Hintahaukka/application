@@ -252,4 +252,7 @@ public class ShoppingCartFragment extends Fragment {
         return testMessage;
     }
 
+    public ParcelableHashMap getEanWithNames() {
+        return this.eanWithNames;
+    }
 }

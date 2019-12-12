@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hifian.hintahaukka.Database.Product;
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.GUI.ShoppingCartFragment;
 import hifian.hintahaukka.GUI.ShoppingCartFragmentDirections;
@@ -68,7 +69,7 @@ public class ShoppingCartFragmentTest {
 
         verify(mockNavController).navigate(
                 ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(
-                        prices, null));
+                        prices, thisFragment.getEanWithNames()));
     }
 
     @Test

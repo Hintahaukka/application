@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.GUI.CompareShoppingCartsFragment;
 import hifian.hintahaukka.Domain.PriceListItem;
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -55,8 +56,14 @@ public class CompareShoppingCartsFragmentTest {
         pricesInStores[0] = item1;
         pricesInStores[1] = item2;
 
+        ParcelableHashMap eanWithNames = new ParcelableHashMap();
+
+
+
         Bundle bundle = new Bundle();
         bundle.putParcelableArray("shoppingCartPrices", pricesInStores);
+
+        bundle.putParcelable("eanWithNames", eanWithNames);
 
         // WHEN - On the compare shopping carts fragment screen
         launchCompareShoppingCartsFragment(bundle);
