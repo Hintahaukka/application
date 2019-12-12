@@ -104,7 +104,6 @@ public class StoreListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.checkIfIsRunningInTestEnvironment();
         updateLocationAndStoreList();
-        showUserInfo();
 
         getView().findViewById(R.id.button_update_location).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,27 +249,6 @@ public class StoreListFragment extends Fragment {
         fusedLocationClient.requestLocationUpdates(locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
-    }
-
-    /**
-     * Shows user info in the menu
-     */
-    public void showUserInfo() {
-        if (isRunningInTestEnvironment) {
-            return;
-        }
-        UserManager userManager = new UserManager(this.getActivity());
-        String userName = userManager.getUserName();
-        int pointsTotal = userManager.getPointsTotal();
-        int pointsUnused = userManager.getPointsUnused();
-        String rank = userManager.getRank();
-
-        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
-        View headerView = navigationView.getHeaderView(0);
-        TextView pointsField = (TextView) headerView.findViewById(R.id.pointsField);
-        SpannableString spanString = new SpannableString(userName + "\nTaso: " + rank + "\nPisteet: "+ pointsTotal + "\nKäytettävissä: " + pointsUnused + "\n");
-        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
-        pointsField.setText(spanString);
     }
     
 }

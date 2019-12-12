@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.io.InputStream;
+import java.util.List;
 
-import hifian.hintahaukka.GUI.MainActivity;
+import hifian.hintahaukka.Domain.User;
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.GUI.ScanButtonFragmentArgs;
-import hifian.hintahaukka.GUI.ScanButtonFragmentDirections;
+import hifian.hintahaukka.Service.HttpPostTask;
+import hifian.hintahaukka.Service.LeaderboardUtils;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
 
@@ -58,7 +60,7 @@ public class ScanButtonFragment extends Fragment {
         this.createStoreManager();
         TextView showStore = getView().findViewById(R.id.showStore);
         Store store = storeManager.getStore(selectedStore);
-        showStore.setText("Valittu kauppa: " + store.getName());
+        showStore.setText(getString(R.string.store_leaderboard_title) + " " + store.getName());
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
         databaseCheckBox.setVisibility(View.INVISIBLE);
@@ -75,6 +77,20 @@ public class ScanButtonFragment extends Fragment {
                         ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(selectedStore, test));
                 }
         });
+
+        CheckBox databaseCheckBox = getView().findViewById(R.id.checkbox_test_database);
+        databaseCheckBox.setOnClickListener(checkBoxView -> {
+            test = databaseCheckBox.isChecked();
+            new GetStoreLeaderboardTask().execute(new String[]{selectedStore});
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //CheckBox databaseCheckBox = getView().findViewById(R.id.checkbox_test_database);
+        //test = databaseCheckBox.isChecked();
+        new GetStoreLeaderboardTask().execute(new String[]{selectedStore});
     }
 
     /**
@@ -104,6 +120,31 @@ public class ScanButtonFragment extends Fragment {
             this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
         } catch (ClassCastException e) {
             this.isRunningInTestEnvironment = true;
+        }
+    }
+
+    private class GetStoreLeaderboardTask extends HttpPostTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if(test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/getLeaderboardForStore");
+            } else {
+                this.setUrlString("https://hintahaukka.herokuapp.com/getLeaderboardForStore");
+            }
+
+            this.setParamNames(new String[]{"storeId"});
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+
+            List<User> leaderboard = LeaderboardUtils.parseLeaderboardFromJSONRespose(response);
+            LeaderboardListAdapter adapter = new LeaderboardListAdapter(getContext(), R.layout.leaderboard_item, leaderboard);
+            ListView listView = getView().findViewById(R.id.list_store_leaderboard);
+            listView.setAdapter(adapter);
         }
     }
 

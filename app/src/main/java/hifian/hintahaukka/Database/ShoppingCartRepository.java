@@ -26,4 +26,10 @@ public class ShoppingCartRepository {
             shoppingCartDao.insert(product);
         });
     }
+
+    public void delete(Product product) {
+        ShoppingCartDatabase.databaseWriteExecutor.execute(() -> {
+            shoppingCartDao.delete(product);
+        });
+    }
 }

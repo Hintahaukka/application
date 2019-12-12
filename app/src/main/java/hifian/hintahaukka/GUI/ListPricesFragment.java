@@ -82,38 +82,39 @@ public class ListPricesFragment extends Fragment {
         // Hide the keyboard if it wasn't closed
         hideKeyboard(view);
 
-        //Showing the product info
-        productField = (TextView) getView().findViewById(R.id.productField);
-        productField.setText(productName);
+            //Showing the product info
+            productField = (TextView) getView().findViewById(R.id.productField);
+            productField.setText(productName);
 
-        //Showing the store
-        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
-        Store s = storeManager.getStore(selectedStore);
-        if (s!= null && s.getName() != null) {
-            storeField.setText(s.getName());
-        } else {
-            storeField.setText("Tuntematon kauppa");
-        }
+            //Showing the store
+            TextView storeField = (TextView) getView().findViewById(R.id.storeField);
+            Store s = storeManager.getStore(selectedStore);
+            if (s != null && s.getName() != null) {
+                storeField.setText(s.getName());
+            } else {
+                storeField.setText("Tuntematon kauppa");
+            }
 
-        // Showing the  price added by the user
-        double myPrice = Integer.parseInt(this.cents) / 100.0;
-        String formattedPrice = String.format("%.02f", myPrice);
-        myPriceField = getView().findViewById(R.id.myPriceField);
-        myPriceField.setText("Hinta: " + formattedPrice + "€");
+            // Showing the  price added by the user
+            double myPrice = Integer.parseInt(this.cents) / 100.0;
+            String formattedPrice = String.format("%.02f", myPrice);
+            myPriceField = getView().findViewById(R.id.myPriceField);
+            myPriceField.setText("Hinta: " + formattedPrice + "€");
 
-        // Show average price
-        averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
-        averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
-        averagePriceField.setText("Keskihinta: " + averagePrice + "€");
+            // Show average price
+            averagePriceField = (TextView) getView().findViewById(R.id.productNameField);
+            averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
+            averagePriceField.setText("Keskihinta: " + averagePrice + "€");
 
-        // Create the price cauge
-        createPriceCauge();
+            // Create the price cauge
+            createPriceCauge();
 
-        //Create the price list
-        createPriceList();
+            //Create the price list
+            createPriceList();
 
-        // Set up "add to cart" -button
-        setUpAddToCartButton();
+            // Set up "add to cart" -button
+            setUpAddToCartButton();
+
     }
 
     private void createPriceCauge() {

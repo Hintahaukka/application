@@ -70,6 +70,9 @@ public class ShoppingCartFragmentTest {
         verify(mockNavController).navigate(
                 ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(
                         prices, thisFragment.getEanWithNames()));
+
+
+
     }
 
     @Test
