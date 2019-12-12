@@ -48,7 +48,7 @@ public class PricesInSelectedStoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prices_in_selected_store, container, false);
+        return inflater.inflate(R.layout.fragment_compare_shopping_carts, container, false);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PricesInSelectedStoreFragment extends Fragment {
         // TODO: Handle empty list!
 
         ProductListAdapter adapter = new ProductListAdapter(
-                this.getContext(), R.layout.fragment_prices_in_selected_store, Arrays.asList(pricesInSelectedStore), storeManager, eanWithNames);
+                this.getContext(), R.layout.fragment_compare_shopping_carts, Arrays.asList(pricesInSelectedStore), storeManager, eanWithNames);
 
         final ListView listView = getView().findViewById(R.id.storePriceListView);
         listView.setAdapter(adapter);
