@@ -13,16 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
+import android.widget.Button;;
 import com.google.android.material.snackbar.Snackbar;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Domain.PricesInStore;
@@ -40,6 +38,7 @@ public class ShoppingCartFragment extends Fragment {
     private PricesInStore[] shoppingCartPrices;
     private boolean isRunningInTestEnvironment;
     private int testMessage;
+    public ParcelableHashMap<String, String> eanWithNames;
 
 
     public ShoppingCartFragment() {
@@ -71,6 +70,7 @@ public class ShoppingCartFragment extends Fragment {
                 }
             }
         });
+
 
         compareShoppingCartsButton = view.findViewById(R.id.button_compare_shopping_cart_prices);
 
@@ -135,8 +135,17 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public void moveToCompareShoppingCartsFragment() {
+        /*
+        Put eans and names to hashmap to retrieve them for later use
+        */
+        eanWithNames = new ParcelableHashMap<>();
+
+        for (int i = 0; i < cartSize; i++) {
+            eanWithNames.put(productList.get(i).getEan(), productList.get(i).getName());
+            eanWithNames.put(productList.get(i).getEan(), productList.get(i).getName());
+        }
         Navigation.findNavController(getView()).navigate(
-                ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(shoppingCartPrices));
+                ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(shoppingCartPrices, eanWithNames));
     }
 
     /**

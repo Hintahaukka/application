@@ -16,6 +16,7 @@ import android.widget.ListView;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Domain.Store;
 import hifian.hintahaukka.R;
@@ -26,6 +27,7 @@ public class PricesInSelectedStoreFragment extends Fragment {
     private PriceListItem[] pricesInSelectedStore;
     private StoreManager storeManager;
     private boolean isRunningInTestEnvironment;
+    public ParcelableHashMap<String, String> eanWithNames;
 
     public PricesInSelectedStoreFragment() {
         // Required empty public constructor
@@ -39,6 +41,7 @@ public class PricesInSelectedStoreFragment extends Fragment {
         createStoreManager();
         PricesInSelectedStoreFragmentArgs args = PricesInSelectedStoreFragmentArgs.fromBundle(getArguments());
         pricesInSelectedStore = args.getPricesInSelectedStore();
+        eanWithNames = args.getEanWithNames();
     }
 
     @Override
@@ -57,8 +60,8 @@ public class PricesInSelectedStoreFragment extends Fragment {
     public void createPriceList() {
         // TODO: Handle empty list!
 
-        PriceListAdapter adapter = new PriceListAdapter(
-                this.getContext(), R.layout.fragment_prices_in_selected_store, Arrays.asList(pricesInSelectedStore), storeManager);
+        ProductListAdapter adapter = new ProductListAdapter(
+                this.getContext(), R.layout.fragment_prices_in_selected_store, Arrays.asList(pricesInSelectedStore), storeManager, eanWithNames);
 
         final ListView listView = getView().findViewById(R.id.storePriceListView);
         listView.setAdapter(adapter);

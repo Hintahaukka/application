@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
+import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.R;
@@ -34,6 +36,7 @@ public class CompareShoppingCartsFragment extends Fragment {
     private boolean isRunningInTestEnvironment;
     private static final int NUMBER_OF_PRICES_TO_RETURN = 10;
     private PricesInStore pricesInStore;
+    public ParcelableHashMap<String, String> eanWithNames;
 
     public CompareShoppingCartsFragment() {
         // Required empty public constructor
@@ -43,9 +46,8 @@ public class CompareShoppingCartsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CompareShoppingCartsFragmentArgs args = CompareShoppingCartsFragmentArgs.fromBundle(getArguments());
-
         pricesInStores = args.getShoppingCartPrices();
-
+        eanWithNames = args.getEanWithNames();
         this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
     }
@@ -116,9 +118,7 @@ public class CompareShoppingCartsFragment extends Fragment {
     private void moveToTheNextFragment(PricesInStore pricesInStore) {
         pricesInSelectedStore = pricesInStore.getPrices();
         Navigation.findNavController(getView()).navigate(
-                CompareShoppingCartsFragmentDirections.actionCompareShoppingCartsFragmentToPricesInSelectedStoreFragment(pricesInSelectedStore)
+                CompareShoppingCartsFragmentDirections.actionCompareShoppingCartsFragmentToPricesInSelectedStoreFragment(pricesInSelectedStore, eanWithNames)
         );
     }
-
-
 }

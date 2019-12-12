@@ -19,13 +19,6 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/text_average_price_notice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hinta on keskiarvo tuotteen hinnasta saatavilla olevilla kaupoissa"
-        android:textColor="#F44336" />
-
-    <TextView
         android:id="@+id/text_timestamp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
