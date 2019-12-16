@@ -16,7 +16,7 @@ Osmosiksella kaupat voi irrottaa erilliseksi tiedostoksi Suomen kattavasta finla
 
 > osmosis --read-pbf \finland-latest.osm.pbf --node-key-value keyValueList="shop.alcohol,shop.bakery" --write-xml stores.osm
 
-missä keyValueList pitää sisällään kaikki halutut kauppatyypit (esimerkissä vain shop.alcohol ja shop.bakery). Ajankohtainen lista kaikista shop-avaimen mahdollisista arvoista kannattaa tarkistaa [wikistä](https://wiki.openstreetmap.org/wiki/Key:shop). Tällä hetkellä sovelluksessa käytetyt kauppatyypit on listattu täällä.
+missä keyValueList pitää sisällään kaikki halutut kauppatyypit (esimerkissä vain shop.alcohol ja shop.bakery). Ajankohtainen lista kaikista shop-avaimen mahdollisista arvoista kannattaa tarkistaa [wikistä](https://wiki.openstreetmap.org/wiki/Key:shop). Tällä hetkellä sovelluksessa on käytetty kaikkia osoissa "Food, beverages" sekä "General store, department store, mall" lueteltuja kauppatyyppejä.
 
 ## Irrotetun kauppadatan lisääminen sovellukseen
 
