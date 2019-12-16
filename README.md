@@ -28,7 +28,8 @@ kameralla.
 
 * [Product backlog](https://docs.google.com/spreadsheets/d/1Mazq4EFbfbMsLPeCpOckbu11LNR1Ki2RiNf460z-rpU/edit#gid=0)
 * Sprint backlogit löytyvät samasta tiedostosta välilehdiltä
-* Tuntikirjanpito löytyy sprinttien yhteydestä ja kootusti omalta välilehdeltään
+* Tuntikirjanpito löytyy sprinttien yhteydestä ja [kootusti omalta välilehdeltään](https://docs.google.com/spreadsheets/d/1Mazq4EFbfbMsLPeCpOckbu11LNR1Ki2RiNf460z-rpU/edit#gid=1976084857)
+* [Ohje](https://github.com/Hintahaukka/application/blob/master/documentation/osm_kauppadata.md) Open Street Map -kauppadatan päivittämiseen
 
 ## Branch -käytännöt
 
