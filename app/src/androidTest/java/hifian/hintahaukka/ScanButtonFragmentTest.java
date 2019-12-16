@@ -57,7 +57,7 @@ public class ScanButtonFragmentTest {
         // THEN - Application navigates to barcode scanner with the id of selected store and the test parameter set false
         verify(mockNavController).navigate(
                 ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(
-                        defaultStoreId, true));
+                        defaultStoreId, false));
     }
 
 }
