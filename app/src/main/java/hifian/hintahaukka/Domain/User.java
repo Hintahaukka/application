@@ -17,11 +17,4 @@ public class User {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
 }

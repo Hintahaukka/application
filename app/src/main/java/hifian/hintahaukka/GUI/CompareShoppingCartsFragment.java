@@ -1,7 +1,6 @@
 
 package hifian.hintahaukka.GUI;
 
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,12 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
-
 
 import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PriceListItem;
@@ -73,13 +69,11 @@ public class CompareShoppingCartsFragment extends Fragment {
         final ListView listView = getView().findViewById(R.id.storePriceListView);
         listView.setAdapter(adapter);
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 pricesInStore = (PricesInStore) adapterView.getItemAtPosition(i);
                 moveToTheNextFragment(pricesInStore);
-
             }
         });
     }

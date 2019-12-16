@@ -1,7 +1,5 @@
 package hifian.hintahaukka.GUI;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import java.util.Arrays;
 
 import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PriceListItem;
-import hifian.hintahaukka.Domain.Store;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 
@@ -33,11 +30,10 @@ public class PricesInSelectedStoreFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.checkIfIsRunningInTestEnvironment();
         createStoreManager();
         PricesInSelectedStoreFragmentArgs args = PricesInSelectedStoreFragmentArgs.fromBundle(getArguments());
         pricesInSelectedStore = args.getPricesInSelectedStore();
@@ -67,6 +63,10 @@ public class PricesInSelectedStoreFragment extends Fragment {
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Fragment uses the StoreManager of the Activity.
+     * In tests the fragment creates its own StoreManager.
+     */
     private void createStoreManager() {
         if (isRunningInTestEnvironment) {
             this.storeManager = new StoreManager();
@@ -78,6 +78,18 @@ public class PricesInSelectedStoreFragment extends Fragment {
             }
         } else {
             this.storeManager = ((MainActivity)getActivity()).getStoreManager();
+        }
+    }
+
+    /**
+     * Sets the isRunningInTestEnvironment variable true if this fragment has been launched in an android test.
+     * Method calls the Main Activity, which causes a ClassCastException in test environment.
+     */
+    private void checkIfIsRunningInTestEnvironment() {
+        try {
+            this.isRunningInTestEnvironment = ((MainActivity)getActivity()).isDisabled();
+        } catch (ClassCastException e) {
+            this.isRunningInTestEnvironment = true;
         }
     }
 }

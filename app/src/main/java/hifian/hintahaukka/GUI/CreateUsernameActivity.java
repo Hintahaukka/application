@@ -58,12 +58,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         });
     }
 
-    //Method to check if username is taken
-    /*public boolean checkIfUserNameIsTaken(String username) {
-        //Will be implemented later
-    }*/
-
-    //Method to check username is atleast 2 characters long
+    // Method to check that username is at least 3 characters long
     public boolean checkIfUserNameIsLongEnough(String username) {
         if (username.length() < 3) {
             return false;
@@ -71,7 +66,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         return true;
     }
 
-    //Method to check username length is less than 20
+    // Method to check that username is not longer than 20 characters
     public boolean checkIfUserNameIsTooLong(String username) {
         if (username.length() > 20) {
             return false;
@@ -84,7 +79,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/getNewId");
+            this.setUrlString("https://hintahaukka.herokuapp.com/getNewId");
         }
 
         @Override
@@ -104,15 +99,8 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/updateNickname");
-
+            this.setUrlString("https://hintahaukka.herokuapp.com/updateNickname");
             this.setParamNames(new String[]{"id","nickname"});
-
-            // Will be implemented later
-            /*if (isRunningInTestEnvironment) {
-                this.setMocked();
-            }*/
         }
 
         @Override
@@ -122,10 +110,8 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-
             updateUserIdAndNickName();
             continueToApp();
-
         }
     }
 

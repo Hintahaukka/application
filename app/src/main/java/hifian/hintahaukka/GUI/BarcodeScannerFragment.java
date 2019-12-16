@@ -49,9 +49,7 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         test = args.getTest();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-//                Toast.makeText(getContext(), "Permission is granted!", Toast.LENGTH_LONG).show();
-            } else {
+            if (!checkPermission()) {
                 requestPermission();
             }
         }
@@ -98,10 +96,6 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
         super.onResume();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                if(scannerView == null) {
-                    //scannerView = new ZXingScannerView(getContext());
-                    //setContentView(scannerView);
-                }
                 scannerView.setResultHandler(this);
                 scannerView.startCamera();
             } else {
@@ -137,22 +131,18 @@ public class BarcodeScannerFragment extends Fragment implements ZXingScannerView
     @Override
     public void handleResult(Result result) {
         final String scanResult = result.getText();
+        // Check if barcode is correct EAN13
         BarCodeChecker bcCherker = new BarCodeChecker();
         if (bcCherker.checkEan13(scanResult)) {
+            // Ok, move to next fragment
             onDestroy();
              Navigation.findNavController(getView()).navigate(
                 BarcodeScannerFragmentDirections.actionBarcodeScannerFragmentToEnterPriceFragment(selectedStore, scanResult, test));
         } else {
-            // Barcode was not correct EAN13
-            /**Mun mielestä toast on parempivaihtoehto tässä koska toastin teksi tulee keskelle näyttöä.
-              Jätän Snackbarin koodin tähän jos myöhemmin Snackbar osoittautuu paremmaksi vaihtoehdoksi.
-            */
-            //Toast.makeText(getContext(), R.string.text_faulty_barcode, Toast.LENGTH_LONG).show();
+            // Not correct, show error message
             Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.text_faulty_barcode, Snackbar.LENGTH_LONG).show();
             onResume();
         }
     }
-
-
 }
 

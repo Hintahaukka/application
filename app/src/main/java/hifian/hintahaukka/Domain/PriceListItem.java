@@ -3,9 +3,10 @@ package hifian.hintahaukka.Domain;
 import android.os.Parcelable;
 import android.os.Parcel;
 
+/**
+ * PriceListItem represents the price of a given product, spotted at a given time in a given store
+ */
 public class PriceListItem implements Parcelable {
-
-    // made Parcelable so can be passed array from fragment to another
 
     private String storeId;
     private String timestamp;

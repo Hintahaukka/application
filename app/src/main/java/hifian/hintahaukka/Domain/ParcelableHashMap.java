@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 public class ParcelableHashMap<K, V> extends HashMap<K, V> implements Parcelable {
 
-
     public ParcelableHashMap() {
     }
 

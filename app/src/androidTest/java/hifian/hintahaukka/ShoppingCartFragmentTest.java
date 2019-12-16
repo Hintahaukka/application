@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hifian.hintahaukka.Database.Product;
-import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.GUI.ShoppingCartFragment;
 import hifian.hintahaukka.GUI.ShoppingCartFragmentDirections;
@@ -24,7 +23,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
@@ -70,9 +68,6 @@ public class ShoppingCartFragmentTest {
         verify(mockNavController).navigate(
                 ShoppingCartFragmentDirections.actionShoppingCartFragmentToCompareShoppingCartsFragment(
                         prices, thisFragment.getEanWithNames()));
-
-
-
     }
 
     @Test

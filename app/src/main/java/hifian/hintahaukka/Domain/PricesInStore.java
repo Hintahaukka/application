@@ -3,9 +3,10 @@ package hifian.hintahaukka.Domain;
 import android.os.Parcelable;
 import android.os.Parcel;
 
+/**
+ * PricesInStore represents a store with a list of spotted prices for products and their total price
+ */
 public class PricesInStore implements Parcelable {
-
-    // made Parcelable so can be passed array from fragment to another
 
     private String storeId;
     private int centsTotal;
