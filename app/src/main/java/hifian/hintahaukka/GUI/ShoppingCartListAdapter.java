@@ -21,7 +21,6 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     private  LayoutInflater inflater;
     private List<Product> products; //Cached copy of products
 
-
     ShoppingCartListAdapter(Context context) {
         inflater = LayoutInflater.from(context);
     }
@@ -58,11 +57,6 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
         }
     }
 
-
-    public Product getProductAt(int position) {
-        return products.get(position);
-    }
-
     class ShoppingCartViewHolder extends RecyclerView.ViewHolder {
         private final TextView productNameView;
         private final TextView productEanView;
@@ -87,7 +81,6 @@ public class ShoppingCartListAdapter extends RecyclerView.Adapter<ShoppingCartLi
     public void setOnProductClickListener(RecyclerViewClickListener listener) {
         this.listener = listener;
     }
-
 
     public Product getProduct(int position) {
         return products.get(position);

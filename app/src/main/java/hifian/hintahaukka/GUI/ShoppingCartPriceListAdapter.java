@@ -15,7 +15,6 @@ import java.util.List;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.Domain.Store;
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Service.StoreManager;
 
 public class ShoppingCartPriceListAdapter extends ArrayAdapter<PricesInStore> {
@@ -65,10 +64,5 @@ public class ShoppingCartPriceListAdapter extends ArrayAdapter<PricesInStore> {
         } else {
             return "Tuntematon kauppa";
         }
-    }
-
-    private String parseTimestamp(PriceListItem item) {
-        String date = item.getTimestamp();
-        return (date.substring(8, 10) + "." + date.substring(5, 7) + "." + date.substring(0, 4));
     }
 }

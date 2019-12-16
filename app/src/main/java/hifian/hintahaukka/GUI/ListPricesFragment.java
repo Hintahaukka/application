@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 
-
 import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Service.ListPricesUtils;
 import hifian.hintahaukka.Domain.PriceListItem;
@@ -159,8 +158,6 @@ public class ListPricesFragment extends Fragment {
     }
 
     public void createPriceList() {
-        // TODO: Handle empty list!
-
         Store selected = storeManager.getStore(selectedStore);
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);

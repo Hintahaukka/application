@@ -31,8 +31,6 @@ public class ListPricesFragment2 extends Fragment {
     private boolean test;
     private boolean isRunningInTestEnvironment;
 
-
-
     public ListPricesFragment2() {
         // Required empty public constructor
     }
@@ -45,7 +43,7 @@ public class ListPricesFragment2 extends Fragment {
         ean = args.getScanResult();
         productName = args.getProductName();
         priceList = args.getPriceList();
-        test = true;
+        test = false;
 
         createStoreManager();
     }
@@ -70,8 +68,6 @@ public class ListPricesFragment2 extends Fragment {
     }
 
     public void createPriceList() {
-        // TODO: Handle empty list!
-
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
 
         PriceListAdapter adapter = new PriceListAdapter(

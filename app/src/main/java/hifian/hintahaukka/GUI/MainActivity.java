@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This is a dumb method that is called by fragments for testing purposes.
-     * @return
+     * The point is just to see if calling this method causes an exception or not.
+     * @return always false
      */
     public boolean isDisabled() {
         return false;

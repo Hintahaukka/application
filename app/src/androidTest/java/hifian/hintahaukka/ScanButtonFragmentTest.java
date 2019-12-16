@@ -45,7 +45,6 @@ public class ScanButtonFragmentTest {
         });
     }
 
-
     @Test
     public void ifUserClicksScanBarcodeButtonThenFragmentNavigatesToTheNextFragmentWithCorrectStoreIdAndTestArguments() {
 
@@ -58,23 +57,7 @@ public class ScanButtonFragmentTest {
         // THEN - Application navigates to barcode scanner with the id of selected store and the test parameter set false
         verify(mockNavController).navigate(
                 ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(
-                        defaultStoreId, true));
+                        defaultStoreId, false));
     }
 
-
-    /*@Test
-    public void ifUserClicksCheckboxOnceThenParameterTestIsTrueWhenFragmentNavigatesToTheNextFragment() {
-
-        // GIVEN - On the scan button fragment screen
-        launchScanButtonFragment();
-
-        // WHEN - User selects the checkbox and clicks scan barcode button
-        onView(withId(R.id.checkbox_test_database)).perform(click());
-        onView(withId(R.id.button_scan_barcode)).perform(click());
-
-        // THEN - Application navigates to barcode scanner with parameter test set true
-        verify(mockNavController).navigate(
-                ScanButtonFragmentDirections.actionScanButtonFragmentToBarcodeScannerFragment(
-                        defaultStoreId, true));
-    }*/
 }

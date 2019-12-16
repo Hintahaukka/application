@@ -17,13 +17,10 @@ import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 import hifian.hintahaukka.Service.LeaderboardUtils;
 
-
 public class LeaderboardFragment extends Fragment {
-
 
     public LeaderboardFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,11 +29,14 @@ public class LeaderboardFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_leaderboard, container, false);
     }
 
+    /**
+     * Get leaderboard data from the server
+     */
     private class GetLeaderboardTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/getLeaderboard");
+            this.setUrlString("https://hintahaukka.herokuapp.com/getLeaderboard");
         }
 
         @Override

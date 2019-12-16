@@ -21,14 +21,12 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.List;
 
 import hifian.hintahaukka.Domain.ParcelableHashMap;
 import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.Domain.PricesInStore;
 import hifian.hintahaukka.R;
-import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Service.HttpPostTask;
 import hifian.hintahaukka.Service.UserManager;
 import hifian.hintahaukka.Service.RecyclerViewClickListener;
@@ -57,7 +55,7 @@ public class ShoppingCartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
         checkIfIsRunningInTestEnvironment();
-        test = true;
+        test = false;
         return view;
     }
 
@@ -81,11 +79,9 @@ public class ShoppingCartFragment extends Fragment {
             public void onProductClick(Product product) {
                 productEan = product.getEan();
                 productName = product.getName();
-                //Toast.makeText(getContext(), "ean: " + productEan, Toast.LENGTH_LONG).show();
                 new ProductInfoTask().execute(productEan);
             }
         });
-
 
         viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
         viewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
@@ -133,7 +129,11 @@ public class ShoppingCartFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/getPricesForManyProducts");
+            this.setUrlString("https://hintahaukka.herokuapp.com/getPricesForManyProducts");
+            if (test) {
+                this.setUrlString("https://hintahaukka.herokuapp.com/test/getPricesForManyProducts");
+            }
+
             String[] paramNames = new String[cartSize + 1];
             paramNames[0] = "id";
             for (int i = 1; i < paramNames.length; i ++) {
@@ -282,15 +282,13 @@ public class ShoppingCartFragment extends Fragment {
         return testMessage;
     }
 
-
     public ParcelableHashMap getEanWithNames() {
         return this.eanWithNames;
     }
 
-
-
-
-
+    /**
+     * Gets product info from the server
+     */
     private class ProductInfoTask extends HttpPostTask {
 
         @Override
@@ -348,7 +346,6 @@ public class ShoppingCartFragment extends Fragment {
         }
 
     }
-
 
     /**
      * Deletes the product from te database. Shows a snackbar that allows to cancel the deletion.

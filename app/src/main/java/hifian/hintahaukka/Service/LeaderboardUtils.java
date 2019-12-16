@@ -1,7 +1,5 @@
 package hifian.hintahaukka.Service;
 
-import android.widget.ListView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

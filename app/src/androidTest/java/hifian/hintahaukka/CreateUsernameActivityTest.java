@@ -12,8 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import hifian.hintahaukka.GUI.CreateUsernameActivity;
 
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -26,7 +24,6 @@ import static org.hamcrest.core.IsNull.notNullValue;
     @Rule
     public ActivityTestRule<CreateUsernameActivity> rule = new ActivityTestRule<>(CreateUsernameActivity.class);
 
-
     @Test
     public void ensureViewIsPresented() {
         CreateUsernameActivity activity = rule.getActivity();
@@ -38,25 +35,4 @@ import static org.hamcrest.core.IsNull.notNullValue;
         assertThat(usernameField, notNullValue());
         assertThat(sendUsernameButton, notNullValue());
     }
-
-    /**
-     
-    @Test
-    public void ensureUsernameTooShortTextIsDisplayed() {
-        String shortUsername = "a";
-
-        CreateUsernameActivity activity = rule.getActivity();
-        TextView usernameField = activity.findViewById(R.id.usernameField);
-        Button sendUsernameButton = activity.findViewById(R.id.sendUsernameButton);
-
-        usernameField.setText(shortUsername);
-        sendUsernameButton.performClick();
-
-        onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(R.string.text_username_too_short)));
-
-
-
-    }
-    */
 }

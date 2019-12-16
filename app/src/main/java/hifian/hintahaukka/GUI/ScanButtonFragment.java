@@ -25,11 +25,12 @@ import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
 
 public class ScanButtonFragment extends Fragment {
-    private boolean test = true;
+    private boolean test = false;
     private String selectedStore;
     private StoreManager storeManager;
     private boolean isRunningInTestEnvironment;
     private CheckBox databaseCheckBox;
+
     public ScanButtonFragment() {
         // Required empty public constructor
     }
@@ -46,8 +47,6 @@ public class ScanButtonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_scan_button, container, false);
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_scan_button, container, false);
         return view;
 
     }
@@ -63,10 +62,13 @@ public class ScanButtonFragment extends Fragment {
         showStore.setText(getString(R.string.store_leaderboard_title) + " " + store.getName());
         Button scanBarcodeButton = getView().findViewById(R.id.button_scan_barcode);
         databaseCheckBox = (CheckBox) getView().findViewById(R.id.checkbox_test_database);
+
+        // Database checkbox is only needed by programmers. Let's hide it from the app.
         databaseCheckBox.setVisibility(View.INVISIBLE);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // For developers: Remove these comments if you want to use the test database
                 /*if (databaseCheckBox.isChecked()) {
                     test = true;
                 } else {
@@ -88,6 +90,7 @@ public class ScanButtonFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // For developers: Remove these comments if you want to use the test database
         //CheckBox databaseCheckBox = getView().findViewById(R.id.checkbox_test_database);
         //test = databaseCheckBox.isChecked();
         new GetStoreLeaderboardTask().execute(new String[]{selectedStore});
@@ -147,5 +150,4 @@ public class ScanButtonFragment extends Fragment {
             listView.setAdapter(adapter);
         }
     }
-
 }
