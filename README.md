@@ -6,7 +6,7 @@
 
 master: [![CircleCI](https://circleci.com/gh/Hintahaukka/application.svg?style=svg)](https://circleci.com/gh/Hintahaukka/application)
 
-#### Tests codecoverage:
+#### Testikattavuus:
 
 Master: [![codecov](https://codecov.io/gh/Hintahaukka/application/branch/master/graph/badge.svg)](https://codecov.io/gh/Hintahaukka/application)
 
@@ -32,7 +32,7 @@ kameralla.
 
 ## Branch -käytännöt
 
-Uusia ominaisuuksia varten tehdään aina oma branch. Kun ominaisuus on valmis, se pushataan dev-branchiin ja varmistetaan, että kaikki toimii. Lopuksi dev-branch pushataan masteriin.
+Uusia ominaisuuksia varten tehdään aina oma branch. Kun ominaisuus on valmis, branch yhdistetään pull reqestin kautta dev-branchiin ja varmistetaan, että kaikki toimii. Sprintin lopuksi dev-branch pushataan masteriin.
 
 ## Definition of Done
 
@@ -62,11 +62,29 @@ Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se an
 1. Laita puhelimen GPS päälle
 2. Avaa sovellus
 3. Anna sovellukselle lupa käyttää sijaintitietoja
-4. Valitse valikosta kauppa
-5. Paina "SKANNAA VIIVAKOODI" nappia
-6. Skannaa tuotteen viivakoodi puhelimen kameralla
-7. Syötä tuotteen hinta ja paina "Lähetä"
-8. Tuotteen hinta muissa kaupoissa tulee näkyville.
+4. Ensimmäisellä käyttökerralla lisää itsellesi nimimerkki
+
+### Tuotteen hintahaku ja lisääminen ostoskoriin
+1. Valitse valikosta kauppa, jossa olet
+2. Paina "SKANNAA VIIVAKOODI" nappia
+3. Skannaa tuotteen viivakoodi puhelimen kameralla
+4. Syötä tuotteelle halutessasi nimi, jos sovellus kysyy sitä
+5. Syötä tuotteen hinta ja paina "Lähetä"
+6. Tuotteen hinta muissa kaupoissa tulee näkyville.
+7. Lisää tuote halutessasi ostoskoriin painamalla "Lisää ostoskoriin"
+
+### Ostoskori
+1. Valitse sivuvalikosta "Ostoskori"
+2. Ostoskorin sisältö tulee näkyville
+3. Poista tuote ostoskorista pyyhkäisemällä se vasemmalle
+4. Klikkaamalla ostoskorista tuotetta näet tuotteen hinnat eri kaupoissa
+5. Klikkaamalla ostoskorista "Hae parhaat hinnat" näet koko ostoskorin kokonaishinnat eri kaupoissa
+6. Valitsemalla tämän jälkeen yhden listalla näkyvistä kaupoista näet korissa olevien tuotteiden tarkemmat hinnat kyseisessä kaupassa
+
+### Ahkerimmat hintahaukat
+1. Kerää itsellesi pisteitä lisäämällä hintoja ja tuotenimiä
+2. Katso eniten pisteitä keränneet nimimerkit valitsemalla sivuvalikosta Ahkerimmat Hintahaukat
+3. Skannatessasi tuotteita kaupassa näet mitkä nimimerkit ovat keränneet eniten pisteitä kyseisessä kaupassa
 
 <!--
 ## Credits
