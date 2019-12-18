@@ -30,6 +30,7 @@ kameralla.
 * Sprint backlogit löytyvät samasta tiedostosta välilehdiltä
 * Tuntikirjanpito löytyy sprinttien yhteydestä ja [kootusti omalta välilehdeltään](https://docs.google.com/spreadsheets/d/1Mazq4EFbfbMsLPeCpOckbu11LNR1Ki2RiNf460z-rpU/edit#gid=1976084857)
 * [Ohje](https://github.com/Hintahaukka/application/blob/master/documentation/osm_kauppadata.md) Open Street Map -kauppadatan päivittämiseen
+* [App testaus ja kehitys ](https://github.com/Hintahaukka/application/blob/master/documentation/test_and_CI.md) Applikaation testaus ja kehitysympäristön ohjeet
 
 ## Branch -käytännöt
 
