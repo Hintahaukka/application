@@ -50,9 +50,7 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 ## Asennusohjeet
 
-1. Mene osoitteeseen https://github.com/Hintahaukka/application/releases
-2. Paina sivulla näkyvää "Assets" nimistä valikkoa
-3. Paina "app-dubug.apk" nimistä tiedostoa.
+1. Mene osoitteeseen https://github.com/Hintahaukka/application/releases/download/v5.0/hintahaukka_5.0.apk
 
 Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se android puhelimeesi. Vaihtoehtoisesti voit ladata tiedoston suoraan puhelimeesi menemällä puhelimen selaimella kohdassa 1) olevaan osoitteeseen.
 
