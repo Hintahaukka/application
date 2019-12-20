@@ -1,8 +1,5 @@
 package hifian.hintahaukka.GUI;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -27,11 +23,12 @@ import org.json.JSONException;
 import java.io.InputStream;
 
 import hifian.hintahaukka.Service.HttpPostTask;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.EnterPriceUtils;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
+import hifian.hintahaukka.Service.UserManager;
 
 public class EnterPriceFragment extends Fragment {
 
@@ -40,16 +37,13 @@ public class EnterPriceFragment extends Fragment {
     private boolean test;
     private String cents;
 
-    private String storeName;
     private String productName;
     private TextView nameTextView;
     private Button sendPriceButton;
     private TextView enterEuros;
     private TextView enterCents;
-    private PriceListItem priceListItem;
     private PriceListItem[] prices;
     private StoreManager storeManager;
-    private String[] parameterNames;
     private String[] parameters;
     private TextView enterProductNameField;
     private Button sendProductNameButton;
@@ -109,7 +103,7 @@ public class EnterPriceFragment extends Fragment {
         } else {
             storeField.setText("Tuntematon kauppa");
         }
-        TextView eanField = (TextView) getView().findViewById(R.id.eanField);
+        TextView eanField = (TextView) getView().findViewById(R.id.productField);
         eanField.setText("Viivakoodi: " + scanResult);
 
         sendPriceButton.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +153,7 @@ public class EnterPriceFragment extends Fragment {
      * Parses the product name and an array of prices based on the JSON response.
      * @param response The JSON containing the product and price info
      */
-    public void handleResponse(String response) {
+    public void parseProductInfo(String response) {
         if (response == null || response == "") {
             nameTextView.setText("Tuotetietojen hakeminen epäonnistui\n");
         } else {
@@ -174,7 +168,7 @@ public class EnterPriceFragment extends Fragment {
                 for (int i = 0; i < l; i++) {
                     JSONObject j = jsonArray.getJSONObject(i);
                     prices[i] = new PriceListItem(j.getInt("cents"), j.getString("storeId"),
-                            j.getString("timestamp"));
+                            j.getString("timestamp"), scanResult);
                 }
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -197,15 +191,16 @@ public class EnterPriceFragment extends Fragment {
                         sendProductNameButton.setEnabled(false);
                         enterProductNameField.setEnabled(false);
                         enterProductNameField.setText("Kiitos!");
+                        productName = userInputProductName;
                     }
                 }
             });
         }
-        // If the responce contains no price list, create a fake, so that argument won't be null
+        // If the response contains no price list, create a fake, so that argument won't be null
         // Id must be that of selectedStore, so that it won't be listed in the next fragment
         if (prices == null) {
             prices = new PriceListItem[1];
-            prices[0] = new PriceListItem(0, selectedStore, "timestamp");
+            prices[0] = new PriceListItem(0, selectedStore, "timestamp", scanResult);
         }
         // Showing of the product name
         nameTextView.setText(productName);
@@ -275,7 +270,7 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            handleResponse(response);
+            parseProductInfo(response);
         }
     }
 
@@ -343,6 +338,9 @@ public class EnterPriceFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            if (response.equals("success")) {
+                addPoints(5);
+            }
         }
     }
 
@@ -354,8 +352,8 @@ public class EnterPriceFragment extends Fragment {
         if (isRunningInTestEnvironment) {
             return "1234567890123456789012345678901";
         }
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return sharedPreferences.getString(getString(R.string.key_user_id), null);
+        UserManager userManager = new UserManager(this.getActivity());
+        return userManager.getUserId();
     }
 
     /**
@@ -364,11 +362,19 @@ public class EnterPriceFragment extends Fragment {
      * @param pointsUnused unused points
      */
     private void updatePoints(int pointsTotal, int pointsUnused) {
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(getString(R.string.key_points_total), pointsTotal);
-        editor.putInt(getString(R.string.key_points_unused), pointsUnused);
-        editor.apply();
+        UserManager userManager = new UserManager(this.getActivity());
+        userManager.updatePoints(pointsTotal, pointsUnused);
+    }
+
+    /**
+     * Adds points and updates them to memory
+     * @param pointsToAdd number of points to be added to total and unused points
+     */
+    private void addPoints(int pointsToAdd) {
+        UserManager userManager = new UserManager(this.getActivity());
+        int total = userManager.getPointsTotal();
+        int unused = userManager.getPointsUnused();
+        updatePoints(total + pointsToAdd, unused + pointsToAdd);
     }
 
     /**

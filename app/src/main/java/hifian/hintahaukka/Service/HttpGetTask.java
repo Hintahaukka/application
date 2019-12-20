@@ -41,6 +41,7 @@ public abstract class HttpGetTask extends AsyncTask<String, String, String> {
 
         String response = "";
         if (isMocked) {
+            // Currently returns only an empty mock response. Could be added different mock responses for different urls.
             return "";
         }
         try {

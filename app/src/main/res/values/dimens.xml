@@ -3,7 +3,9 @@
     <dimen name="text_large">30sp</dimen>
     <dimen name="padding_button">16dp</dimen>
     <dimen name="spacing_sides">16dp</dimen>
-    <dimen name="spacing_top_and_bottom">24dp</dimen>
+    <dimen name="spacing_top_and_bottom">16dp</dimen>
     <dimen name="drawer_header_margin">40sp</dimen>
     <dimen name="drawer_header_logo_size">140sp</dimen>
+    <dimen name="text_medium">20sp</dimen>
+    <dimen name="margin_scan_button">48dp</dimen>
 </resources>

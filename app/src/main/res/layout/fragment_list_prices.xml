@@ -27,6 +27,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="@dimen/spacing_sides" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_list_prices_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
+
     <TextView
         android:id="@+id/productField"
         android:layout_width="wrap_content"
@@ -65,14 +72,15 @@
         android:id="@+id/priceListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_add_to_cart"
         app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/otherPricesText" />
+        app:layout_constraintTop_toBottomOf="@+id/otherPricesText"
+        tools:listitem="@layout/list_prices_item" />
 
     <TextView
-        android:id="@+id/averagePriceField"
+        android:id="@+id/productNameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -87,7 +95,7 @@
         android:layout_height="125sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
-        app:layout_constraintTop_toBottomOf="@+id/averagePriceField"
+        app:layout_constraintTop_toBottomOf="@+id/productNameField"
         app:scc_angle_start="180"
         app:scc_angle_sweep="180"
         app:scc_halo_size="0dp"
@@ -108,5 +116,18 @@
         app:layout_constraintStart_toStartOf="@+id/priceGauge"
         app:layout_constraintTop_toBottomOf="@+id/priceGauge"
         tools:text="20% keskihintaa kalliimpi" />
+
+    <Button
+        android:id="@+id/button_add_to_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_add_shopping_cart_white_24dp"
+        android:drawablePadding="@dimen/padding_button"
+        android:text="@string/button_add_to_cart"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_list_prices_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_list_prices_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_list_prices_left"
+        app:layout_constraintTop_toBottomOf="@+id/priceListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

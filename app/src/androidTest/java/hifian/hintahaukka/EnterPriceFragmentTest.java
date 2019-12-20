@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 
 import hifian.hintahaukka.GUI.EnterPriceFragment;
 import hifian.hintahaukka.GUI.EnterPriceFragmentDirections;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;

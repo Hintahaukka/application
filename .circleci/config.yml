@@ -2,57 +2,6 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.5
 jobs:
-  build:
-    docker:
-      - image: circleci/android:api-28-alpha
-    working_directory: ~/code
-    environment:
-      JVM_OPTS: -Xmx3200m
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-#     - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
-      - run:
-          yes | sdkmanager --licenses || exit 0
-      - run: 
-          yes | sdkmanager --update || exit 0
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Store Google Service Account
-          command: |
-            echo $GOOGLE_SERVICES_KEY | base64 -d > app/google-services.json	
-            echo $GCLOUD_SERVICE_KEY | base64 -d > app/gcloud-service-key.json
-      - run:
-          name: chmod for those files
-          command: |
-            sudo chmod +r app/gcloud-service-key.json
-            sudo chmod +r app/google-services.json
-      - run:
-          name: Authorize gcloud and set config defaults
-          command: |
-            sudo gcloud auth activate-service-account --key-file=app/gcloud-service-key.json
-            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}      
-      - run:
-          name: Run Tests
-          command: ./gradlew build jacocoTestReport assembleAndroidTest
-      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: app/build/reports
-          destination: reports
-      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: app/build/test-results
-      - run:
-          name: Upload Coverage Results
-          command: |
-            curl -s https://codecov.io/bash | bash -s --\
-              -t $CODECOV_TOKEN \
-              -n $CIRCLE_BUILD_NUM \
-              -Z || echo 'Codecov upload failed'
   test:
     docker:
       - image: circleci/android:api-28-alpha    
@@ -106,8 +55,25 @@ jobs:
           name: Authorize gcloud and set config defaults
           command: |
             sudo gcloud auth activate-service-account --key-file=app/gcloud-service-key.json
-            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}      
-      
+            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}   
+      - run:
+          name: Lint
+          command: ./gradlew lint test
+      - run:
+          name: Run Tests
+          command: ./gradlew build jacocoTestReport assembleAndroidTest
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
+          path: app/build/reports
+          destination: reports
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: app/build/test-results
+      - run:
+          name: Upload Coverage Results
+          command: |
+            curl -s https://codecov.io/bash | bash -s --\
+              -t $CODECOV_TOKEN \
+              -n $CIRCLE_BUILD_NUM \
+              -Z || echo 'Codecov upload failed'
       - run:
           name: Build debug APK and release APK
           command: |
@@ -130,7 +96,6 @@ jobs:
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
-            sudo mkdir app/build/reports
             sudo gsutil -m cp -r  gs://${GCLOUD_BUCKET}/${GCLOUD_RESULT} app/build/reports
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: app/build/reports
@@ -140,6 +105,5 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
       - test 
          

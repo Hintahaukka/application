@@ -1,21 +1,26 @@
-package hifian.hintahaukka.Service;
+package hifian.hintahaukka.Domain;
 
 import android.os.Parcelable;
 import android.os.Parcel;
 
+/**
+ * PriceListItem represents the price of a given product, spotted at a given time in a given store
+ */
 public class PriceListItem implements Parcelable {
-
-    // made Parcelable so can be passed array from fragment to another
 
     private String storeId;
     private String timestamp;
     private int cents;
+    private String ean;
 
-    public PriceListItem(int cents, String storeId, String timestamp) {
+    public PriceListItem(int cents, String storeId, String timestamp, String ean) {
         this.cents = cents;
         this.storeId = storeId;
         this.timestamp = timestamp;
+        this.ean = ean;
     }
+
+    public String getEan() { return ean; }
 
     public String getStoreId() {
         return storeId;
@@ -40,6 +45,7 @@ public class PriceListItem implements Parcelable {
         out.writeString(storeId);
         out.writeString(timestamp);
         out.writeInt(cents);
+        out.writeString(ean);
     }
 
 
@@ -61,6 +67,7 @@ public class PriceListItem implements Parcelable {
         storeId = in.readString();
         timestamp = in.readString();
         cents = in.readInt();
+        ean = in.readString();
     }
 
 }

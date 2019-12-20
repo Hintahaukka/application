@@ -1,9 +1,7 @@
 package hifian.hintahaukka.GUI;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,14 +16,16 @@ import com.google.android.material.snackbar.Snackbar;
 
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
+import hifian.hintahaukka.Service.UserManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 3000;
     private int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private boolean isNewUser = false;
     private String userId;
-
     private int completedTasks = 0;
-    private final int TASKS_TO_COMPLETE = 4;
+    private final int TASKS_TO_COMPLETE = 3;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +35,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         new WakeHerokuTask().execute("");
         requirePermissionToUseLocation(true);
         getUserId();
-
-
     }
 
     private void requirePermissionToUseLocation(boolean firstTimer) {
@@ -50,15 +48,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
 
             // Permission has not been granted
-
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // If user has previously denied permission, tell the reason why we are asking the permission to the user
                 Snackbar.make(findViewById(R.id.image_splash_screen_logo), R.string.snackbar_request_permission_rationale, Snackbar.LENGTH_LONG).show();
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-
             } else {
-
                 // Either user is using the app first time or user has clicked "never ask again" and denied permission
                 if (firstTimer) {
                     // If first timer, ask permission
@@ -67,7 +62,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     // If user has pressed "never ask again", show message and don't let the user use the app
                     Snackbar.make(findViewById(R.id.image_splash_screen_logo), R.string.snackbar_require_permission, Snackbar.LENGTH_INDEFINITE).show();
                 }
-
             }
         }
     }
@@ -78,7 +72,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Permission was granted
             taskCompleted();
-
         } else {
             // Permission denied, ask permission again
             requirePermissionToUseLocation(false);
@@ -89,34 +82,22 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Checks if a user id already exists. If not, get a new one from the server.
      */
     private void getUserId() {
-        requirePermissionToUseLocation(true);
+
         // Check if there already is an id in the memory
-        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        userId = sharedPreferences.getString(getString(R.string.key_user_id), null);
+        UserManager userManager = new UserManager(this);
+        userId = userManager.getUserId();
 
-
-        // If not, move to the next activity
+        // If not, mark as new user (to be guided to create username in continueToApp())
         if (userId == null) {
-            new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
-            startActivity(intent);
-            finish();
-            }, SPLASH_TIME_OUT);
-        } else {
-            taskCompleted();
-            /**
-             * Show ID when debugging
-            Snackbar.make(findViewById(android.R.id.content), userId, Snackbar.LENGTH_LONG).show();
-             */
+           isNewUser = true;
         }
 
+        taskCompleted();
     }
 
     /**
      * Sends a wake request to the server.
      */
-
-
     private class WakeHerokuTask extends HttpGetTask {
         @Override
         protected void onPreExecute() {
@@ -141,7 +122,6 @@ public class SplashScreenActivity extends AppCompatActivity {
      */
     private void taskCompleted() {
         completedTasks++;
-
         if (completedTasks == TASKS_TO_COMPLETE) {
             continueToApp();
         }
@@ -152,11 +132,22 @@ public class SplashScreenActivity extends AppCompatActivity {
      * finished.
      */
     private void continueToApp() {
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-            startActivity(intent);
-            // close this activity
-            finish();
-        }, SPLASH_TIME_OUT);
+
+        // New users are navigated to create username
+        if(isNewUser) {
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, CreateUsernameActivity.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        } else {
+
+            // Old users navigate straight to the app
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }, SPLASH_TIME_OUT);
+        }
     }
 }

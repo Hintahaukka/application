@@ -10,13 +10,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sccomponents.widgets.ScArc;
 import com.sccomponents.widgets.ScGauge;
 import com.sccomponents.widgets.ScSeekBar;
@@ -25,9 +29,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 
-
+import hifian.hintahaukka.Database.Product;
 import hifian.hintahaukka.Service.ListPricesUtils;
-import hifian.hintahaukka.Service.PriceListItem;
+import hifian.hintahaukka.Domain.PriceListItem;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
 import hifian.hintahaukka.Domain.Store;
@@ -77,35 +81,39 @@ public class ListPricesFragment extends Fragment {
         // Hide the keyboard if it wasn't closed
         hideKeyboard(view);
 
-        //Showing the product info
-        productField = (TextView) getView().findViewById(R.id.productField);
-        productField.setText(productName);
+            //Showing the product info
+            productField = (TextView) getView().findViewById(R.id.productField);
+            productField.setText(productName);
 
-        //Showing the store
-        TextView storeField = (TextView) getView().findViewById(R.id.storeField);
-        Store s = storeManager.getStore(selectedStore);
-        if (s!= null && s.getName() != null) {
-            storeField.setText(s.getName());
-        } else {
-            storeField.setText("Tuntematon kauppa");
-        }
+            //Showing the store
+            TextView storeField = (TextView) getView().findViewById(R.id.storeField);
+            Store s = storeManager.getStore(selectedStore);
+            if (s != null && s.getName() != null) {
+                storeField.setText(s.getName());
+            } else {
+                storeField.setText("Tuntematon kauppa");
+            }
 
-        // Showing the  price added by the user
-        double myPrice = Integer.parseInt(this.cents) / 100.0;
-        String formattedPrice = String.format("%.02f", myPrice);
-        myPriceField = getView().findViewById(R.id.myPriceField);
-        myPriceField.setText("Hinta: " + formattedPrice + "€");
+            // Showing the  price added by the user
+            double myPrice = Integer.parseInt(this.cents) / 100.0;
+            String formattedPrice = String.format("%.02f", myPrice);
+            myPriceField = getView().findViewById(R.id.myPriceField);
+            myPriceField.setText("Hinta: " + formattedPrice + "€");
 
-        // Show average price
-        averagePriceField = (TextView) getView().findViewById(R.id.averagePriceField);
-        averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
-        averagePriceField.setText("Keskihinta: " + averagePrice + "€");
+            // Show average price
+            averagePriceField = (TextView) getView().findViewById(R.id.productNameField);
+            averagePrice = ListPricesUtils.getAveragePrice(priceList, myPrice);
+            averagePriceField.setText("Keskihinta: " + averagePrice + "€");
 
-        // Create the price cauge
-        createPriceCauge();
+            // Create the price cauge
+            createPriceCauge();
 
-        //Create the price list
-        createPriceList();
+            //Create the price list
+            createPriceList();
+
+            // Set up "add to cart" -button
+            setUpAddToCartButton();
+
     }
 
     private void createPriceCauge() {
@@ -150,8 +158,6 @@ public class ListPricesFragment extends Fragment {
     }
 
     public void createPriceList() {
-        // TODO: Handle empty list!
-
         Store selected = storeManager.getStore(selectedStore);
         Arrays.sort(priceList, new ListPricesFragment.PriceListItemDistanceComparator(selected.getLat(), selected.getLon()));
         if(priceList.length > NUMBER_OF_PRICES_TO_RETURN) priceList = Arrays.copyOf(priceList, NUMBER_OF_PRICES_TO_RETURN);
@@ -161,6 +167,21 @@ public class ListPricesFragment extends Fragment {
 
         final ListView listView = getView().findViewById(R.id.priceListView);
         listView.setAdapter(adapter);
+    }
+
+    private void setUpAddToCartButton() {
+        Button addToCartButton = getView().findViewById(R.id.button_add_to_cart);
+        addToCartButton.setOnClickListener(buttonView -> {
+            if (productName.equals("")) {
+                Snackbar.make(buttonView, R.string.message_product_needs_a_name_to_be_added_to_cart,
+                        Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            ShoppingCartViewModel viewModel = new ViewModelProvider(getActivity()).get(ShoppingCartViewModel.class);
+            viewModel.insert(new Product(ean, productName));
+            Snackbar.make(buttonView, R.string.message_added_to_cart, Snackbar.LENGTH_LONG).show();
+        });
     }
 
     /**

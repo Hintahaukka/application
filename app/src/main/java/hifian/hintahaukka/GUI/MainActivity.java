@@ -2,7 +2,6 @@ package hifian.hintahaukka.GUI;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,6 +13,7 @@ import java.io.InputStream;
 
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.StoreManager;
+import hifian.hintahaukka.Service.UserManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         // Configure top-level destinations that show a menu icon instead of up button on top left corner
         // and set drawer layout for navigation drawer
         appBarConfiguration =
-                new AppBarConfiguration.Builder(R.id.storeListFragment, R.id.shoppingCartFragment)
+                new AppBarConfiguration.Builder(R.id.storeListFragment, R.id.shoppingCartFragment, R.id.leaderboardFragment)
                         .setDrawerLayout(findViewById(R.id.drawerLayout))
                         .build();
 
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navView = findViewById(R.id.navView);
         NavigationUI.setupWithNavController(navView, navController);
+        new UserManager(this).updatePointsToUIView();
 
 
         this.storeManager = new StoreManager();
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This is a dumb method that is called by fragments for testing purposes.
-     * @return
+     * The point is just to see if calling this method causes an exception or not.
+     * @return always false
      */
     public boolean isDisabled() {
         return false;

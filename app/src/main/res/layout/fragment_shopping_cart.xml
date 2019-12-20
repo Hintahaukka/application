@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shoppingCartLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.ShoppingCartFragment" />
+    tools:context=".GUI.ShoppingCartFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_shopping_cart_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_shopping_cart_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/spacing_top_and_bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_shopping_cart_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_sides" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_shopping_cart_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/spacing_top_and_bottom" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shopping_cart_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_compare_shopping_cart_prices"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_shopping_cart_right"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_shopping_cart_left"
+        app:layout_constraintTop_toTopOf="@+id/guideline_shopping_cart_top"
+        tools:listitem="@layout/shopping_cart_list_item" />
+
+    <Button
+        android:id="@+id/button_compare_shopping_cart_prices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/button_compare_shopping_cart_prices"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_shopping_cart_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_shopping_cart_right"
+        app:layout_constraintStart_toStartOf="@+id/shopping_cart_list"
+        app:layout_constraintTop_toBottomOf="@+id/shopping_cart_list" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

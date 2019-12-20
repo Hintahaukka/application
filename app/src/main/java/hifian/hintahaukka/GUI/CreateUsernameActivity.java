@@ -2,7 +2,6 @@ package hifian.hintahaukka.GUI;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,13 +15,13 @@ import com.google.android.material.snackbar.Snackbar;
 import hifian.hintahaukka.R;
 import hifian.hintahaukka.Service.HttpGetTask;
 import hifian.hintahaukka.Service.HttpPostTask;
+import hifian.hintahaukka.Service.UserManager;
 
 public class CreateUsernameActivity extends AppCompatActivity {
 
     private TextView usernameField;
     private Button sendUsernameButton;
     private String nickname;
-    private TextView firstTimeRegisterFied;
     private String userId;
     private String[] parameters;
 
@@ -36,8 +35,6 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         usernameField = (TextView) findViewById(R.id.usernameField);
         sendUsernameButton = (Button) findViewById(R.id.sendUsernameButton);
-        firstTimeRegisterFied = (TextView) findViewById(R.id.firstTimeRegisterFied);
-        firstTimeRegisterFied.setText(R.string.first_time_register_text);
         new GetNewIdTask().execute();
 
         sendUsernameButton.setOnClickListener(new View.OnClickListener() {
@@ -61,14 +58,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         });
     }
 
-
-    //Method to check if username is taken
-    /*public boolean checkIfUserNameIsTaken(String username) {
-        //Will be implemented later
-    }*/
-
-
-    //Method to check username is atleast 2 characters long
+    // Method to check that username is at least 3 characters long
     public boolean checkIfUserNameIsLongEnough(String username) {
         if (username.length() < 3) {
             return false;
@@ -76,7 +66,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         return true;
     }
 
-    //Method to check username length is less than 20
+    // Method to check that username is not longer than 20 characters
     public boolean checkIfUserNameIsTooLong(String username) {
         if (username.length() > 20) {
             return false;
@@ -89,7 +79,7 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/getNewId");
+            this.setUrlString("https://hintahaukka.herokuapp.com/getNewId");
         }
 
         @Override
@@ -100,14 +90,8 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             userId = response;
-            /**Snackbar.make(findViewById(android.R.id.content), "Response: " + userId, Snackbar.LENGTH_LONG).show();
-             * See if there was a response
-             */
-
         }
     }
-
-
 
     //Post nickname with id to backend
     private class PostNewNicknameTask extends HttpPostTask {
@@ -115,15 +99,8 @@ public class CreateUsernameActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            this.setUrlString("https://hintahaukka.herokuapp.com/test/updateNickname");
-
+            this.setUrlString("https://hintahaukka.herokuapp.com/updateNickname");
             this.setParamNames(new String[]{"id","nickname"});
-
-            // Will be implemented later
-            /*if (isRunningInTestEnvironment) {
-                this.setMocked();
-            }*/
         }
 
         @Override
@@ -133,24 +110,21 @@ public class CreateUsernameActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.key_user_id), userId);
-            editor.apply();
-
+            updateUserIdAndNickName();
             continueToApp();
-
         }
     }
 
-
+    private void updateUserIdAndNickName() {
+        UserManager userManager = new UserManager(this);
+        userManager.setUserId(userId);
+        userManager.setUserName(nickname);
+    }
 
     private void continueToApp() {
         Intent intent = new Intent(CreateUsernameActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-
-
 
 }
