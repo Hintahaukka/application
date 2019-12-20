@@ -54,8 +54,8 @@ User story katsotaan valmiiksi kun seuraavat ehdot täyttyvät:
 
 Asennustiedosto latautuu nyt laitteellesi. Kun tiedosto on ladattu siirrä se android puhelimeesi. Vaihtoehtoisesti voit ladata tiedoston suoraan puhelimeesi menemällä puhelimen selaimella kohdassa 1) olevaan osoitteeseen.
 
-4. Seuraavaksi mene puhelimesi asetuksiin ja salli asennus tuntemattomista lähteistä. Android puhelimissa valinnan sijainti asetuksissa vaihtelee mutta esimerkiksi Huawei puhelimissa tämä tapahtuu siten että menee asetuksiin, valitsee suojaus ja sitten valitsee "Tuntematomat lähteet".
-5. Kun sovellus on asennettu voit käynnistää sen valitsemalla sen sovellusvalikosta.
+2. Seuraavaksi mene puhelimesi asetuksiin ja salli asennus tuntemattomista lähteistä. Android puhelimissa valinnan sijainti asetuksissa vaihtelee mutta esimerkiksi Huawei puhelimissa tämä tapahtuu siten että menee asetuksiin, valitsee suojaus ja sitten valitsee "Tuntematomat lähteet".
+3. Kun sovellus on asennettu voit käynnistää sen valitsemalla sen sovellusvalikosta.
 
 
 ## Käyttöohjeet
